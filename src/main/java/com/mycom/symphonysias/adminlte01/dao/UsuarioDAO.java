@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * DAO para validación de usuarios en SymphonySIAS-AdminLTE01
@@ -53,5 +55,34 @@ public class UsuarioDAO {
             LOGGER.log(Level.SEVERE, "Error al validar usuario", e); // Se puede reemplazar por logger si se desea
         }
         return resultado;
-    }   
+    }
+    
+    public List<Usuario> listarUsuarios() {
+        List<Usuario>lista = new ArrayList<>();
+        
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        
+        try (Connection conn = DriverManager.getConnection (
+                "jdbc:mysql://localhost:33065/login_symphony", "root", "");
+            PreparedStatement ps = conn.prepareStatement(
+                "SELECT id, nombre, usuario, rol, activo FROM usuarios");
+            ResultSet rs = ps.executeQuery()
+        ) {
+           while (rs.next()) {
+               Usuario u = new Usuario();
+               u.setId(rs.getInt("id"));
+               u.setNombre(rs.getString("nombre"));
+               u.setUsuario(rs.getString("usuario"));
+               u.setRol(rs.getString("rol"));
+               u.setActivo(rs.getBoolean("activo"));
+               lista.add(u);
+           }
+        }
+    } catch (SQLException | ClassNotFoundException e){
+        LOGGER.log(Level.SEVERE, "Error al listar usuarios", e);
+    }
+    
+    return lista;
 }
+}    

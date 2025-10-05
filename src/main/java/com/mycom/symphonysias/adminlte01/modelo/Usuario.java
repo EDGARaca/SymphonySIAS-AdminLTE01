@@ -13,6 +13,8 @@ public class Usuario {
     private String usuario;
     private String clave;
     private String rol;
+    private int id;
+    private boolean activo;
     
     // Constructo completo  
     public Usuario(String nombre, String usuario, String clave, String rol) {
@@ -20,6 +22,10 @@ public class Usuario {
         this.usuario = usuario;
         this.clave = clave;
         this.rol = rol;
+    }
+    
+    public Usuario() {
+        // Constructor vacío para uso en DAO
     }
     
     // Getters
@@ -56,4 +62,19 @@ public class Usuario {
         this.rol = rol;
     }
     
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public boolean isActivo() {
+        return activo;
+    }
+    
+    public void setActivo(boolean activo) {
+        this.activo = activo; 
+    }  
 }

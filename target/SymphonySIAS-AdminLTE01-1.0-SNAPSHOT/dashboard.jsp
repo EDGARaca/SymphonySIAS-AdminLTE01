@@ -35,44 +35,10 @@
         <div class="wrapper">
             
             <%-- Navbar --%>
-            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
-                    </li>
-                </ul>
-            </nav>
+            <jsp:include page="header.jsp" />
             
             <%-- Sidebar --%>
-            <aside class="main-sidebar sidebar-dark-primary elevation-4">
-                <a href="#" class="brand-link">
-                    <span class="brand-text font-weight-light">SymphonySIAS</span>
-                </a>
-                <div class="sidebar">
-                    <nav class="mt-2">
-                        <ul class="nav nav-pills nav-sidebar flex-column">
-                            <li class="nav-item">
-                                <a href="dashboard.jsp" class="nav-link active">
-                                    <i class="nav-icon fas fa-users"></i>
-                                    <p>Inicio</p>
-                                </a>                        
-                            </li>
-                            <li>
-                                <a href="ReporterServlet" class="nav-link">
-                                    <i class="nav-icon fas fa-chart-bar"></i>
-                                    <p>Reportes Institucionales</p>
-                                </a>                        
-                            </li>
-                            <li class="nav-item">
-                                <a href="ReporterServlet" class="nav-link">
-                                    <i class="nav-icon fas fa-robot"></i>
-                                    <p>Chatbot SymphonySIAS</p>
-                                </a>                        
-                            </li>                            
-                        </ul>
-                    </nav>                    
-                </div>                
-            </aside>
+            <jsp:include page="sidebar.jsp" />
             
             <%-- Content --%>
             <div class="content-wrapper">
@@ -101,8 +67,6 @@
         </div>
                             
         <%-- Scripts --%>
-        <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
-        <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/adminlte/dist/js/adminlte.min.js"></script>
+        <jsp:include page="footer.jsp" />
     </body>
 </html>
