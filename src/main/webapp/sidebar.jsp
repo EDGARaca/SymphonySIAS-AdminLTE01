@@ -38,8 +38,8 @@
                 
                 <% if ("ADMIN".equals(rol)) { %>
                 <li class="nav-item">
-                    <a href="UsuariosServlet" class="nav-link">
-                        <i class="nav-icon fas fa-user-cog"></i>
+                    <a href="usuarios.jsp" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
                         <p>Gestión de Usuarios</p>
                     </a>
                 </li>

@@ -19,39 +19,43 @@ import java.util.ArrayList;
  * DAO para validación de usuarios en SymphonySIAS-AdminLTE01
  * @author Spiri
  */
-public class UsuarioDAO {
-    
+public class UsuarioDAO {    
     private static final Logger LOGGER = Logger.getLogger(UsuarioDAO.class.getName());
+    private Connection conn;
+    
+    public UsuarioDAO() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:33065/login_symphony", "root", "");
+            LOGGER.log(Level.INFO, "[DAO] Conexión establecida correctamente");
+        } catch (ClassNotFoundException | SQLException e){
+            LOGGER.log(Level.SEVERE, "Error al conectar en constructor UsuarioDAO", e);
+        }
+    }
     
     public Usuario validar(String usuario, String clave) {
         Usuario resultado = null;
         
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // Carga explícita del driver
+        try (PreparedStatement ps = conn.prepareStatement(
+               "SELECT nombre, usuario, clave, rol FROM usuarios WHERE usuario=? AND clave=?")
+        ) {    
+            ps.setString(1, usuario);
+            ps.setString(2, clave);
             
-            try (Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:33065/login_symphony", "root", "");
-                PreparedStatement ps = conn.prepareStatement(
-                    "SELECT nombre, usuario, clave, rol FROM usuarios WHERE usuario=? AND clave=?")
-            ) {    
-                ps.setString(1, usuario);
-                ps.setString(2, clave);
-            
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        resultado = new Usuario(
-                            rs.getString("nombre"),
-                            rs.getString("usuario"), 
-                            rs.getString("clave"),
-                            rs.getString("rol")    
-                        );
-                        LOGGER.log(Level.INFO, "Usuario validado: {0}", resultado.getUsuario());
-                    } else {
-                        LOGGER.log(Level.WARNING, "No se encontró coincidencia para usuario: {0}", usuario);
-                    }
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    resultado = new Usuario(
+                        rs.getString("nombre"),
+                        rs.getString("usuario"), 
+                        rs.getString("clave"),
+                        rs.getString("rol")    
+                    );
+                    LOGGER.log(Level.INFO, "Usuario validado: {0}", resultado.getUsuario());
+                } else {
+                    LOGGER.log(Level.WARNING, "No se encontró coincidencia para usuario: {0}", usuario);
                 }
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al validar usuario", e); // Se puede reemplazar por logger si se desea
         }
         return resultado;
@@ -60,12 +64,7 @@ public class UsuarioDAO {
     public List<Usuario> listarUsuarios() {
         List<Usuario>lista = new ArrayList<>();
         
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        
-        try (Connection conn = DriverManager.getConnection (
-                "jdbc:mysql://localhost:33065/login_symphony", "root", "");
-            PreparedStatement ps = conn.prepareStatement(
+        try (PreparedStatement ps = conn.prepareStatement(
                 "SELECT id, nombre, usuario, rol, activo FROM usuarios");
             ResultSet rs = ps.executeQuery()
         ) {
@@ -78,11 +77,12 @@ public class UsuarioDAO {
                u.setActivo(rs.getBoolean("activo"));
                lista.add(u);
            }
+        } catch (SQLException e){
+            LOGGER.log(Level.SEVERE, "Error al listar usuarios", e);
         }
-    } catch (SQLException | ClassNotFoundException e){
-        LOGGER.log(Level.SEVERE, "Error al listar usuarios", e);
-    }
     
-    return lista;
-}
+        LOGGER.log(Level.INFO, "{DAO} Usuarios recuperados: {0}", lista.size());
+        
+        return lista;
+    }
 }    
