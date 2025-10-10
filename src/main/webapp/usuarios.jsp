@@ -72,6 +72,31 @@
                 <section class="content">
                                 
                     <div class="container-fluid">
+                        <%-- Validación de mensaje de éxito o error tras editar --%>
+                        <%
+                            String actualizado = request.getParameter("actualizado");
+                            String error = request.getParameter("error");
+
+                            if ("true".equals(actualizado)) {
+                        %>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>¡Usuario actualizado!</strong> Los cambios se guardaron correctamente.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <%
+                            } else if ("actualizacion".equals(error)) {
+                        %>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error al actualizar.</strong> No se pudo guardar los cambios. Intenta nuevamente.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <%
+                            }
+                        %>
                         
                         <div class="card">                        
                             <div class="card-header bg-secondary text-white">
@@ -107,7 +132,10 @@
                                         <td><%= u.getRol() %></td>
                                         <td><%= u.isActivo() ? "Activo" : "Inactivo" %></td> 
                                         <td>
-                                            <button class="btn btn-sm btn-primary" title="Editar"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-primary" title="Editar"
+                                                onclick="abrirModalEditar('<%= u.getId() %>', '<%= u.getNombre() %>', '<%= u.getUsuario() %>', '<%= u.getRol() %>', '<%= u.isActivo() ? "Activo" : "Inactivo" %>')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
                                             <button class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                                         </td>
                                     </tr>                                
@@ -135,28 +163,103 @@
                 dom: 'Bfrtip',
                 buttons: [
                     {
-                        extend: 'copy',
-                        text: '<i class="fas fa-copy"></i> Copiar',
-                        className: 'btn btn-secondary btn-sm'
+                     extend: 'copy',
+                     text: '<i class="fas fa-copy"></i> Copiar',
+                     className: 'btn btn-secondary btn-sm'
                     },
                     {
-                        extend: 'excel',
-                        text: '<i class="fas fa-file-excel"></i> Excel',
-                        className: 'btn btn-success btn-sm'
+                     extend: 'excel',
+                     text: '<i class="fas fa-file-excel"></i> Excel',
+                     className: 'btn btn-success btn-sm'
                     },
                     {
-                        extend: 'pdf',
-                        text: '<i class="fas fa-file-pdf"></i> PDF',
-                        className: 'btn btn-danger btn-sm'
+                     extend: 'pdf',
+                     text: '<i class="fas fa-file-pdf"></i> PDF',
+                     className: 'btn btn-danger btn-sm'
                     },
                     {
-                        extend: 'print',
-                        text: '<i class="fas fa-print"></i> Imprimir',
-                        className: 'btn btn-info btn-sm'
+                     extend: 'print',
+                     text: '<i class="fas fa-print"></i> Imprimir',
+                     className: 'btn btn-info btn-sm'
                     }
                 ]
             });
         });   
         </script>
+        
+        <%-- Modal de edición de usuario --%>
+        <div class="modal fade" id="modalEditarUsuario" tabindex="-1" role="dialog" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="EditarUsuarioServlet" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="modalEditarUsuarioLabel"><i class="fas fa-edit"></i> Editar Usuario</h5>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="editId" name="id">
+                            <div class="form-group">
+                                <label for="editNombre">Nombre</label>
+                                <input type="text" class="form-control" id="editNombre" name="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editUsuario">Usuario</label>
+                                <input type="text" class="form-control" id="editUsuario" name="usuario" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editRol">Rol</label>
+                                <select class="form-control" id="editRol" name="rol">
+                                    <option>ADMIN</option>
+                                    <option>DOCENTE</option>
+                                    <option>ESTUDIANTE</option>
+                                    <option>FUNCIONARIO</option>
+                                    <option>PRUEBA</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editEstado">Estado</label>
+                                <select class="form-control" id="editEstado" name="estado">
+                                    <option value="true">Activo</option>
+                                    <option value="false">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i>Guardar cambios</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <script>
+            // Función que se llama al hacer clic en el botón "Editar"
+            function abrirModalEditar(id, nombre, usuario, rol, estado) {
+                // Asignar valores a los campos del modal
+                document.getElementById("editId").value = id;
+                document.getElementById("editNombre").value = nombre;
+                document.getElementById("editUsuario").value = usuario;
+                document.getElementById("editRol").value = rol;
+                document.getElementById("editEstado").value = estado  === 'Activo' ? 'true' : 'false';
+
+                // Mostrar el modal correctamente (corregido el ID)
+                $('#modalEditarUsuario').modal('show');
+            }
+        </script>
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <%-- Script de Bootstrap para que las alertas y modales funcionen --%>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <%-- Cierra automáticamente las alertas después de 4 segundos --%>
+        <script>
+            setTimeout(function() {
+            $(".alert").alert('close');
+            }, 4000);
+        </script>
+
     </body>
 </html>
