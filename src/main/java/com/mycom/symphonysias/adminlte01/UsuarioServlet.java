@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.mycom.symphonysias.adminlte01.modelo.Usuario;
 import com.mycom.symphonysias.adminlte01.dao.UsuarioDAO;
+import java.util.List;
 
 
 /**
@@ -25,10 +26,13 @@ public class UsuarioServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Aquí podrías implementar la lógica para listar usuarios si decides usar GET
-        // Por ahora no se usa, ya que el listado se hace directamente en usuarios.jsp
-    
+        UsuarioDAO dao = new UsuarioDAO();
+        List<Usuario> lista = dao.listarUsuarios();
+        request.setAttribute("listaUsuarios", lista);
+        request.getRequestDispatcher("usuarios.jsp").forward(request, response);
     }
+    
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,6 +44,7 @@ public class UsuarioServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         String nombre = request.getParameter("nombre");
         String usuario = request.getParameter("usuario");
+        String correo = request.getParameter("correo");
         String rol = request.getParameter("rol");
         boolean estado = Boolean.parseBoolean(request.getParameter("estado"));
 
@@ -56,6 +61,7 @@ public class UsuarioServlet extends HttpServlet {
         u.setId(id);
         u.setNombre(nombre);
         u.setUsuario(usuario);
+        u.setCorreo(correo);
         u.setRol(rol);
         u.setActivo(estado);
 
@@ -70,7 +76,11 @@ public class UsuarioServlet extends HttpServlet {
             System.out.println("[ERROR] Falló la actualización del usuario");
         }
 
-        // Redirigir de nuevo a usuarios.jsp
-        response.sendRedirect("usuarios.jsp");
+        // Reemplazo de redirección por recarga con datos actualizados
+        List<Usuario> lista = dao.listarUsuarios();
+        request.setAttribute("listaUsuarios", lista);
+        request.getRequestDispatcher("usuarios.jsp").forward(request, response);
+
+
     }
 }

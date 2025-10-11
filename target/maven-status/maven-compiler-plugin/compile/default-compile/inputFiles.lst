@@ -1,6 +1,11 @@
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\resources\JakartaEE8Resource.java
+D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\UsuarioServlet.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\LoginServlet.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\SessionFilter.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\LogoutServlet.java
+D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\servlet\CrearUsuarioServlet.java
+D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\servlet\EditarUsuarioServlet.java
+D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\UsuarioServlet.java
+D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\util\Conexion.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\dao\UsuarioDAO.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\modelo\Usuario.java

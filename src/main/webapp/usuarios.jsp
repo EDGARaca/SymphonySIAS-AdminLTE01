@@ -4,11 +4,27 @@
     Author     : Spiri
 --%>
 
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
-<%@ page import="com.mycom.symphonysias.adminlte01.dao.UsuarioDAO" %>
-<%@ page import="com.mycom.symphonysias.adminlte01.modelo.Usuario" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.mycom.symphonysias.adminlte01.modelo.Usuario" %>
+
+
+<%
+    // Código que evita el error 500 y asegura que la tabla se cargue correctamente.
+    List<Usuario> usuarios = (List<Usuario>) request.getAttribute("usuarios");
+    
+    if (usuarios == null) {
+        usuarios = (List<Usuario>) request.getAttribute("listaUsuarios");
+    }
+
+    if (usuarios == null) {
+        response.sendRedirect("UsuarioServlet");
+        return;
+    }
+%>
+
 
 
 <%
@@ -25,8 +41,7 @@
     System.out.println("[USUARIOS] Acceso autorizado por: " + usuario + " (" + rol + ")" );
     
     //Instanciación del DAO y recuperación de usuarios
-    UsuarioDAO dao = new UsuarioDAO();
-    List<Usuario> usuarios = dao.listarUsuarios();
+    
     System.out.println("[DEBUG] Total usuarios encontrados: + usuarios.size()");
 %>
 
@@ -35,11 +50,14 @@
     <head>
         <meta charset="UTF-8">
         <title>Gestion de Usuarios - SymphonySIAS</title>
+        <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
         <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="assets/adminlte/dist/css/adminlte.min.css">
+        <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
+        
         <%-- DataTables CSS --%>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap4.min.css">      
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         
         <%-- jQuery y DataTables JS --%>
         <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -72,6 +90,32 @@
                 <section class="content">
                                 
                     <div class="container-fluid">
+                        <%-- Validación de mensaje tras creación de usuario --%>
+                        <%
+                            String creado = request.getParameter("creado");
+                            String errorCreacion = request.getParameter("error");
+
+                            if ("true".equals(creado)) {
+                        %>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>¡Usuario creado!</strong> El registro se completó correctamente.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <%
+                            } else if ("creacion".equals(errorCreacion)) {
+                        %>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error al crear usuario.</strong> No se pudo completar el registro.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <%
+                            }
+                        %>
+                        
                         <%-- Validación de mensaje de éxito o error tras editar --%>
                         <%
                             String actualizado = request.getParameter("actualizado");
@@ -99,8 +143,13 @@
                         %>
                         
                         <div class="card">                        
-                            <div class="card-header bg-secondary text-white">
-                                <h3 class="card-title"><i class="fas fa-users-cog"></i>Gestion de Usuarios</h3>                           
+                            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                                <h3 class="card-title mb-0"><i class="fas fa-users-cog"></i> Gestión de Usuarios</h3>
+
+                                <!-- Botón para abrir el modal de nuevo usuario -->
+                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalNuevoUsuario">
+                                    <i class="fas fa-user-plus"></i> Nuevo Usuario
+                                </button>
                             </div>
                             <div class="card-body">
                                 <table id= "tablaUsuarios" class="table table-bordered table-hover">
@@ -109,37 +158,51 @@
                                         <th>ID</th>
                                         <th>Nombre</th>
                                         <th>Usuario</th>
+                                        <th>Correo</th>
                                         <th>Rol</th>
                                         <th>Estado</th>
                                         <th>Acción</th>
                                     </tr>
                                 </thead>
+                                
                                 <tbody>
-                                    <% for (Usuario u : usuarios){
-                                        String claseFila = "";
-                                        switch (u.getRol()) {
-                                            case "ADMIN": claseFila = "table-danger"; break;
-                                            case "DOCENTE": claseFila ="table-warning"; break;
-                                            case "EESTUDIANTE":claseFila ="table-seccess"; break;
-                                            case "FUNCIONARIO":claseFila ="table-info"; break;
-                                            default: claseFila = "";
-                                        }
-                                    %>                                
-                                    <tr class="<%= claseFila %>">
-                                        <td><%= u.getId() %></td>
-                                        <td><%= u.getNombre() %></td>
-                                        <td><%= u.getUsuario() %></td>
-                                        <td><%= u.getRol() %></td>
-                                        <td><%= u.isActivo() ? "Activo" : "Inactivo" %></td> 
-                                        <td>
-                                            <button class="btn btn-sm btn-primary" title="Editar"
-                                                onclick="abrirModalEditar('<%= u.getId() %>', '<%= u.getNombre() %>', '<%= u.getUsuario() %>', '<%= u.getRol() %>', '<%= u.isActivo() ? "Activo" : "Inactivo" %>')">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-                                        </td>
-                                    </tr>                                
-                                    <% } %>
+                                <% for (Usuario u : usuarios) {
+                                    String claseFila = "";
+                                    switch (u.getRol()) {
+                                        case "ADMIN": claseFila = "table-danger"; break;
+                                        case "DOCENTE": claseFila = "table-warning"; break;
+                                        case "ESTUDIANTE": claseFila = "table-success"; break;
+                                        case "FUNCIONARIO": claseFila = "table-info"; break;
+                                        default: claseFila = "";
+                                    }
+                                %>
+                                <tr class="<%= claseFila %>">
+                                    <td><%= u.getId() %></td>
+                                    <td><%= u.getNombre() %></td>
+                                    <td><%= u.getUsuario() %></td>
+                                <%--<td><%= u.getClave() %></td> --%>
+                                    <td><%= u.getCorreo() %></td>
+                                    <td><%= u.getRol() %></td>
+                                    <td><%= u.isActivo() ? "Activo" : "Inactivo" %></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" title="Editar"
+                                            onclick="abrirModalEditar(
+                                                '<%= u.getId() %>',
+                                                '<%= u.getNombre() %>',
+                                                '<%= u.getUsuario() %>',
+                                                '<%= u.getCorreo() %>',
+                                                '<%= u.getRol() %>',
+                                                '<%= u.isActivo() ? "Activo" : "Inactivo" %>',
+                                                ''
+                                            )">    
+                                            <i class="fas fa-edit"></i> Editar
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" title="Eliminar">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                                <% } %>
                                 </tbody>
                                 </table>
                             </div>
@@ -209,6 +272,14 @@
                                 <input type="text" class="form-control" id="editUsuario" name="usuario" required>
                             </div>
                             <div class="form-group">
+                                <label for="editClave">Clave</label>
+                                <input type="password" class="form-control" id="editClave" name="clave" placeholder="(solo si desea cambiar)">
+                            </div>
+                            <div class="form-group">
+                                <label for="editCorreo">Correo</label>
+                                <input type="email" class="form-control" id="editCorreo" name="correo" required>
+                            </div>
+                            <div class="form-group">
                                 <label for="editRol">Rol</label>
                                 <select class="form-control" id="editRol" name="rol">
                                     <option>ADMIN</option>
@@ -260,6 +331,79 @@
             $(".alert").alert('close');
             }, 4000);
         </script>
+        
+        <!-- Modal para crear nuevo usuario -->
+        <div class="modal fade" id="modalNuevoUsuario" tabindex="-1" role="dialog" aria-labelledby="modalNuevoUsuarioLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="CrearUsuarioServlet" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title" id="modalNuevoUsuarioLabel"><i class="fas fa-user-plus"></i> Nuevo Usuario</h5>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="nuevoNombre">Nombre</label>
+                                <input type="text" class="form-control" id="nuevoNombre" name="nombre" required>
+                            </div>
+                        <div class="form-group">
+                            <label for="nuevoUsuario">Usuario</label>
+                            <input type="text" class="form-control" id="nuevoUsuario" name="usuario" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nuevoCorreo">Correo</label>
+                            <input type="email" class="form-control" id="nuevoCorreo" name="correo" required>
+                        </div>                           
+                        <div class="form-group">
+                          <label for="nuevoClave">Clave</label>
+                          <input type="password" class="form-control" id="nuevoClave" name="clave" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="nuevoRol">Rol</label>
+                          <select class="form-control" id="nuevoRol" name="rol">
+                            <option>ADMIN</option>
+                            <option>DOCENTE</option>
+                            <option>ESTUDIANTE</option>
+                            <option>FUNCIONARIO</option>
+                            <option>PRUEBA</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="nuevoEstado">Estado</label>
+                          <select class="form-control" id="nuevoEstado" name="estado">
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                          </select>
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Registrar</button>
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+        
+        <script>
+        function abrirModalEditar(id, nombre, usuario, correo, rol, estado, clave) {
+            document.getElementById("editId").value = id;
+            document.getElementById("editNombre").value = nombre;
+            document.getElementById("editUsuario").value = usuario;
+            document.getElementById("editCorreo").value = correo;
+            document.getElementById("editRol").value = rol;
+            document.getElementById("editEstado").value = (estado === "Activo") ? "true" : "false";
+            document.getElementById("editClave").value = clave;
 
+            $('#modalEditarUsuario').modal('show');
+        }
+        </script>
+        
+        <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
+        <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/adminlte/js/adminlte.min.js"></script> 
+    
     </body>
 </html>

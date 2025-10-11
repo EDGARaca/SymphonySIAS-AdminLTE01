@@ -4,9 +4,9 @@
  */
 package com.mycom.symphonysias.adminlte01.dao;
 
+import com.mycom.symphonysias.adminlte01.util.Conexion;
 import com.mycom.symphonysias.adminlte01.modelo.Usuario;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
+
+
 
 /**
  * DAO para validación de usuarios en SymphonySIAS-AdminLTE01
@@ -25,13 +27,13 @@ public class UsuarioDAO {
 
     public UsuarioDAO() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:33065/login_symphony", "root", "");
+            conn = Conexion.getConexion();
             LOGGER.log(Level.INFO, "[DAO] Conexión establecida correctamente");
-        } catch (ClassNotFoundException | SQLException e){
-            LOGGER.log(Level.SEVERE, "Error al conectar en constructor UsuarioDAO", e);
+        } catch (SQLException e){
+            LOGGER.log(Level.SEVERE, "Error al conectar desde UsuarioDAO", e);
         }
     }
+
 
     public Usuario validar(String usuario, String clave) {
         Usuario resultado = null;
@@ -66,7 +68,8 @@ public class UsuarioDAO {
         List<Usuario> lista = new ArrayList<>();
 
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT id, nombre, usuario, rol, activo FROM usuarios");
+                "SELECT id, nombre, usuario, clave, correo, rol, activo FROM usuarios");
+
              ResultSet rs = ps.executeQuery()
         ) {
             while (rs.next()) {
@@ -74,6 +77,8 @@ public class UsuarioDAO {
                 u.setId(rs.getInt("id"));
                 u.setNombre(rs.getString("nombre"));
                 u.setUsuario(rs.getString("usuario"));
+                u.setClave(rs.getString("clave"));
+                u.setCorreo(rs.getString("correo"));
                 u.setRol(rs.getString("rol"));
                 u.setActivo(rs.getBoolean("activo"));
                 lista.add(u);
@@ -116,6 +121,40 @@ public class UsuarioDAO {
         }
     }
 
+        return resultado;
+    }
+    
+    public boolean crear(Usuario u) {
+    boolean resultado = false;
+    PreparedStatement ps = null;
+
+    String sql = "INSERT INTO usuarios (nombre, usuario, clave, correo, rol, activo) VALUES (?, ?, ?, ?, ?, ?)";
+
+    try {
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, u.getNombre());
+        ps.setString(2, u.getUsuario());
+        ps.setString(3, u.getClave());
+        ps.setString(4, u.getCorreo());
+        ps.setString(5, u.getRol());
+        ps.setBoolean(6, u.isActivo());
+
+        int filas = ps.executeUpdate();
+        resultado = filas > 0;
+
+        LOGGER.log(Level.INFO, "[DAO] Usuario creado. Filas afectadas: {0}", filas);
+
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al crear usuario", e);
+    } finally {
+        try {
+            if (ps != null) ps.close();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al cerrar PreparedStatement", e);
+        }
+    }
+
     return resultado;
-}
+    }
+
 }

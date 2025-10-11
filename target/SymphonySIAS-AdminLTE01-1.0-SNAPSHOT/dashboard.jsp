@@ -26,9 +26,10 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Dashboard - SymphonySIAS</title>
+        <title>Dashboard - SymphonySIAS</title>        
+        <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
         <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="assets/adminlte/dist/css/adminlte.min.css">
+        <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">       
     </head>
 
     <body class="hold-transition sidebar-mini layout-fixed">
@@ -40,7 +41,7 @@
             <%-- Sidebar --%>
             <jsp:include page="sidebar.jsp" />
             
-            <%-- Content --%>
+            <%-- Content Wrapper --%>
             <div class="content-wrapper">
                 <section class="content-header">
                     <div class="container-fluid">
@@ -62,11 +63,15 @@
                         </div>
                     </div>
                 </section>                    
-            </div>
-                            
+            </div>                        
         </div>
                             
         <%-- Scripts --%>
         <jsp:include page="footer.jsp" />
+                
+        <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
+        <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/adminlte/js/adminlte.min.js"></script> 
+    
     </body>
 </html>
