@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
  * @author Spiri
  */
 
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
+
 public class LoginServlet extends HttpServlet {
     
     // Metodo para convertir la clave a SHA-256
@@ -52,7 +52,7 @@ public class LoginServlet extends HttpServlet {
         
         // Trazabilidad directa
         System.out.println("Usuario recibido: " + user);
-        System.out.println("Clave original: " + user);
+        System.out.println("Clave original: " + pass);
         
         //  Convertir la clave ingresada a SHA-256
         String hashedPass = sha256(pass);

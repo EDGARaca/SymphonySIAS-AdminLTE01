@@ -22,13 +22,14 @@
 %>
 
 <%-- Navbar superior --%> 
-<nav class="main-header navbar-expand navbar-white navbar-light">
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <%-- Contenido del navbar --%>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
             <a class="nav-link" href="ChangePassword.jsp"><i class="fas fa-key"></i>Cambiar contraseña</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="LogoutServlet"><i class="fas fa-sing-out-alt"></i>Cerrar sesión</a>
+            <a class="nav-link" href="LogoutServlet"><i class="fas fa-sign-out-alt"></i>Cerrar sesión</a>
         </li>    
     </ul>
 </nav>

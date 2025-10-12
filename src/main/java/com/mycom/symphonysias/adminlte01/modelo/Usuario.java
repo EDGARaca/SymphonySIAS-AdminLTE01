@@ -12,11 +12,12 @@ public class Usuario {
     private String nombre;
     private String usuario;
     private String clave;
+    private String correo;
     private String rol;
     private int id;
     private boolean activo;
     
-    // Constructo completo  
+    // Constructor completo  
     public Usuario(String nombre, String usuario, String clave, String rol) {
         this.nombre = nombre;
         this.usuario = usuario;
@@ -41,6 +42,10 @@ public class Usuario {
         return clave;
     }
     
+    public String getCorreo() {
+    return correo;
+    }
+    
     public String getRol() {
         return rol;
     }
@@ -56,6 +61,10 @@ public class Usuario {
     
     public void setClave(String clave) {
         this.clave = clave;
+    }
+    
+    public void setCorreo(String correo) {
+    this.correo = correo;
     }
     
     public void setRol(String rol) {
