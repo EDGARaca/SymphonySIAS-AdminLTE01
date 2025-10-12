@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class Conexion {
 
     private static final String URL = "jdbc:mysql://localhost:33065/login_symphony?useUnicode=true&characterEncoding=UTF-8";
@@ -27,4 +28,5 @@ public class Conexion {
             throw new SQLException("Driver no encontrado", e);
         }
     }
+
 }

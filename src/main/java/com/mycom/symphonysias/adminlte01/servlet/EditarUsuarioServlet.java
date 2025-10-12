@@ -17,21 +17,33 @@ public class EditarUsuarioServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+        
+        // 🔧 Corrección de codificación
+        request.setCharacterEncoding("UTF-8");
 
         // 1. Recuperar datos del formulario
         int id = Integer.parseInt(request.getParameter("id"));
         String nombre = request.getParameter("nombre");
         String usuario = request.getParameter("usuario");
+        String clave = request.getParameter("clave");
+        String correo = request.getParameter("correo");            
         String rol = request.getParameter("rol");
         boolean estado = Boolean.parseBoolean(request.getParameter("estado"));
+
 
         // 2. Crear objeto Usuario con los datos actualizados
         Usuario u = new Usuario();
         u.setId(id);
         u.setNombre(nombre);
         u.setUsuario(usuario);
+        u.setCorreo(correo);
         u.setRol(rol);
         u.setActivo(estado);
+        
+        // Solo actualizar clave si se proporciona
+        if (clave != null && !clave.trim().isEmpty()) {
+        u.setClave(clave); // puedes aplicar hash si lo manejas
+        }
 
         // 3. Actualizar en la base de datos
         UsuarioDAO dao = new UsuarioDAO();
@@ -39,7 +51,7 @@ public class EditarUsuarioServlet extends HttpServlet {
 
         // 4. Redirigir con trazabilidad
         if (actualizado) {
-            response.sendRedirect("usuarios.jsp?actualizado=true");
+            response.sendRedirect("UsuarioServlet?actualizado=true");
         } else {
             response.sendRedirect("usuarios.jsp?error=actualizacion");
         }

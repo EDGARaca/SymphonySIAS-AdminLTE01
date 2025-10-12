@@ -24,13 +24,30 @@ public class UsuarioServlet extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        UsuarioDAO dao = new UsuarioDAO();
-        List<Usuario> lista = dao.listarUsuarios();
-        request.setAttribute("listaUsuarios", lista);
-        request.getRequestDispatcher("usuarios.jsp").forward(request, response);
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+    String actualizado = request.getParameter("actualizado");
+    String error = request.getParameter("error");
+    String creado = request.getParameter("creado");
+    
+    if (actualizado != null) {
+        request.setAttribute("actualizado", actualizado);
     }
+    
+    if (error != null) {
+        request.setAttribute("error", error);
+    }
+    
+    if (creado != null) {
+        request.setAttribute("creado", creado);
+    }
+
+    UsuarioDAO dao = new UsuarioDAO();
+    List<Usuario> lista = dao.listarUsuarios();
+    request.setAttribute("listaUsuarios", lista);
+    request.getRequestDispatcher("usuarios.jsp").forward(request, response);
+}
     
     
     @Override
@@ -44,6 +61,7 @@ public class UsuarioServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         String nombre = request.getParameter("nombre");
         String usuario = request.getParameter("usuario");
+        String clave = request.getParameter("clave");
         String correo = request.getParameter("correo");
         String rol = request.getParameter("rol");
         boolean estado = Boolean.parseBoolean(request.getParameter("estado"));
@@ -55,8 +73,7 @@ public class UsuarioServlet extends HttpServlet {
         System.out.println("[DEBUG] Rol: " + rol);
         System.out.println("[DEBUG] Estado: " + estado);
 
-        /* Crear objeto Usuario con los datos actualizados*/
-        
+        // Crear objeto Usuario con los datos actualizados
         Usuario u = new Usuario();
         u.setId(id);
         u.setNombre(nombre);
@@ -65,15 +82,30 @@ public class UsuarioServlet extends HttpServlet {
         u.setRol(rol);
         u.setActivo(estado);
 
-        // Actualizar en BD
+        
+        // Solo actualizar clave si se proporciona
+        if (clave != null && !clave.trim().isEmpty()) {
+            u.setClave(clave);
+        }
+
+        // Bloque 1: para lógica interna (base de datos)- Actualizar en BD
         UsuarioDAO dao = new UsuarioDAO();
         boolean actualizado = dao.actualizar(u);
+        
+        if (actualizado) {
+            request.setAttribute("actualizadoBD", true);
+        } else {
+            request.setAttribute("errorBD", "actualizacion");
+        }
 
-        // Trazabilidad del resultado
+
+        // Trazabilidad visual en JSP del resultado - permite que usuarios.jsp detecte el mensaje y lo muestre
         if (actualizado) {
             System.out.println("[DEBUG] Usuario actualizado correctamente");
+            request.setAttribute("actualizado", "true");
         } else {
             System.out.println("[ERROR] Falló la actualización del usuario");
+            request.setAttribute("error", "actualizacion");
         }
 
         // Reemplazo de redirección por recarga con datos actualizados

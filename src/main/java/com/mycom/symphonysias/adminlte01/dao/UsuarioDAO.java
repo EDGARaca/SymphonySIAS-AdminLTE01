@@ -21,6 +21,7 @@ import java.util.ArrayList;
  * DAO para validación de usuarios en SymphonySIAS-AdminLTE01
  * @author Spiri
  */
+
 public class UsuarioDAO {
     private static final Logger LOGGER = Logger.getLogger(UsuarioDAO.class.getName());
     private Connection conn;
@@ -155,6 +156,32 @@ public class UsuarioDAO {
     }
 
     return resultado;
+    }
+    
+    public boolean eliminarUsuario(String id) {
+    boolean eliminado = false;
+    Connection conn = null;
+    PreparedStatement stmt = null;
+
+    try {
+        conn = Conexion.getConexion();
+        String sql = "DELETE FROM usuarios WHERE id = ?";
+        stmt = conn.prepareStatement(sql);
+        stmt.setString(1, id);
+        int filas = stmt.executeUpdate();
+        eliminado = filas > 0;
+    } catch (Exception e) {
+        System.err.println("[ERROR] Fallo al eliminar usuario: " + e.getMessage());
+        e.printStackTrace();
+    } finally {
+        try {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (Exception e) {
+            System.err.println("[ERROR] Fallo al cerrar conexión: " + e.getMessage());
+        }
+    }
+    return eliminado;
     }
 
 }

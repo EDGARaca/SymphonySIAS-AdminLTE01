@@ -57,9 +57,9 @@ public class CrearUsuarioServlet extends HttpServlet {
 
         // 5. Redirigir con trazabilidad
         if (creado) {
-            response.sendRedirect("usuarios.jsp?creado=true");
+            response.sendRedirect("UsuarioServlet?creado=true");
         } else {
-            response.sendRedirect("usuarios.jsp?error=creacion");
+            response.sendRedirect("UsuarioServlet?error=creacion");
         }
     }
 

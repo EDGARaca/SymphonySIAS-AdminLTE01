@@ -12,38 +12,12 @@
 
 
 <%
-    // Código que evita el error 500 y asegura que la tabla se cargue correctamente.
-    List<Usuario> usuarios = (List<Usuario>) request.getAttribute("usuarios");
+    String actualizadoParam = request.getParameter("actualizado");
+    String actualizadoAttr = (String) request.getAttribute("actualizado");
     
-    if (usuarios == null) {
-        usuarios = (List<Usuario>) request.getAttribute("listaUsuarios");
-    }
-
-    if (usuarios == null) {
-        response.sendRedirect("UsuarioServlet");
-        return;
-    }
-%>
-
-
-
-<%
-    // Validación de sesion y rol
-    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
-    
-    if (usuario == null || !"ADMIN".equals(rol)) {
-        response.sendRedirect("dashboard.jsp");
-        return;
-    }
-    
-    // Trazabilidad en consola del servidor
-    System.out.println("[USUARIOS] Acceso autorizado por: " + usuario + " (" + rol + ")" );
-    
-    //Instanciación del DAO y recuperación de usuarios
-    
-    System.out.println("[DEBUG] Total usuarios encontrados: + usuarios.size()");
-%>
+    String errorParam = request.getParameter("error");
+    String errorAttr = (String) request.getAttribute("error");
+%>    
 
 <!DOCTYPE html>
 <html lang="es">
@@ -54,12 +28,11 @@
         <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
         <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
         
-        <%-- DataTables CSS --%>
+        
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap4.min.css">      
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        
-        <%-- jQuery y DataTables JS --%>
+                
         <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
@@ -73,75 +46,61 @@
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             
-            <%-- Navbar --%>
-            <jsp:include page="header.jsp" />
             
-            <%-- Sidebar --%>
+            <jsp:include page="header.jsp" />
+           
             <jsp:include page="sidebar.jsp" />
             
-            <%-- Content --%>
+            <jsp:include page="footer.jsp" />
+            
+            
             <div class="content-wrapper">
                 <section class="content-header">
                     <div class="container-fluid">
-                        <h1 class="m-0">Gestión de Usuarios</h1>                                      
-                    </div>
-                </section>
-                    
-                <section class="content">
-                                
-                    <div class="container-fluid">
-                        <%-- Validación de mensaje tras creación de usuario --%>
-                        <%
-                            String creado = request.getParameter("creado");
-                            String errorCreacion = request.getParameter("error");
-
-                            if ("true".equals(creado)) {
-                        %>
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <strong>¡Usuario creado!</strong> El registro se completó correctamente.
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        <%
-                            } else if ("creacion".equals(errorCreacion)) {
-                        %>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Error al crear usuario.</strong> No se pudo completar el registro.
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        <%
-                            }
-                        %>
+                        <h1 class="m-0 mb-3">Gestión de Usuarios</h1>
                         
-                        <%-- Validación de mensaje de éxito o error tras editar --%>
-                        <%
-                            String actualizado = request.getParameter("actualizado");
-                            String error = request.getParameter("error");
-
-                            if ("true".equals(actualizado)) {
-                        %>
+                        <!-- Validación de mensaje tras creación de usuario -->        
+                        <!-- Sección de alertas -->
+                        <!-- Validación de mensaje de éxito o error tras editar -->
+                        <!-- Esto asegura que el mensaje se muestre correctamente tras una edición por POST -->
+                        
+                        <% if ("true".equals(request.getParameter("actualizado")) || "true".equals(request.getAttribute("actualizado"))) { %>
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <strong>¡Usuario actualizado!</strong> Los cambios se guardaron correctamente.
+                                <strong>¡Usuario actualizado!</strong> Los cambios se guardaron correctamente48.
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                        <%
-                            } else if ("actualizacion".equals(error)) {
-                        %>
+                        <% } else if ("actualizacion".equals(request.getParameter("error")) || "actualizacion".equals(request.getAttribute("error"))) { %>
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <strong>Error al actualizar.</strong> No se pudo guardar los cambios. Intenta nuevamente.
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                        <%
-                            }
-                        %>
+                        <% } else if ("true".equals(request.getParameter("creado")) || "true".equals(request.getAttribute("creado"))) { %>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>¡Usuario creado!</strong> El nuevo usuario fue registrado correctamente36.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <% } else if ("creacion".equals(request.getParameter("error")) || "creacion".equals(request.getAttribute("error"))) { %>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error al crear usuario.</strong> No se pudo completar el registro.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <% } %>
                         
+                    </div>
+                </section>
+                    
+                <section class="content">
+                                
+                    <div class="container-fluid">
+
                         <div class="card">                        
                             <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
                                 <h3 class="card-title mb-0"><i class="fas fa-users-cog"></i> Gestión de Usuarios</h3>
@@ -166,54 +125,62 @@
                                 </thead>
                                 
                                 <tbody>
-                                <% for (Usuario u : usuarios) {
-                                    String claseFila = "";
-                                    switch (u.getRol()) {
-                                        case "ADMIN": claseFila = "table-danger"; break;
-                                        case "DOCENTE": claseFila = "table-warning"; break;
-                                        case "ESTUDIANTE": claseFila = "table-success"; break;
-                                        case "FUNCIONARIO": claseFila = "table-info"; break;
-                                        default: claseFila = "";
-                                    }
-                                %>
-                                <tr class="<%= claseFila %>">
-                                    <td><%= u.getId() %></td>
-                                    <td><%= u.getNombre() %></td>
-                                    <td><%= u.getUsuario() %></td>
-                                <%--<td><%= u.getClave() %></td> --%>
-                                    <td><%= u.getCorreo() %></td>
-                                    <td><%= u.getRol() %></td>
-                                    <td><%= u.isActivo() ? "Activo" : "Inactivo" %></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary" title="Editar"
-                                            onclick="abrirModalEditar(
-                                                '<%= u.getId() %>',
-                                                '<%= u.getNombre() %>',
-                                                '<%= u.getUsuario() %>',
-                                                '<%= u.getCorreo() %>',
-                                                '<%= u.getRol() %>',
-                                                '<%= u.isActivo() ? "Activo" : "Inactivo" %>',
-                                                ''
-                                            )">    
-                                            <i class="fas fa-edit"></i> Editar
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" title="Eliminar">
-                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                        </button>
-                                    </td>
-                                </tr>
-                                <% } %>
+                                    <%
+                                        List<Usuario> usuarios = (List<Usuario>) request.getAttribute("listaUsuarios");
+                                        if (usuarios != null && !usuarios.isEmpty()) {
+                                            for (Usuario u : usuarios) {
+                                                String claseFila = "";
+                                                switch (u.getRol()) {
+                                                    case "ADMIN": claseFila = "table-danger"; break;
+                                                    case "DOCENTE": claseFila = "table-warning"; break;
+                                                    case "ESTUDIANTE": claseFila = "table-success"; break;
+                                                    case "FUNCIONARIO": claseFila = "table-info"; break;
+                                                    default: claseFila = "";
+                                                }
+                                    %>
+                                    <tr class="<%= claseFila %>">
+                                        <td><%= u.getId() %></td>
+                                        <td><%= u.getNombre() %></td>
+                                        <td><%= u.getUsuario() %></td>
+                                        <td><%= u.getCorreo() %></td>
+                                        <td><%= u.getRol() %></td>
+                                        <td><%= u.isActivo() ? "Activo" : "Inactivo" %></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" title="Editar"
+                                                onclick="abrirModalEditar(
+                                                    '<%= u.getId() %>',
+                                                    '<%= u.getNombre() %>',
+                                                    '<%= u.getUsuario() %>',
+                                                    '<%= u.getCorreo() %>',
+                                                    '<%= u.getRol() %>',
+                                                    '<%= u.isActivo() ? "Activo" : "Inactivo" %>',
+                                                    ''
+                                                )">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" title="Eliminar"
+                                                    onclick="confirmarEliminacion('<%= u.getId() %>')">
+                                                <i class="fas fa-trash-alt"></i> Eliminar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <%
+                                            }
+                                        } else {
+                                    %>
+                                    <tr>
+                                        <td colspan="7" class="text-center text-warning">No hay usuarios registrados.</td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
                                 </tbody>
                                 </table>
                             </div>
                         </div>    
                     </div>
                 </section>                    
-            </div>
-                    
-            <%-- Footer --%>
-            <jsp:include page="footer.jsp" />
-                            
+            </div>                                               
         </div>       
     
         <script>
@@ -250,10 +217,10 @@
         });   
         </script>
         
-        <%-- Modal de edición de usuario --%>
+       
         <div class="modal fade" id="modalEditarUsuario" tabindex="-1" role="dialog" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form action="EditarUsuarioServlet" method="post">
+                <form action="EditarUsuarioServlet" method="post" accept-charset="UTF-8">
                     <div class="modal-content">
                         <div class="modal-header bg-primary text-white">
                             <h5 class="modal-title" id="modalEditarUsuarioLabel"><i class="fas fa-edit"></i> Editar Usuario</h5>
@@ -307,7 +274,7 @@
         </div>
         
         <script>
-            // Función que se llama al hacer clic en el botón "Editar"
+           
             function abrirModalEditar(id, nombre, usuario, rol, estado) {
                 // Asignar valores a los campos del modal
                 document.getElementById("editId").value = id;
@@ -316,26 +283,26 @@
                 document.getElementById("editRol").value = rol;
                 document.getElementById("editEstado").value = estado  === 'Activo' ? 'true' : 'false';
 
-                // Mostrar el modal correctamente (corregido el ID)
+               
                 $('#modalEditarUsuario').modal('show');
             }
         </script>
         
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <%-- Script de Bootstrap para que las alertas y modales funcionen --%>
+        <!-- Script de Bootstrap para que las alertas y modales funcionen -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
         
-        <%-- Cierra automáticamente las alertas después de 4 segundos --%>
+       
         <script>
             setTimeout(function() {
             $(".alert").alert('close');
-            }, 4000);
+            }, 7000);
         </script>
         
-        <!-- Modal para crear nuevo usuario -->
+       
         <div class="modal fade" id="modalNuevoUsuario" tabindex="-1" role="dialog" aria-labelledby="modalNuevoUsuarioLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form action="CrearUsuarioServlet" method="post">
+                <form action="CrearUsuarioServlet" method="post" accept-charset="UTF-8">
                     <div class="modal-content">
                         <div class="modal-header bg-success text-white">
                             <h5 class="modal-title" id="modalNuevoUsuarioLabel"><i class="fas fa-user-plus"></i> Nuevo Usuario</h5>
@@ -398,6 +365,14 @@
             document.getElementById("editClave").value = clave;
 
             $('#modalEditarUsuario').modal('show');
+        }
+        </script>
+        
+        <script>
+        function confirmarEliminacion(idUsuario) {
+            if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+                window.location.href = "EliminarUsuarioServlet?id=" + idUsuario;
+            }
         }
         </script>
         
