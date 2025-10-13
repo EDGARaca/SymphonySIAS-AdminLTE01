@@ -3,7 +3,9 @@ com\mycom\symphonysias\adminlte01\servlet\EliminarUsuarioServlet.class
 com\mycom\symphonysias\adminlte01\dao\UsuarioDAO.class
 com\mycom\symphonysias\adminlte01\servlet\CrearUsuarioServlet.class
 com\mycom\symphonysias\adminlte01\LoginServlet.class
+com\mycom\symphonysias\adminlte01\LOGGER.class
 com\mycom\symphonysias\adminlte01\util\Conexion.class
+com\mycom\symphonysias\adminlte01\servlet\CerrarSesionServlet.class
 com\mycom\symphonysias\adminlte01\UsuarioServlet.class
 com\mycom\symphonysias\adminlte01\resources\JakartaEE8Resource.class
 UsuarioServlet.class

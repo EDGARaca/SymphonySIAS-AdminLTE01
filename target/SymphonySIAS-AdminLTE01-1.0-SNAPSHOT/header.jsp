@@ -29,7 +29,9 @@
             <a class="nav-link" href="ChangePassword.jsp"><i class="fas fa-key"></i>Cambiar contraseña</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="LogoutServlet"><i class="fas fa-sign-out-alt"></i>Cerrar sesión</a>
+            <a class="nav-link text-danger" href="CerrarSesionServlet">
+                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+            </a>
         </li>    
     </ul>
 </nav>

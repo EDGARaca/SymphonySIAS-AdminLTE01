@@ -39,7 +39,7 @@ public class UsuarioDAO {
     public Usuario validar(String usuario, String clave) {
         Usuario resultado = null;
 
-        String sql = "SELECT * FROM usuarios WHERE usuario = ? AND clave = ?";
+        String sql = "SELECT * FROM usuarios WHERE usuario = ? AND clave = ? AND activo = true";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, usuario);
@@ -47,12 +47,16 @@ public class UsuarioDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    resultado = new Usuario(
-                        rs.getString("nombre"),
-                        rs.getString("usuario"),
-                        rs.getString("clave"),
-                        rs.getString("rol")
-                    );
+                    Usuario u = new Usuario();
+                    u.setId(rs.getInt("id"));
+                    u.setNombre(rs.getString("nombre"));
+                    u.setUsuario(rs.getString("usuario"));
+                    u.setClave(rs.getString("clave"));
+                    u.setCorreo(rs.getString("correo"));
+                    u.setRol(rs.getString("rol"));
+                    u.setActivo(rs.getBoolean("activo"));
+                    resultado = u;
+
                     LOGGER.log(Level.INFO, "Usuario validado: {0}", resultado.getUsuario());
                 } else {
                     LOGGER.log(Level.WARNING, "No se encontró coincidencia para usuario: {0}", usuario);

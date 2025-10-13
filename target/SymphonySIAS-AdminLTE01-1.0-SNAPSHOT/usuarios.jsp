@@ -59,6 +59,17 @@
                     <div class="container-fluid">
                         <h1 class="m-0 mb-3">Gestión de Usuarios</h1>
                         
+                        <%
+                            String rol = (String) session.getAttribute("rolActivo");
+                        %>
+
+                        <% if ("admin".equals(rol)) { %>
+                            <a href="crear_usuario.jsp" class="btn btn-primary mb-3">
+                                <i class="fas fa-user-plus"></i> Crear Usuario
+                            </a>
+                        <% } %>
+
+                        
                         <!-- Validación de mensaje tras creación de usuario -->        
                         <!-- Sección de alertas -->
                         <!-- Validación de mensaje de éxito o error tras editar -->
@@ -92,8 +103,17 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
+                            
+                        <% } else if ("true".equals(request.getParameter("eliminado")) || "true".equals(request.getAttribute("eliminado"))) { %>
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>¡Usuario eliminado!</strong> El registro fue borrado correctamente.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            
                         <% } %>
-                        
+                         
                     </div>
                 </section>
                     
@@ -146,22 +166,29 @@
                                         <td><%= u.getRol() %></td>
                                         <td><%= u.isActivo() ? "Activo" : "Inactivo" %></td>
                                         <td>
-                                            <button class="btn btn-sm btn-primary" title="Editar"
-                                                onclick="abrirModalEditar(
-                                                    '<%= u.getId() %>',
-                                                    '<%= u.getNombre() %>',
-                                                    '<%= u.getUsuario() %>',
-                                                    '<%= u.getCorreo() %>',
-                                                    '<%= u.getRol() %>',
-                                                    '<%= u.isActivo() ? "Activo" : "Inactivo" %>',
-                                                    ''
-                                                )">
-                                                <i class="fas fa-edit"></i> Editar
-                                            </button>
-                                            <button class="btn btn-sm btn-danger" title="Eliminar"
-                                                    onclick="confirmarEliminacion('<%= u.getId() %>')">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </button>
+                                            <%
+                                                String rolActivo = (String) session.getAttribute("rolActivo");
+                                                if ("ADMIN".equalsIgnoreCase(rolActivo)) {
+                                            %>
+                                                <button class="btn btn-sm btn-primary" title="Editar"
+                                                    onclick="abrirModalEditar(
+                                                        '<%= u.getId() %>',
+                                                        '<%= u.getNombre() %>',
+                                                        '<%= u.getUsuario() %>',
+                                                        '<%= u.getCorreo() %>',
+                                                        '<%= u.getRol() %>',
+                                                        '<%= u.isActivo() ? "Activo" : "Inactivo" %>',
+                                                        ''
+                                                    )">
+                                                    <i class="fas fa-edit"></i> Editar
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" title="Eliminar"
+                                                        onclick="confirmarEliminacion('<%= u.getId() %>')">
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                                </button>
+                                            <%
+                                                }
+                                            %>        
                                         </td>
                                     </tr>
                                     <%

@@ -59,6 +59,44 @@
                             <div class="card-body">
                                 <p>Este es el dashboard institucional de SymphonySIAS.</p>
                                 <%-- Aquí puedo agregar módulos, reportes, gráficos, etc --%>
+                                <%
+                                    switch (rol) {
+                                        case "admin":
+                                %>
+                                            <div class="alert alert-info">
+                                                <i class="fas fa-user-shield"></i> Acceso completo como <strong>Administrador</strong>. Puedes gestionar usuarios, clases, contenidos y reportes.
+                                            </div>
+                                <%
+                                            break;
+                                        case "docente":
+                                %>
+                                            <div class="alert alert-warning">
+                                                <i class="fas fa-chalkboard-teacher"></i> Acceso como <strong>Docente</strong>. Puedes visualizar tus clases, contenidos asignados y notificaciones.
+                                            </div>
+                                <%
+                                            break;
+                                        case "estudiante":
+                                %>
+                                            <div class="alert alert-success">
+                                                <i class="fas fa-user-graduate"></i> Acceso como <strong>Estudiante</strong>. Puedes consultar tus horarios, contenidos y mensajes institucionales.
+                                            </div>
+                                <%
+                                            break;
+                                        case "funcionario":
+                                %>
+                                            <div class="alert alert-secondary">
+                                                <i class="fas fa-briefcase"></i> Acceso como <strong>Funcionario</strong>. Puedes revisar reportes administrativos y notificaciones internas.
+                                            </div>
+                                <%
+                                            break;
+                                        default:
+                                %>
+                                            <div class="alert alert-danger">
+                                                <i class="fas fa-exclamation-triangle"></i> Rol no reconocido. Contacta al administrador del sistema.
+                                            </div>
+                                <%
+                                    }
+                                %>
                             </div>
                         </div>
                     </div>
