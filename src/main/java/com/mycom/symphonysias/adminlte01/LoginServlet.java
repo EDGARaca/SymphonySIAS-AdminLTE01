@@ -75,7 +75,12 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("usuarioActivo", usuario.getUsuario()); //"usuario"
             session.setAttribute("nombreActivo", usuario.getNombre()); //"nombre"
-            session.setAttribute("rolActivo", usuario.getRol().toLowerCase()); //"rol"
+            
+            String rolNormalizado = usuario.getRol().toLowerCase().trim();
+            if ("admin".equals(rolNormalizado)) {
+                rolNormalizado = "administrador";
+            }            
+            session.setAttribute("rolActivo", rolNormalizado); //"rol"
             response.sendRedirect("dashboard.jsp"); //por error se cambia el index.jsp 04OCT2025h1123
         } else {
             request.setAttribute("error", "Credenciales inválidas");

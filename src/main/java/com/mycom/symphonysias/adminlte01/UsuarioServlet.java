@@ -13,6 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.mycom.symphonysias.adminlte01.modelo.Usuario;
 import com.mycom.symphonysias.adminlte01.dao.UsuarioDAO;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import javax.servlet.http.HttpSession;
+
+
+
 
 
 /**
@@ -21,11 +27,21 @@ import java.util.List;
  */
 @WebServlet("/UsuarioServlet")
 public class UsuarioServlet extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(UsuarioServlet.class.getName());
 
 
     @Override
 protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+    
+    HttpSession session = request.getSession(false);
+    String rolActivo = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+
+    if (rolActivo == null || !"administrador".equals(rolActivo)) {
+        LOGGER.log(Level.WARNING, "[ACCESO DENEGADO] Usuario sin permiso para acceder a UsuarioServlet (GET). Rol: {0}", rolActivo);
+        response.sendRedirect("dashboard.jsp");
+        return;
+    }
 
     String actualizado = request.getParameter("actualizado");
     String error = request.getParameter("error");
@@ -53,6 +69,15 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        HttpSession session = request.getSession(false);
+        String rolActivo = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+
+        if (rolActivo == null || !"administrador".equals(rolActivo)) {
+            LOGGER.log(Level.WARNING, "[ACCESO DENEGADO] Usuario sin permiso para acceder a UsuarioServlet (POST). Rol: {0}", rolActivo);
+            response.sendRedirect("dashboard.jsp");
+            return;
+}
         // Lógica para editar o eliminar usuarios, si se usa por POST
         // Trazabilidad de recepción
         System.out.println("[DEBUG] EditarUsuarioServlet recibió datos POST");

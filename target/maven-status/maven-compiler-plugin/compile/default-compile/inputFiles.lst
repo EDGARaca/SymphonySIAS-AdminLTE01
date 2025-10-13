@@ -1,7 +1,6 @@
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\UsuarioServlet.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\servlet\EliminarUsuarioServlet.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\SessionFilter.java
-D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\LOGGER.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\LogoutServlet.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\dao\UsuarioDAO.java
 D:\MisProyectosAdminLTE\SymphonySIAS-AdminLTE01\src\main\java\com\mycom\symphonysias\adminlte01\modelo\Usuario.java

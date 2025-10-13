@@ -61,11 +61,39 @@
                                 <%-- Aquí puedo agregar módulos, reportes, gráficos, etc --%>
                                 <%
                                     switch (rol) {
-                                        case "admin":
+                                        case "administrador":
                                 %>
                                             <div class="alert alert-info">
                                                 <i class="fas fa-user-shield"></i> Acceso completo como <strong>Administrador</strong>. Puedes gestionar usuarios, clases, contenidos y reportes.
                                             </div>
+                                <%
+                                    switch (rol) {
+                                        case "director":
+                                %>
+                                            <div class="alert alert-primary">
+                                                <i class="fas fa-user-tie"></i> Acceso como <strong>Director</strong>. Puedes supervisar la gestión académica, revisar reportes y coordinar acciones institucionales.
+                                            </div>
+                                <%
+                                    switch (rol) {
+                                        case "coordinador académico":
+                                %>
+                                            <div class="alert alert-info">
+                                                <i class="fas fa-user-cog"></i> Acceso como <strong>Coordinador Académico</strong>. Puedes organizar clases, asignar profesores y validar contenidos académicos.
+                                            </div>
+                                <%
+                                    switch (rol) {
+                                        case "auxiliar administrativo":
+                                %>
+                                            <div class="alert alert-secondary">
+                                                <i class="fas fa-user-clock"></i> Acceso como <strong>Auxiliar Administrativo</strong>. Puedes apoyar la gestión de estudiantes y enviar notificaciones institucionales.
+                                            </div>
+                                <%
+                                    switch (rol) {
+                                        case "auxiliar contable":
+                                %>
+                                            <div class="alert alert-dark">
+                                                <i class="fas fa-calculator"></i> Acceso como <strong>Auxiliar Contable</strong>. Puedes consultar reportes financieros y realizar seguimiento contable.
+                                            </div>            
                                 <%
                                             break;
                                         case "docente":
