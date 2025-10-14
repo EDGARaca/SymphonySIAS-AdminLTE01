@@ -45,89 +45,81 @@
             <div class="content-wrapper">
                 <section class="content-header">
                     <div class="container-fluid">
-                        <div class="text-center mb-3">
-                            <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS2" style="height:120px;">
+                        <div class="row align-items-center mb-3">
+                            <div class="col-12 col-md-6 text-center mb-2">
+                                <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" style="max-height:220px;">
+                            </div>
+                            <div class="col-12 col-md-6 text-center mb-2">
+                                <img src="assets/adminlte/img/banda5.jpg" alt="Fotografía institucional" style="max-height:300px; border-radius:8px;">
+                            </div>
                         </div>
-                        <h1 class="m-0">Bienvenido, <strong><%= nombre %></strong> (<%= rol %>)</h1>                                      
+
+                        <div class="text-center mb-4 px-3">
+                            <h5 class="text-primary text-wrap">
+                                <i class="fas fa-music"></i> ¡Somos una Escuela de Música que te ayuda a impulsar tu desarrollo musical!
+                            </h5>
+                        </div>
+                        <h5 class="m-0">Bienvenido, <strong><%= nombre %></strong> (<%= rol %>)</h5>
+                        <p class="text-muted">Sistema de información estudiantil SymphonySIAS</p>
                         <p>Usuario activo: <%= usuario %></p>
+
+                        <% if ("administrador".equals(rol)) { %>
+                            <div class="alert alert-info mt-2">
+                                <i class="fas fa-user-shield"></i> Acceso completo como <strong>Administrador</strong>. Puedes gestionar usuarios, clases, contenidos y reportes.
+                            </div>
+                        <% } %>
                     </div>
                 </section>
                     
                 <section class="content">
-                    <div class="container-fluid">
+                    <div class="container-fluid px-3">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Panel principal</h3>
+                                <h3 class="card-title"><i class="fas fa-school"></i> Accesos a módulos institucionales</h3>
                             </div>
-                            <div class="card-body">
-                                <p>Este es el dashboard institucional de SymphonySIAS.</p>
-                                <%-- Aquí puedo agregar módulos, reportes, gráficos, etc --%>
-                                <%
-                                    switch (rol) {
-                                        case "administrador":
-                                %>
-                                            <div class="alert alert-info">
-                                                <i class="fas fa-user-shield"></i> Acceso completo como <strong>Administrador</strong>. Puedes gestionar usuarios, clases, contenidos y reportes.
-                                            </div>
-                                <%
-                                            break;
-                                        case "director":
-                                %>
-                                            <div class="alert alert-primary">
-                                                <i class="fas fa-user-tie"></i> Acceso como <strong>Director</strong>. Puedes supervisar la gestión académica, revisar reportes y coordinar acciones institucionales.
-                                            </div>
-                                <%
-                                            break;
-                                        case "coordinador académico":
-                                %>
-                                            <div class="alert alert-info">
-                                                <i class="fas fa-user-cog"></i> Acceso como <strong>Coordinador Académico</strong>. Puedes organizar clases, asignar profesores y validar contenidos académicos.
-                                            </div>
-                                <%
-                                            break;
-                                        case "auxiliar administrativo":
-                                %>
-                                            <div class="alert alert-secondary">
-                                                <i class="fas fa-user-clock"></i> Acceso como <strong>Auxiliar Administrativo</strong>. Puedes apoyar la gestión de estudiantes y enviar notificaciones institucionales.
-                                            </div>
-                                <%
-                                            break;
-                                        case "auxiliar contable":
-                                %>
-                                            <div class="alert alert-dark">
-                                                <i class="fas fa-calculator"></i> Acceso como <strong>Auxiliar Contable</strong>. Puedes consultar reportes financieros y realizar seguimiento contable.
-                                            </div>            
-                                <%
-                                            break;
-                                        case "docente":
-                                %>
-                                            <div class="alert alert-warning">
-                                                <i class="fas fa-chalkboard-teacher"></i> Acceso como <strong>Docente</strong>. Puedes visualizar tus clases, contenidos asignados y notificaciones.
-                                            </div>
-                                <%
-                                            break;
-                                        case "estudiante":
-                                %>
-                                            <div class="alert alert-success">
-                                                <i class="fas fa-user-graduate"></i> Acceso como <strong>Estudiante</strong>. Puedes consultar tus horarios, contenidos y mensajes institucionales.
-                                            </div>
-                                <%
-                                            break;
-                                        case "funcionario":
-                                %>
-                                            <div class="alert alert-secondary">
-                                                <i class="fas fa-briefcase"></i> Acceso como <strong>Funcionario</strong>. Puedes revisar reportes administrativos y notificaciones internas.
-                                            </div>
-                                <%
-                                            break;
-                                        default:
-                                %>
-                                            <div class="alert alert-danger">
-                                                <i class="fas fa-exclamation-triangle"></i> Rol no reconocido. Contacta al administrador del sistema.
-                                            </div>
-                                <%
-                                    } // cierre del switch
-                                %>
+                            <div class="card-body">                             
+                                <div class="row text-center">
+                                    <div class="col-12 col-sm-6 col-md-3 mb-3">
+                                        <a href="adminSias.jsp" class="btn btn-outline-primary btn-block">
+                                            <i class="fas fa-tools"></i> ADMIN SIAS
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <a href="gestionEstudiantes.jsp" class="btn btn-outline-success btn-block">
+                                            <i class="fas fa-user-graduate"></i> Gestión Estudiantes
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <a href="gestionProfesores.jsp" class="btn btn-outline-warning btn-block">
+                                            <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <a href="gestionContable.jsp" class="btn btn-outline-dark btn-block">
+                                            <i class="fas fa-calculator"></i> Auxiliar Contable
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <a href="gestionAdministrativo.jsp" class="btn btn-outline-secondary btn-block">
+                                            <i class="fas fa-user-clock"></i> Auxiliar Administrativo
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <a href="gestionClases.jsp" class="btn btn-outline-info btn-block">
+                                            <i class="fas fa-calendar-alt"></i> Clases y Horarios
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <a href="gestionCoordinador.jsp" class="btn btn-outline-primary btn-block">
+                                            <i class="fas fa-user-cog"></i> Coordinador Académico
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <a href="gestionDirector.jsp" class="btn btn-outline-primary btn-block">
+                                            <i class="fas fa-user-tie"></i> Gestión Director
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

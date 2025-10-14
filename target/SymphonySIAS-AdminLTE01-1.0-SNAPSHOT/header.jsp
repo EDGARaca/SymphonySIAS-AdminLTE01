@@ -32,7 +32,7 @@
     <ul class="navbar-nav ml-auto">
     <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="fas fa-user-circle"></i> <strong><%= nombre %></strong> (<%= rol %>)
+            <i class="fas fa-user-circle fa-2x text-green"> </i></i><strong>  <%= nombre %></strong> (<%= rol %>)
         </a>
     </li>
     <li class="nav-item">
