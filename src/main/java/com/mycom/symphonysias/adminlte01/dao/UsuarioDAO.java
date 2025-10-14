@@ -39,7 +39,7 @@ public class UsuarioDAO {
     public Usuario validar(String usuario, String clave) {
         Usuario resultado = null;
 
-        String sql = "SELECT * FROM usuarios WHERE usuario = ? AND clave = ? AND activo = true";
+        String sql = "SELECT * FROM usuarios WHERE usuario = ? AND clave = ? AND activo = 1";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, usuario);
@@ -164,27 +164,20 @@ public class UsuarioDAO {
     
     public boolean eliminarUsuario(String id) {
     boolean eliminado = false;
-    Connection conn = null;
-    PreparedStatement stmt = null;
 
-    try {
-        conn = Conexion.getConexion();
-        String sql = "DELETE FROM usuarios WHERE id = ?";
-        stmt = conn.prepareStatement(sql);
+    String sql = "DELETE FROM usuarios WHERE id = ?";
+
+    try (Connection conn = Conexion.getConexion();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
         stmt.setString(1, id);
         int filas = stmt.executeUpdate();
         eliminado = filas > 0;
-    } catch (Exception e) {
-        System.err.println("[ERROR] Fallo al eliminar usuario: " + e.getMessage());
-        e.printStackTrace();
-    } finally {
-        try {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-        } catch (Exception e) {
-            System.err.println("[ERROR] Fallo al cerrar conexión: " + e.getMessage());
-        }
+
+    } catch (SQLException ex) {
+        LOGGER.log(Level.SEVERE, "[ERROR] Fallo al eliminar usuario", ex);
     }
+
     return eliminado;
     }
 

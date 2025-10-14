@@ -1,8 +1,10 @@
 com\mycom\symphonysias\adminlte01\SessionFilter.class
 com\mycom\symphonysias\adminlte01\servlet\EliminarUsuarioServlet.class
+com\mycom\symphonysias\adminlte01\util\HashUtil.class
 com\mycom\symphonysias\adminlte01\dao\UsuarioDAO.class
 com\mycom\symphonysias\adminlte01\servlet\CrearUsuarioServlet.class
 com\mycom\symphonysias\adminlte01\LoginServlet.class
+com\mycom\symphonysias\adminlte01\servlet\CambiarClaveServlet.class
 com\mycom\symphonysias\adminlte01\util\Conexion.class
 com\mycom\symphonysias\adminlte01\servlet\CerrarSesionServlet.class
 com\mycom\symphonysias\adminlte01\UsuarioServlet.class

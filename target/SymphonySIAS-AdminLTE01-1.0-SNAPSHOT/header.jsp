@@ -25,15 +25,20 @@
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <%-- Contenido del navbar --%>
     <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="ChangePassword.jsp"><i class="fas fa-key"></i>Cambiar contraseña</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-danger" href="CerrarSesionServlet">
-                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-            </a>
-        </li>    
-    </ul>
+    <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+            <i class="fas fa-user-circle"></i> <strong><%= nombre %></strong> (<%= rol %>)
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="ChangePassword.jsp"><i class="fas fa-key"></i> Cambiar contraseña</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-danger" href="CerrarSesionServlet">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </a>
+    </li>    
+</ul>
 </nav>
 
 

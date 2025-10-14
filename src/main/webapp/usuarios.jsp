@@ -5,10 +5,12 @@
 --%>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ page import="javax.servlet.http.HttpSession" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.mycom.symphonysias.adminlte01.modelo.Usuario" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page session="true" %>
+
 
 
 <%
@@ -17,7 +19,11 @@
     
     String errorParam = request.getParameter("error");
     String errorAttr = (String) request.getAttribute("error");
-%>    
+%>
+
+<%
+    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+%>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -58,18 +64,7 @@
                 <section class="content-header">
                     <div class="container-fluid">
                         <h1 class="m-0 mb-3">Gestión de Usuarios</h1>
-                        
-                        <%
-                            String rol = (String) session.getAttribute("rolActivo");
-                        %>
-
-                        <% if ("admin".equals(rol)) { %>
-                            <a href="crear_usuario.jsp" class="btn btn-primary mb-3">
-                                <i class="fas fa-user-plus"></i> Crear Usuario
-                            </a>
-                        <% } %>
-
-                        
+                                               
                         <!-- Validación de mensaje tras creación de usuario -->        
                         <!-- Sección de alertas -->
                         <!-- Validación de mensaje de éxito o error tras editar -->
@@ -151,55 +146,60 @@
                                             for (Usuario u : usuarios) {
                                                 String claseFila = "";
                                                 switch (u.getRol()) {
-                                                    case "ADMIN": claseFila = "table-danger"; break;
-                                                    case "DOCENTE": claseFila = "table-warning"; break;
-                                                    case "ESTUDIANTE": claseFila = "table-success"; break;
-                                                    case "FUNCIONARIO": claseFila = "table-info"; break;
+                                                    case "ADMINISTRADOR SIAS": claseFila = "table-danger"; break;
+                                                    case "DIRECTOR": claseFila = "table-primary"; break;
+                                                    case "COORDINADOR ACADÉMICO": claseFila = "table-warning"; break;
+                                                    case "AUXILIAR ADMINISTRATIVO": claseFila = "table-info"; break;
+                                                    case "AUXILIAR CONTABLE": claseFila = "table-secondary"; break;
+                                                    case "DOCENTE": claseFila = "table-success"; break;
+                                                    case "ESTUDIANTE": claseFila = "table-light"; break;
                                                     default: claseFila = "";
                                                 }
                                     %>
-                                    <tr class="<%= claseFila %>">
-                                        <td><%= u.getId() %></td>
-                                        <td><%= u.getNombre() %></td>
-                                        <td><%= u.getUsuario() %></td>
-                                        <td><%= u.getCorreo() %></td>
-                                        <td><%= u.getRol() %></td>
-                                        <td><%= u.isActivo() ? "Activo" : "Inactivo" %></td>
-                                        <td>
-                                            <%
-                                                String rolActivo = (String) session.getAttribute("rolActivo");
-                                                if ("ADMIN".equalsIgnoreCase(rolActivo)) {
-                                            %>
-                                                <button class="btn btn-sm btn-primary" title="Editar"
-                                                    onclick="abrirModalEditar(
-                                                        '<%= u.getId() %>',
-                                                        '<%= u.getNombre() %>',
-                                                        '<%= u.getUsuario() %>',
-                                                        '<%= u.getCorreo() %>',
-                                                        '<%= u.getRol() %>',
-                                                        '<%= u.isActivo() ? "Activo" : "Inactivo" %>',
-                                                        ''
-                                                    )">
-                                                    <i class="fas fa-edit"></i> Editar
-                                                </button>
-                                                <button class="btn btn-sm btn-danger" title="Eliminar"
-                                                        onclick="confirmarEliminacion('<%= u.getId() %>')">
-                                                    <i class="fas fa-trash-alt"></i> Eliminar
-                                                </button>
-                                            <%
-                                                }
-                                            %>        
-                                        </td>
-                                    </tr>
+                                        <tr class="<%= claseFila %>">
+                                            <td><%= u.getId() %></td>
+                                            <td><%= u.getNombre() %></td>
+                                            <td><%= u.getUsuario() %></td>
+                                            <td><%= u.getCorreo() %></td>
+                                            <td><%= u.getRol() %></td>
+                                            <td><%= u.isActivo() ? "Activo" : "Inactivo" %></td>
+                                            <td>
+                                                <%
+                                                    String rolActivo = (String) session.getAttribute("rolActivo");
+                                                    if ("administrador".equalsIgnoreCase(rolActivo) ||
+                                                        "director".equalsIgnoreCase(rolActivo) ||
+                                                        "coordinador académico".equalsIgnoreCase(rolActivo)) {
+                                                %>
+                                                    <button class="btn btn-sm btn-primary" title="Editar"
+                                                        onclick="abrirModalEditar(
+                                                            '<%= u.getId() %>',
+                                                            '<%= u.getNombre() %>',
+                                                            '<%= u.getUsuario() %>',
+                                                            '<%= u.getCorreo() %>',
+                                                            '<%= u.getRol() %>',
+                                                            '<%= u.isActivo() ? "Activo" : "Inactivo" %>',
+                                                            ''
+                                                        )">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger" title="Eliminar"
+                                                            onclick="confirmarEliminacion('<%= u.getId() %>')">
+                                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                                    </button>
+                                                <%
+                                                    }
+                                                %>
+                                            </td>
+                                        </tr>
                                     <%
-                                            }
+                                            } // cierre del for
                                         } else {
                                     %>
-                                    <tr>
-                                        <td colspan="7" class="text-center text-warning">No hay usuarios registrados.</td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="7" class="text-center text-warning">No hay usuarios registrados.</td>
+                                        </tr>
                                     <%
-                                        }
+                                        } // cierre del if
                                     %>
                                 </tbody>
                                 </table>
@@ -276,10 +276,13 @@
                             <div class="form-group">
                                 <label for="editRol">Rol</label>
                                 <select class="form-control" id="editRol" name="rol">
-                                    <option>ADMIN</option>
-                                    <option>DOCENTE</option>
-                                    <option>ESTUDIANTE</option>
-                                    <option>FUNCIONARIO</option>
+                                    <option>ADMIN SIAS</option>
+                                    <option>Director</option>
+                                    <option>Coord. Acad</option>
+                                    <option>Aux. Admin</option>
+                                    <option>Aux. Contable</option>
+                                    <option>Docente</option>
+                                    <option>Estudiante</option>
                                     <option>PRUEBA</option>
                                 </select>
                             </div>
@@ -358,10 +361,13 @@
                           <label for="nuevoRol">Rol</label>
                           <select class="form-control" id="nuevoRol" name="rol">
                             <option>ADMIN</option>
-                            <option>DOCENTE</option>
-                            <option>ESTUDIANTE</option>
-                            <option>FUNCIONARIO</option>
-                            <option>PRUEBA</option>
+                                    <option>Director</option>
+                                    <option>Coord. Acad</option>
+                                    <option>Aux. Admin</option>
+                                    <option>Aux. Contable</option>
+                                    <option>Docente</option>
+                                    <option>Estudiante</option>
+                                    <option>PRUEBA</option>
                           </select>
                         </div>
                         <div class="form-group">
