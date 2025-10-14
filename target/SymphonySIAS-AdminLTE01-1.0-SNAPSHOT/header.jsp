@@ -23,6 +23,11 @@
 
 <%-- Navbar superior --%> 
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    
+    <a class="navbar-brand ml-3" href="dashboard.jsp">
+    <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS1" style="height:50px;">
+    </a>
+    
     <%-- Contenido del navbar --%>
     <ul class="navbar-nav ml-auto">
     <li class="nav-item dropdown">

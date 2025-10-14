@@ -45,6 +45,9 @@
             <div class="content-wrapper">
                 <section class="content-header">
                     <div class="container-fluid">
+                        <div class="text-center mb-3">
+                            <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS2" style="height:120px;">
+                        </div>
                         <h1 class="m-0">Bienvenido, <strong><%= nombre %></strong> (<%= rol %>)</h1>                                      
                         <p>Usuario activo: <%= usuario %></p>
                     </div>
