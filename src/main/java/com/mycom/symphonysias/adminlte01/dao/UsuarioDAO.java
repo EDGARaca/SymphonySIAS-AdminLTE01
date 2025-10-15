@@ -151,7 +151,11 @@ public class UsuarioDAO {
 
     } catch (SQLException e) {
         LOGGER.log(Level.SEVERE, "Error al crear usuario", e);
-    } finally {
+        e.printStackTrace(); 
+    }
+       
+        
+    finally {
         try {
             if (ps != null) ps.close();
         } catch (SQLException e) {
