@@ -38,7 +38,7 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
             <a class="nav-link text-light" data-toggle="dropdown" href="#">
-                <i class="fas fa-user-circle fa-lg text-success"></i>
+                <i class="fas fa-user-circle fa-2x text-success align-middle me-2"></i>
                 <strong><%= nombre %></strong> (<%= rol %>)
             </a>
         </li>
