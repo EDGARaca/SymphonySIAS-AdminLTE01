@@ -47,7 +47,7 @@
                 <div class="container-fluid">
                     <div class="row align-items-center mb-3">
                         <div class="col-12 col-md-6 text-center mb-2">
-                            <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" style="max-height:220px;">
+                            <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" style="max-height:220px; border-radius:8px;">
                         </div>
                         <div class="col-12 col-md-6 text-center mb-2">
                             <img src="assets/adminlte/img/banda5.jpg" alt="Fotografía institucional" style="max-height:300px; border-radius:8px;">

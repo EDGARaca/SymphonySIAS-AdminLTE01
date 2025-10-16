@@ -26,7 +26,7 @@
 
     <%-- Logo institucional --%>
     <a class="navbar-brand ml-3" href="dashboard.jsp">
-        <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" style="height:45px; opacity:0.9;">
+        <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" style="height:45px; opacity:0.9; border-radius:8px;">
     </a>
 
     <%-- Lema institucional --%>
