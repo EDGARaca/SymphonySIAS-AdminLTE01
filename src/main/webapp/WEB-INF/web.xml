@@ -12,6 +12,17 @@
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+    
+    <servlet>
+        <servlet-name>EstudianteServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.EstudianteServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EstudianteServlet</servlet-name>
+        <url-pattern>/EstudianteServlet</url-pattern>
+    </servlet-mapping>
+    
     <!-- Filtro de sesión institucional -->
     <filter>
         <filter-name>SessionFilter</filter-name>

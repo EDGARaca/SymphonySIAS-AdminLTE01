@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@WebServlet("/EstudianteServlet")
+
 public class EstudianteServlet extends HttpServlet {
 
     @Override
@@ -29,6 +29,8 @@ public class EstudianteServlet extends HttpServlet {
 
         // Trazabilidad en consola
         System.out.println("[SERVLET] Registro de nuevo estudiante");
+        
+        
 
         try {
             // Obtener parámetros del formulario
