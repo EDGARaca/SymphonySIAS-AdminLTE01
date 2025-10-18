@@ -13,7 +13,7 @@ public class Estudiante {
     private String documento;
     private String direccion;
     private String telefono;
-    private String email;
+    private String correo;
     private Date fechaNacimiento;
     private String genero;
     private String estado;
@@ -24,14 +24,14 @@ public class Estudiante {
 
     // Constructor completo
     public Estudiante(String nombre, String apellido, String documento, String direccion,
-                      String telefono, String email, Date fechaNacimiento, String genero,
+                      String telefono, String correo, Date fechaNacimiento, String genero,
                       String estado, String usuarioRegistro) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.documento = documento;
         this.direccion = direccion;
         this.telefono = telefono;
-        this.email = email;
+        this.correo = correo;
         this.fechaNacimiento = fechaNacimiento;
         this.genero = genero;
         this.estado = estado;
@@ -57,8 +57,8 @@ public class Estudiante {
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
 
     public Date getFechaNacimiento() { return fechaNacimiento; }
     public void setFechaNacimiento(Date fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }

@@ -35,6 +35,15 @@
                         </a>
                     </li>
                 <% } %>
+                
+                <% if ("administrador".equals(rol)) { %>
+                    <li class="nav-item">
+                        <a href="listarEstudiantes.jsp" class="nav-link">
+                            <i class="nav-icon fas fa-user-graduate"></i>
+                            <p>Gestión Estudiantes</p>
+                        </a>
+                    </li>
+                <% } %>
 
                 <% if ("director".equals(rol) || "coordinador académico".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
                     <li class="nav-item">

@@ -25,8 +25,7 @@ import java.sql.Statement;
 public class EstudianteDAO {
 
     public boolean insertarEstudiante(Estudiante estudiante) {
-        String sql = "INSERT INTO estudiantes (nombre, apellido, documento, direccion, telefono, email, fecha_nacimiento, genero, estado, usuario_registro) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO estudiantes (nombre, apellido, documento, direccion, telefono, correo, fecha_nacimiento, genero, estado, usuario_registro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = Conexion.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -36,16 +35,16 @@ public class EstudianteDAO {
             stmt.setString(3, estudiante.getDocumento());
             stmt.setString(4, estudiante.getDireccion());
             stmt.setString(5, estudiante.getTelefono());
-            stmt.setString(6, estudiante.getEmail());
+            stmt.setString(6, estudiante.getCorreo());
             stmt.setDate(7, new java.sql.Date(estudiante.getFechaNacimiento().getTime()));
             stmt.setString(8, estudiante.getGenero());
             stmt.setString(9, estudiante.getEstado());
             stmt.setString(10, estudiante.getUsuarioRegistro());
 
-            int filas = stmt.executeUpdate();
-            return filas > 0;
+            return stmt.executeUpdate() > 0;
+            
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("[ERROR DAO] No se pudo insertar estudiante: " + e.getMessage());
             return false;
         }
@@ -67,7 +66,7 @@ public class EstudianteDAO {
                 est.setDocumento(rs.getString("documento"));
                 est.setDireccion(rs.getString("direccion"));
                 est.setTelefono(rs.getString("telefono"));
-                est.setEmail(rs.getString("email"));
+                est.setCorreo(rs.getString("correo"));
                 est.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
                 est.setGenero(rs.getString("genero"));
                 est.setEstado(rs.getString("estado"));
@@ -100,8 +99,8 @@ public class EstudianteDAO {
                 est.setApellido(rs.getString("apellido"));
                 est.setDocumento(rs.getString("documento"));
                 est.setDireccion(rs.getString("direccion"));
-                est.setTelefono(rs.getString("telefono"));
-                est.setEmail(rs.getString("email"));
+                est.setTelefono(rs.getString("telefono"));                
+                est.setCorreo(rs.getString("correo"));
                 est.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
                 est.setGenero(rs.getString("genero"));
                 est.setEstado(rs.getString("estado"));
@@ -113,6 +112,44 @@ public class EstudianteDAO {
         }
 
         return est;
+    }
+    
+    public boolean actualizarEstudiante(Estudiante estudiante) {
+        String sql = "UPDATE estudiantes SET nombre=?, apellido=?, documento=?, direccion=?, telefono=?, correo=?, fecha_nacimiento=?, genero=?, estado=? WHERE id=?";
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, estudiante.getNombre());
+            stmt.setString(2, estudiante.getApellido());
+            stmt.setString(3, estudiante.getDocumento());
+            stmt.setString(4, estudiante.getDireccion());
+            stmt.setString(5, estudiante.getTelefono());
+            stmt.setString(6, estudiante.getCorreo());
+            stmt.setDate(7, new java.sql.Date(estudiante.getFechaNacimiento().getTime()));
+            stmt.setString(8, estudiante.getGenero());
+            stmt.setString(9, estudiante.getEstado());
+            stmt.setInt(10, estudiante.getId());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("[ERROR DAO] No se pudo actualizar estudiante: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean eliminarEstudiante(int id) {
+        String sql = "DELETE FROM estudiantes WHERE id=?";
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("[ERROR DAO] No se pudo eliminar estudiante: " + e.getMessage());
+            return false;
+        }
     }
 
 }

@@ -42,15 +42,61 @@
     <jsp:include page="sidebar.jsp" />
 
     <div class="content-wrapper">
+        
         <section class="content-header">
-            <div class="container-fluid">
-                <h4><i class="fas fa-users"></i> Estudiantes registrados</h4>
+            <div class="content-header">
+                <div class="container-fluid">
+                    <% if ("administrador".equals(rol)) { %>
+                        <div class="d-flex justify-content-end mb-3">
+                            <a href="registroEstudiante.jsp" class="btn btn-success">
+                                <i class="fas fa-plus-circle"></i> Registrar nuevo estudiante
+                            </a>
+                        </div>
+                    <% } %>
+                    <h4 class="mb-3 text-primary">
+                        <i class="fas fa-user-graduate"></i> Listado de Estudiantes
+                    </h4>
+                </div>
+            </div>
+            <div class="container-fluid">                
+                <% String registrado = request.getParameter("registrado");
+                   String editado = request.getParameter("editado");
+                   String eliminado = request.getParameter("eliminado");
+                   String error = request.getParameter("error");
+                %>
+
+                <% if (registrado != null) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>✔ Estudiante registrado correctamente.</strong>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                <% } else if (editado != null) { %>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <strong>✎ Estudiante editado correctamente.</strong>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                <% } else if (eliminado != null) { %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>🗑 Estudiante eliminado correctamente.</strong>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                <% } else if (error != null) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>⚠ Ocurrió un error al procesar la solicitud.</strong>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                <% } %>
             </div>
         </section>
 
         <section class="content">
             <div class="container-fluid">
                 <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-users"></i> Estudiantes registrados
+                        </h5>
+                    </div>
                     <div class="card-body table-responsive">
                         <table class="table table-bordered table-hover table-striped">
                             <thead class="thead-dark text-center">
@@ -61,11 +107,11 @@
                                     <th>Documento</th>
                                     <th>Dirección</th>
                                     <th>Teléfono</th>
-                                    <th>Email</th>
+                                    <th>Correo</th>
                                     <th>Fecha Nac.</th>
                                     <th>Género</th>
                                     <th>Estado</th>
-                                    <th>Registrado por</th>
+                                    <th>Reg. por</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -80,7 +126,7 @@
                                     <td><%= est.getDocumento() %></td>
                                     <td><%= est.getDireccion() %></td>
                                     <td><%= est.getTelefono() %></td>
-                                    <td><%= est.getEmail() %></td>
+                                    <td><%= est.getCorreo() %></td>
                                     <td><%= est.getFechaNacimiento() %></td>
                                     <td><%= est.getGenero() %></td>
                                     <td><%= est.getEstado() %></td>
@@ -107,5 +153,18 @@
 <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
 <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="assets/adminlte/js/adminlte.min.js"></script>
+
+<script>
+    // Ocultar alertas después de 4 segundos
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            alert.classList.remove('show');
+            alert.classList.add('fade');
+        });
+    }, 8000);
+</script>
 </body>
+
+
 </html>

@@ -4,7 +4,7 @@
     Author     : Spiri
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -94,7 +94,7 @@
         <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" class="img-fluid">
         <h5><i class="fas fa-user-graduate"></i> Registro de Estudiante</h5>
 
-        <form action="EstudianteServlet" method="post" autocomplete="off">
+        <form action="EstudianteServlet" method="post" autocomplete="UTF-8">
 
             <div class="form-group text-left">
                 <label class="form-label" for="nombre">Nombre</label>
@@ -122,8 +122,8 @@
             </div>
 
             <div class="form-group text-left">
-                <label class="form-label" for="email">Correo electrónico</label>
-                <input type="email" name="email" id="email" class="form-control" required>
+                <label class="form-label" for="correo">Correo</label>
+                <input type="email" name="correo" id="correo" class="form-control" required>
             </div>
 
             <div class="form-group text-left">
@@ -155,6 +155,9 @@
             </div>
 
             <button type="submit" class="btn btn-block">Guardar estudiante</button>
+            <a href="listarEstudiantes.jsp" class="btn btn-secondary mt-3">
+                <i class="fas fa-arrow-left"></i> Cancelar y volver al listado
+            </a>
         </form>
     </div>
 

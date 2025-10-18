@@ -65,77 +65,155 @@
                         <div class="card-body">
                             <div class="row text-center">
 
-                                <%-- ADMIN SIAS: solo administrador --%>
-                                <% if ("administrador".equals(rol)) { %>
-                                    <div class="col-md-3 mb-3">
+                                <!-- ADMIN SIAS -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("administrador".equals(rol)) { %>
                                         <a href="adminSias.jsp" class="btn btn-outline-primary btn-block">
-                                            <i class="fas fa-tools"></i> ADMIN SIAS
+                                            <i class="fas fa-tools"></i> ADMIN SIAS <br><small>(Administrador)</small>
                                         </a>
-                                    </div>
-                                <% } %>
-
-                                <%-- Gestión Estudiantes --%>
-                                <% if ("director".equals(rol) || "coordinador académico".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
-                                    <div class="col-md-3 mb-3">
-                                        <a href="gestionEstudiantes.jsp" class="btn btn-outline-success btn-block">
-                                            <i class="fas fa-user-graduate"></i> Gestión Estudiantes
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-tools"></i> ADMIN SIAS <br><small>(Administrador)</small>
                                         </a>
-                                    </div>
-                                <% } %>
+                                    <% } %>
+                                </div>
 
-                                <%-- Gestión Profesores --%>
-                                <% if ("director".equals(rol) || "coordinador académico".equals(rol)) { %>
-                                    <div class="col-md-3 mb-3">
+                                <!-- Gestión Estudiantes -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("administrador".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
+                                        <a href="listarEstudiantes.jsp" class="btn btn-outline-success btn-block">
+                                            <i class="fas fa-user-graduate"></i> Gestión Estudiantes <br><small>(Roles autorizados)</small>
+                                        </a>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-user-graduate"></i> Gestión Estudiantes <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
+
+                                <!-- Gestión Profesores -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("director".equals(rol) || "coordinador académico".equals(rol)) { %>
                                         <a href="gestionProfesores.jsp" class="btn btn-outline-warning btn-block">
-                                            <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores
+                                            <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(Director, Coordinador)</small>
                                         </a>
-                                    </div>
-                                <% } %>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
 
-                                <%-- Auxiliar Contable --%>
-                                <% if ("auxiliar contable".equals(rol)) { %>
-                                    <div class="col-md-3 mb-3">
+                                <!-- Auxiliar Contable -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("auxiliar contable".equals(rol)) { %>
                                         <a href="gestionContable.jsp" class="btn btn-outline-dark btn-block">
-                                            <i class="fas fa-calculator"></i> Auxiliar Contable
+                                            <i class="fas fa-calculator"></i> Auxiliar Contable <br><small>(Aux. Contable)</small>
                                         </a>
-                                    </div>
-                                <% } %>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-calculator"></i> Auxiliar Contable <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
 
-                                <%-- Auxiliar Administrativo --%>
-                                <% if ("auxiliar administrativo".equals(rol)) { %>
-                                    <div class="col-md-3 mb-3">
+                                <!-- Auxiliar Administrativo -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("auxiliar administrativo".equals(rol)) { %>
                                         <a href="gestionAdministrativo.jsp" class="btn btn-outline-secondary btn-block">
-                                            <i class="fas fa-user-clock"></i> Auxiliar Administrativo
+                                            <i class="fas fa-user-clock"></i> Auxiliar Administrativo <br><small>(Aux. Administrativo)</small>
                                         </a>
-                                    </div>
-                                <% } %>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-user-clock"></i> Auxiliar Administrativo <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
 
-                                <%-- Clases y Horarios --%>
-                                <% if ("docente".equals(rol) || "coordinador académico".equals(rol) || "director".equals(rol)) { %>
-                                    <div class="col-md-3 mb-3">
+                                <!-- Clases y Horarios -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("docente".equals(rol) || "coordinador académico".equals(rol) || "director".equals(rol)) { %>
                                         <a href="gestionClases.jsp" class="btn btn-outline-info btn-block">
-                                            <i class="fas fa-calendar-alt"></i> Clases y Horarios
+                                            <i class="fas fa-calendar-alt"></i> Clases y Horarios <br><small>(Docente, Coordinador, Director)</small>
                                         </a>
-                                    </div>
-                                <% } %>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-calendar-alt"></i> Clases y Horarios <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
 
-                                <%-- Coordinador Académico --%>
-                                <% if ("coordinador académico".equals(rol)) { %>
-                                    <div class="col-md-3 mb-3">
+                                <!-- Horarios (Estudiante) -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("estudiante".equals(rol)) { %>
+                                        <a href="horarios.jsp" class="btn btn-outline-info btn-block">
+                                            <i class="fas fa-clock"></i> Horarios <br><small>(Estudiante)</small>
+                                        </a>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-clock"></i> Horarios <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
+
+                                <!-- Coordinador Académico -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("coordinador académico".equals(rol)) { %>
                                         <a href="gestionCoordinador.jsp" class="btn btn-outline-primary btn-block">
-                                            <i class="fas fa-user-cog"></i> Coordinador Académico
+                                            <i class="fas fa-user-cog"></i> Coordinador Académico <br><small>(Coordinador)</small>
                                         </a>
-                                    </div>
-                                <% } %>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-user-cog"></i> Coordinador Académico <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
 
-                                <%-- Director --%>
-                                <% if ("director".equals(rol)) { %>
-                                    <div class="col-md-3 mb-3">
+                                <!-- Gestión Director -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("director".equals(rol)) { %>
                                         <a href="gestionDirector.jsp" class="btn btn-outline-primary btn-block">
-                                            <i class="fas fa-user-tie"></i> Gestión Director
+                                            <i class="fas fa-user-tie"></i> Gestión Director <br><small>(Director)</small>
                                         </a>
-                                    </div>
-                                <% } %>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-user-tie"></i> Gestión Director <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
+
+                                <!-- Contenidos -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("docente".equals(rol) || "estudiante".equals(rol)) { %>
+                                        <a href="contenidos.jsp" class="btn btn-outline-success btn-block">
+                                            <i class="fas fa-book-reader"></i> Contenidos <br><small>(Docente, Estudiante)</small>
+                                        </a>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-book-reader"></i> Contenidos <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
+
+                                <!-- Gestión de Notas -->
+                                <div class="col-md-3 mb-3">
+                                    <% if ("docente".equals(rol) || "estudiante".equals(rol) || "coordinador académico".equals(rol) || "director".equals(rol)) { %>
+                                        <a href="gestionNotas.jsp" class="btn btn-outline-success btn-block">
+                                            <i class="fas fa-clipboard-list"></i> Gestión de Notas <br><small>(Docente, Estudiante, Coordinador, Director)</small>
+                                        </a>
+                                    <% } else { %>
+                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
+                                            <i class="fas fa-clipboard-list"></i> Gestión de Notas <br><small>(No disponible)</small>
+                                        </a>
+                                    <% } %>
+                                </div>
+
+                                <!-- Notificaciones (todos los roles) -->
+                                <div class="col-md-3 mb-3">
+                                    <a href="notificaciones.jsp" class="btn btn-outline-danger btn-block">
+                                        <i class="fas fa-bell"></i> Notificaciones <br><small>(Todos los roles)</small>
+                                    </a>
+                                </div>
 
                             </div>
                         </div>

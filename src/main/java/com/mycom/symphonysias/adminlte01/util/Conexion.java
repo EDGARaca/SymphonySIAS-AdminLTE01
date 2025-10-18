@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 
 public class Conexion {
-
+                                       
     private static final String URL = "jdbc:mysql://localhost:33065/login_symphony?useUnicode=true&characterEncoding=UTF-8";
     private static final String USER = "root";
     private static final String PASS = "";
