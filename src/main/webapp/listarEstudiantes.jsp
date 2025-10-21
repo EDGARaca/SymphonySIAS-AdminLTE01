@@ -96,8 +96,24 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-users"></i> Estudiantes registrados
                         </h5>
+                        <div class="card-tools">
+                            <a href="ExportarProfesoresServlet" class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-file-pdf"></i> Exportar PDF
+                            </a>
+                        </div>
                     </div>
                     <div class="card-body table-responsive">
+                        <% if (request.getParameter("sinDatos") != null) { %>
+                            <div class="alert alert-warning text-center">
+                                <i class="fas fa-exclamation-triangle"></i> No hay registros disponibles para exportar.
+                            </div>
+                        <% } %>
+
+                        <% if (request.getParameter("exportado") != null) { %>
+                            <div class="alert alert-success text-center">
+                                <i class="fas fa-file-export"></i> Exportación completada correctamente.
+                            </div>
+                        <% } %>
                         <table class="table table-bordered table-hover table-striped">
                             <thead class="thead-dark text-center">
                                 <tr>
