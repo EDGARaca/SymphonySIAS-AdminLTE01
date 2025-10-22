@@ -24,6 +24,36 @@
     </servlet-mapping>
     
     
+    <servlet>
+    <servlet-name>ExportarEstudiantesServlet</servlet-name>
+    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarEstudiantesServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ExportarEstudiantesServlet</servlet-name>
+        <url-pattern>/ExportarEstudiantesServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+    <servlet-name>ExportarProfesoresServlet</servlet-name>
+    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarProfesoresServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ExportarProfesoresServlet</servlet-name>
+        <url-pattern>/ExportarProfesoresServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+    <servlet-name>ExportarUsuariosServlet</servlet-name>
+    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarUsuariosServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ExportarUsuariosServlet</servlet-name>
+        <url-pattern>/ExportarUsuariosServlet</url-pattern>
+    </servlet-mapping>
+    
     <!-- Filtro de sesión institucional -->
     <filter>
         <filter-name>SessionFilter</filter-name>

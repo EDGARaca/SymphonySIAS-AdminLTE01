@@ -57,7 +57,7 @@
            
             <jsp:include page="sidebar.jsp" />
             
-            <jsp:include page="footer.jsp" />
+            
             
             
             <div class="content-wrapper">
@@ -124,6 +124,21 @@
                                 <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalNuevoUsuario">
                                     <i class="fas fa-user-plus"></i> Nuevo Usuario
                                 </button>
+                                
+                                <a href="ExportarUsuariosServlet" class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                                </a>
+                                <% if (request.getParameter("sinDatos") != null) { %>
+                                <div class="alert alert-warning text-center">
+                                    <i class="fas fa-exclamation-triangle"></i> No hay usuarios registrados para exportar.
+                                </div>
+                                <% } %>
+
+                                <% if (request.getParameter("exportado") != null) { %>
+                                    <div class="alert alert-success text-center">
+                                        <i class="fas fa-file-export"></i> Exportación completada correctamente.
+                                    </div>
+                                <% } %>
                             </div>
                             <div class="card-body">
                                 <table id= "tablaUsuarios" class="table table-bordered table-hover">
@@ -206,7 +221,8 @@
                             </div>
                         </div>    
                     </div>
-                </section>                    
+                </section>
+                 <jsp:include page="footer.jsp" />                
             </div>                                               
         </div>       
     
@@ -411,7 +427,10 @@
         
         <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
         <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/adminlte/js/adminlte.min.js"></script> 
-    
+        <script src="assets/adminlte/js/adminlte.min.js"></script>
+        
+       
+        
+            
     </body>
 </html>
