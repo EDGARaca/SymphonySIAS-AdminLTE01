@@ -9,12 +9,13 @@
  * @author Spiri
  */
 
+
 package com.mycom.symphonysias.adminlte01.servlet;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import com.mycom.symphonysias.adminlte01.dao.EstudianteDAO;
-import com.mycom.symphonysias.adminlte01.modelo.Estudiante;
+import com.mycom.symphonysias.adminlte01.dao.UsuarioDAO;
+import com.mycom.symphonysias.adminlte01.modelo.Usuario;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -23,22 +24,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class ExportarEstudiantesServlet extends HttpServlet {
+public class ExportarUsuariosServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Estudiante> lista = new EstudianteDAO().listarEstudiantes();
+        List<Usuario> lista = new UsuarioDAO().listarUsuarios();
 
         if (lista == null || lista.isEmpty()) {
-            System.out.println("[SERVLET] No hay estudiantes para exportar");
-            response.sendRedirect("listarEstudiantes.jsp?sinDatos=1");
+            System.out.println("[SERVLET] No hay usuarios para exportar");
+            response.sendRedirect("usuarios.jsp?sinDatos=1");
             return;
         }
 
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=Estudiantes_SymphonySIAS.pdf");
+        response.setHeader("Content-Disposition", "inline; filename=Usuarios_SymphonySIAS.pdf");
 
         try {
             Document pdf = new Document(PageSize.A4.rotate());
@@ -47,7 +48,7 @@ public class ExportarEstudiantesServlet extends HttpServlet {
 
             // Encabezado institucional
             Font tituloFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLUE);
-            Paragraph titulo = new Paragraph("Listado de Estudiantes - SymphonySIAS", tituloFont);
+            Paragraph titulo = new Paragraph("Listado de Usuarios - SymphonySIAS", tituloFont);
             titulo.setAlignment(Element.ALIGN_CENTER);
             titulo.setSpacingAfter(10);
             pdf.add(titulo);
@@ -60,14 +61,14 @@ public class ExportarEstudiantesServlet extends HttpServlet {
             pdf.add(fechaGen);
 
             // Tabla
-            PdfPTable tabla = new PdfPTable(6);
+            PdfPTable tabla = new PdfPTable(4);
             tabla.setWidthPercentage(100);
-            tabla.setWidths(new float[]{2, 2, 2, 3, 2, 2});
+            tabla.setWidths(new float[]{2, 3, 3, 2});
 
             Font cabeceraFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
             BaseColor azul = new BaseColor(0, 102, 204);
 
-            String[] columnas = {"Nombre", "Apellido", "Documento", "Correo", "Género", "Estado"};
+            String[] columnas = {"Usuario", "Nombre completo", "Correo", "Rol"};
             for (String col : columnas) {
                 PdfPCell celda = new PdfPCell(new Phrase(col, cabeceraFont));
                 celda.setBackgroundColor(azul);
@@ -77,13 +78,11 @@ public class ExportarEstudiantesServlet extends HttpServlet {
             }
 
             Font filaFont = new Font(Font.FontFamily.HELVETICA, 10);
-            for (Estudiante e : lista) {
-                tabla.addCell(new Phrase(e.getNombre(), filaFont));
-                tabla.addCell(new Phrase(e.getApellido(), filaFont));
-                tabla.addCell(new Phrase(e.getDocumento(), filaFont));
-                tabla.addCell(new Phrase(e.getCorreo(), filaFont));
-                tabla.addCell(new Phrase(e.getGenero(), filaFont));
-                tabla.addCell(new Phrase(e.getEstado(), filaFont));
+            for (Usuario u : lista) {
+                tabla.addCell(new Phrase(u.getUsuario(), filaFont));
+                tabla.addCell(new Phrase(u.getNombre(), filaFont));
+                tabla.addCell(new Phrase(u.getCorreo(), filaFont));
+                tabla.addCell(new Phrase(u.getRol(), filaFont));
             }
 
             pdf.add(tabla);
@@ -98,7 +97,7 @@ public class ExportarEstudiantesServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("listarEstudiantes.jsp?error=exportar");
+            response.sendRedirect("usuarios.jsp?error=exportar");
         }
     }
 }

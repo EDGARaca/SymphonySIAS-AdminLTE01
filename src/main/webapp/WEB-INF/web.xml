@@ -44,6 +44,16 @@
         <url-pattern>/ExportarProfesoresServlet</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+    <servlet-name>ExportarUsuariosServlet</servlet-name>
+    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarUsuariosServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ExportarUsuariosServlet</servlet-name>
+        <url-pattern>/ExportarUsuariosServlet</url-pattern>
+    </servlet-mapping>
+    
     <!-- Filtro de sesión institucional -->
     <filter>
         <filter-name>SessionFilter</filter-name>

@@ -97,7 +97,7 @@
                             <i class="fas fa-users"></i> Estudiantes registrados
                         </h5>
                         <div class="card-tools">
-                            <a href="ExportarProfesoresServlet" class="btn btn-sm btn-outline-success">
+                            <a href="ExportarEstudiantesServlet" class="btn btn-sm btn-outline-success">
                                 <i class="fas fa-file-pdf"></i> Exportar PDF
                             </a>
                         </div>
