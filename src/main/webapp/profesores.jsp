@@ -25,6 +25,11 @@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
+    
+    <jsp:include page="header.jsp" />
+    
+    <jsp:include page="sidebar.jsp" />    
+    
     <div class="wrapper">
 
         <!-- Encabezado institucional -->
@@ -109,5 +114,8 @@
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/adminlte/js/adminlte.min.js"></script>
+    
+    <jsp:include page="footer.jsp" />
+    
 </body>
 </html>

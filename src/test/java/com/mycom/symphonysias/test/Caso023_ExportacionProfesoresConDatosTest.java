@@ -20,11 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class Caso023_ExportacionProfesoresConDatosTest {
 
-    @Test
+   @Test
     public void testExportacionConDatos() {
         List<Profesor> lista = new ProfesorDAO().listar();
         assertNotNull(lista, "La lista de profesores no debe ser nula");
         assertFalse(lista.isEmpty(), "Se esperaba al menos un profesor registrado para exportar");
         System.out.println("[TEST] Profesores disponibles para exportación: " + lista.size());
     }
+    
+    
 }
