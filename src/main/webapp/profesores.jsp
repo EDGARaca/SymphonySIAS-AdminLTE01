@@ -14,6 +14,17 @@
     List<Profesor> lista = dao.listar();
 %>
 
+<%
+    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
+    String nombre = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
+    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+
+    if (usuario == null || nombre == null || rol == null){
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,10 +36,10 @@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">   
-    <div class="wrapper">
+<div class="wrapper">
         
-        <jsp:include page="header.jsp" />    
-        <jsp:include page="sidebar.jsp" /> 
+        <jsp:include page="header.jsp" />
+        <jsp:include page="sidebar.jsp" />
 
         <!-- Encabezado institucional -->
         <div class="content-wrapper">
