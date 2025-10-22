@@ -76,6 +76,9 @@
                                             <i class="fas fa-tools"></i> ADMIN SIAS <br><small>(Administrador)</small>
                                         </a>
                                     <% } %>
+                                    
+                                    
+                                    
                                 </div>
 
                                 <!-- Gestión Estudiantes -->
@@ -102,6 +105,7 @@
                                             <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(No disponible)</small>
                                         </a>
                                     <% } %>
+                                    
                                 </div>
 
                                 <!-- Auxiliar Contable -->
@@ -221,10 +225,13 @@
                 </div>
             </section>
         </div>
-    </div>
-
+                                
     <%-- Scripts --%>
     <jsp:include page="footer.jsp" />
+    
+    </div>
+
+    
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/adminlte/js/adminlte.min.js"></script>
