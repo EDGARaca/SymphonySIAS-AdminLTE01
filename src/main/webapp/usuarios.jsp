@@ -221,7 +221,8 @@
                             </div>
                         </div>    
                     </div>
-                </section>                    
+                </section>
+                 <jsp:include page="footer.jsp" />                
             </div>                                               
         </div>       
     
@@ -428,7 +429,7 @@
         <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="assets/adminlte/js/adminlte.min.js"></script>
         
-        <jsp:include page="footer.jsp" />
+       
         
             
     </body>

@@ -24,13 +24,11 @@
     <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
-    
-    <jsp:include page="header.jsp" />
-    
-    <jsp:include page="sidebar.jsp" />    
-    
+<body class="hold-transition sidebar-mini layout-fixed">   
     <div class="wrapper">
+        
+        <jsp:include page="header.jsp" />    
+        <jsp:include page="sidebar.jsp" /> 
 
         <!-- Encabezado institucional -->
         <div class="content-wrapper">
@@ -47,7 +45,7 @@
                         <div class="card-header bg-warning">
                             <h3 class="card-title"><i class="fas fa-users"></i> Profesores registrados</h3>
                             <div class="card-tools">
-                                <a href="registrarProfesor.jsp" class="btn btn-sm btn-outline-dark">
+                                <a href="registroProfesor.jsp" class="btn btn-sm btn-outline-dark">
                                     <i class="fas fa-user-plus"></i> Registrar Profesor
                                 </a>
                                 <a href="ExportarProfesoresServlet" class="btn btn-sm btn-outline-success">
@@ -106,16 +104,14 @@
                     </div>
                 </div>
             </section>
-
+            <jsp:include page="footer.jsp" />
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/adminlte/js/adminlte.min.js"></script>
-    
-    <jsp:include page="footer.jsp" />
+    <script src="assets/adminlte/js/adminlte.min.js"></script> 
     
 </body>
 </html>

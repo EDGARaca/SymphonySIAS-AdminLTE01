@@ -224,14 +224,10 @@
                     </div>
                 </div>
             </section>
-        </div>
-                                
-    <%-- Scripts --%>
-    <jsp:include page="footer.jsp" />
-    
-    </div>
-
-    
+            <%-- Scripts --%>
+            <jsp:include page="footer.jsp" />                                   
+        </div>   
+    </div>    
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/adminlte/js/adminlte.min.js"></script>
