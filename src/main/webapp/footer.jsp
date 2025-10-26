@@ -41,7 +41,7 @@
 
         <hr>
         <div class="text-center small text-muted">
-            Copyright © Domain. All Rights Reserved. | Designed by Edgar-Camila | Año: 2025
+            Copyright © Domain. All Rights Reserved. | Designed by Edgar | Año: 2025
         </div>
     </div>
 </footer>

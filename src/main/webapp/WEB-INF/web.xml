@@ -23,6 +23,15 @@
         <url-pattern>/EstudianteServlet</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+    <servlet-name>BuscarEstudiantesServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.BuscarEstudiantesServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BuscarEstudiantesServlet</servlet-name>
+        <url-pattern>/BuscarEstudiantesServlet</url-pattern>
+    </servlet-mapping>
     
     <servlet>
     <servlet-name>ExportarEstudiantesServlet</servlet-name>
@@ -53,7 +62,8 @@
         <servlet-name>ExportarUsuariosServlet</servlet-name>
         <url-pattern>/ExportarUsuariosServlet</url-pattern>
     </servlet-mapping>
-    
+
+              
     <!-- Filtro de sesión institucional -->
     <filter>
         <filter-name>SessionFilter</filter-name>

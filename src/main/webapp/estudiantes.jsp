@@ -57,6 +57,13 @@
                             <i class="fas fa-list"></i> Listar Estudiantes
                         </a>
                     </div>
+                    
+                    <%-- Acceso a búsqueda con filtro --%>
+                    <div class="col-md-4 mb-3">
+                        <a href="buscarEstudiantes.jsp" class="btn btn-outline-info btn-block">
+                            <i class="fas fa-filter"></i> Buscar con Filtro
+                        </a>
+                    </div>
 
                     <%-- Acceso a registro --%>
                     <div class="col-md-4 mb-3">

@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
     <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" integrity="sha384-...hash..." crossorigin="anonymous">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -225,11 +226,14 @@
                 </div>
             </section>
             <%-- Scripts --%>
+            <jsp:include page="componentes/chatbot.jspf" />
+
             <jsp:include page="footer.jsp" />                                   
         </div>   
     </div>    
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/adminlte/js/adminlte.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

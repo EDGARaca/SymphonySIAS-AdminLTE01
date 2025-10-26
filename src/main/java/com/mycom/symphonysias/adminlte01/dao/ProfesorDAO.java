@@ -9,19 +9,14 @@
  * @author Spiri
  */
 
-
 package com.mycom.symphonysias.adminlte01.dao;
 
 import com.mycom.symphonysias.adminlte01.modelo.Profesor;
 import com.mycom.symphonysias.adminlte01.util.Conexion;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Statement;
 
 public class ProfesorDAO {
 
@@ -42,6 +37,7 @@ public class ProfesorDAO {
             stmt.setString(9, profesor.getGenero());
             stmt.setString(10, profesor.getEstado());
 
+            System.out.println("[DAO] Insertando profesor: " + profesor.getNombre());
             return stmt.executeUpdate() > 0;
 
         } catch (Exception e) {
@@ -132,6 +128,7 @@ public class ProfesorDAO {
             stmt.setString(10, profesor.getEstado());
             stmt.setInt(11, profesor.getId());
 
+            System.out.println("[DAO] Actualizando profesor ID: " + profesor.getId());
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -147,6 +144,7 @@ public class ProfesorDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
+            System.out.println("[DAO] Eliminando profesor ID: " + id);
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -154,38 +152,9 @@ public class ProfesorDAO {
             return false;
         }
     }
-    
+
+    // Método alternativo (puedes eliminar si no se usa)
     public List<Profesor> listar() {
-        List<Profesor> lista = new ArrayList<>();
-        String sql = "SELECT * FROM profesores";
-
-        try (Connection conn = Conexion.getConexion();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                Profesor prof = new Profesor();
-                prof.setId(rs.getInt("id"));
-                prof.setNombre(rs.getString("nombre"));
-                prof.setApellido(rs.getString("apellido"));
-                prof.setDocumento(rs.getString("documento"));
-                prof.setDireccion(rs.getString("direccion"));
-                prof.setTelefono(rs.getString("telefono"));
-                prof.setCorreo(rs.getString("correo"));
-                prof.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
-                prof.setEspecialidad(rs.getString("especialidad"));
-                prof.setGenero(rs.getString("genero"));
-                prof.setEstado(rs.getString("estado"));
-
-                lista.add(prof);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("[ERROR DAO] No se pudo listar profesores: " + e.getMessage());
-        }
-
-        return lista;
+        return listarProfesores();
     }
-    
-    
 }

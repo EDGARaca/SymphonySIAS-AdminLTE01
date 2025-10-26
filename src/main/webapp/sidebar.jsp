@@ -57,7 +57,7 @@
                 <%-- 3. Gestión Profesores --%>
                 <% if ("administrador".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)) { %>
                     <li class="nav-item">
-                        <a href="listarProfesores.jsp" class="nav-link">
+                        <a href="profesores.jsp" class="nav-link">
                             <i class="nav-icon fas fa-chalkboard-teacher"></i>
                             <p>Gestión Profesores</p>
                         </a>

@@ -9,7 +9,6 @@
  * @author Spiri
  */
 
-
 package com.mycom.symphonysias.adminlte01.servlet;
 
 import com.mycom.symphonysias.adminlte01.dao.ProfesorDAO;
@@ -35,8 +34,8 @@ public class ProfesorServlet extends HttpServlet {
         try {
             if ("editar".equals(accion)) {
                 int id = Integer.parseInt(request.getParameter("id"));
-                Profesor profesor = new Profesor();
 
+                Profesor profesor = new Profesor();
                 profesor.setId(id);
                 profesor.setNombre(request.getParameter("nombre"));
                 profesor.setApellido(request.getParameter("apellido"));
@@ -52,15 +51,15 @@ public class ProfesorServlet extends HttpServlet {
                 boolean actualizado = new ProfesorDAO().actualizarProfesor(profesor);
 
                 if (actualizado) {
-                    System.out.println("[SERVLET] Profesor actualizado correctamente");
-                    response.sendRedirect("profesores.jsp?editado=1");
+                    System.out.println("[PROFESOR-SERVLET] Profesor actualizado correctamente");
+                    response.sendRedirect("listarProfesores.jsp?editado=1");
                 } else {
-                    System.out.println("[SERVLET] Error al actualizar profesor");
-                    response.sendRedirect("editarProfesor.jsp?id=" + id + "&error=1");
+                    System.out.println("[PROFESOR-SERVLET] Error al actualizar profesor");
+                    response.sendRedirect("editarProfesor.jsp?id=" + id + "&error=edicion");
                 }
 
             } else {
-                System.out.println("[SERVLET] Registro de nuevo profesor");
+                System.out.println("[PROFESOR-SERVLET] Registro de nuevo profesor");
 
                 String nombre = request.getParameter("nombre");
                 String apellido = request.getParameter("apellido");
@@ -82,17 +81,17 @@ public class ProfesorServlet extends HttpServlet {
                 boolean exito = new ProfesorDAO().insertarProfesor(profesor);
 
                 if (exito) {
-                    System.out.println("[SERVLET] Profesor registrado correctamente");
-                    response.sendRedirect("profesores.jsp?registrado=1");
+                    System.out.println("[PROFESOR-SERVLET] Profesor registrado correctamente");
+                    response.sendRedirect("listarProfesores.jsp?registrado=1");
                 } else {
-                    System.out.println("[SERVLET] Error al registrar profesor");
-                    response.sendRedirect("registroProfesor.jsp?error=1");
+                    System.out.println("[PROFESOR-SERVLET] Error al registrar profesor");
+                    response.sendRedirect("registroProfesor.jsp?error=registro");
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("registroProfesor.jsp?error=2");
+            response.sendRedirect("registroProfesor.jsp?error=registro");
         }
     }
 
@@ -100,6 +99,7 @@ public class ProfesorServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         String accion = request.getParameter("accion");
 
         if ("eliminar".equals(accion)) {
@@ -108,19 +108,19 @@ public class ProfesorServlet extends HttpServlet {
                 boolean eliminado = new ProfesorDAO().eliminarProfesor(id);
 
                 if (eliminado) {
-                    System.out.println("[SERVLET] Profesor eliminado correctamente");
-                    response.sendRedirect("profesores.jsp?eliminado=1");
+                    System.out.println("[PROFESOR-SERVLET] Profesor eliminado correctamente");
+                    response.sendRedirect("listarProfesores.jsp?eliminado=1");
                 } else {
-                    System.out.println("[SERVLET] Error al eliminar profesor");
-                    response.sendRedirect("profesores.jsp?error=eliminar");
+                    System.out.println("[PROFESOR-SERVLET] Error al eliminar profesor");
+                    response.sendRedirect("listarProfesores.jsp?error=eliminacion");
                 }
 
             } catch (Exception e) {
                 System.out.println("[ERROR SERVLET] " + e.getMessage());
-                response.sendRedirect("profesores.jsp?error=eliminar");
+                response.sendRedirect("listarProfesores.jsp?error=eliminacion");
             }
         } else {
-            response.sendRedirect("profesores.jsp");
+            response.sendRedirect("listarProfesores.jsp");
         }
     }
 }
