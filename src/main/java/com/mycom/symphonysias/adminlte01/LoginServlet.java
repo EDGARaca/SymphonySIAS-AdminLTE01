@@ -111,24 +111,8 @@ public class LoginServlet extends HttpServlet {
 
             session.setAttribute("rolActivo", rolNormalizado);
 
-            // Redirección por rol
-            switch (rolNormalizado) {
-                case "administrador":
-                    response.sendRedirect("admin/dashboard.jsp");
-                    break;
-                case "coordinador académico":
-                    response.sendRedirect("coordinador/dashboard.jsp");
-                    break;
-                case "docente":
-                    response.sendRedirect("docente/dashboard.jsp");
-                    break;
-                case "estudiante":
-                    response.sendRedirect("estudiante/dashboard.jsp");
-                    break;
-                default:
-                    response.sendRedirect("dashboard.jsp");
-                    break;
-            }
+            // ✅ Redirección centralizada
+            response.sendRedirect("dashboard.jsp");
 
         } else {
             request.setAttribute("error", "Credenciales inválidas o usuario inactivo.");
