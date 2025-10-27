@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package com.mycom.symphonysias.adminlte01.dao;
 
 import com.mycom.symphonysias.adminlte01.util.Conexion;
@@ -37,37 +38,52 @@ public class UsuarioDAO {
 
 
     public Usuario validar(String usuario, String clave) {
-        Usuario resultado = null;
-
         String sql = "SELECT * FROM usuarios WHERE usuario = ? AND clave = ? AND activo = 1";
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, usuario);
-            ps.setString(2, clave); // ya viene en SHA-256 desde el servlet
+            stmt.setString(1, usuario);
+            stmt.setString(2, clave);
+            ResultSet rs = stmt.executeQuery();
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Usuario u = new Usuario();
-                    u.setId(rs.getInt("id"));
-                    u.setNombre(rs.getString("nombre"));
-                    u.setUsuario(rs.getString("usuario"));
-                    u.setClave(rs.getString("clave"));
-                    u.setCorreo(rs.getString("correo"));
-                    u.setRol(rs.getString("rol"));
-                    u.setActivo(rs.getBoolean("activo"));
-                    resultado = u;
-
-                    LOGGER.log(Level.INFO, "Usuario validado: {0}", resultado.getUsuario());
-                } else {
-                    LOGGER.log(Level.WARNING, "No se encontró coincidencia para usuario: {0}", usuario);
-                }
+            if (rs.next()) {
+                Usuario u = new Usuario();
+                u.setId(rs.getInt("id"));
+                u.setNombre(rs.getString("nombre"));
+                u.setUsuario(rs.getString("usuario"));
+                u.setClave(rs.getString("clave"));
+                u.setCorreo(rs.getString("correo"));
+                u.setRol(rs.getString("rol"));
+                u.setActivo(rs.getInt("activo") == 1);
+                return u;
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al validar usuario", e);
+
+        } catch (Exception e) {
+            System.err.println("[ERROR DAO] Validación fallida: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public boolean existeUsuario(String usuario) {
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE usuario = ?";
+
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+
+        } catch (Exception e) {
+            System.err.println("[ERROR DAO] Validación de duplicado fallida: " + e.getMessage());
         }
 
-        return resultado;
+        return false;
     }
+
 
     public List<Usuario> listarUsuarios() {
         List<Usuario> lista = new ArrayList<>();

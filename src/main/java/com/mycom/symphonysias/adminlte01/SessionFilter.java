@@ -23,15 +23,18 @@ public class SessionFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-    
-        HttpServletRequest req = (HttpServletRequest) request;
+
+        HttpServletRequest req = (HttpServletRequest) request; // ← este cast es obligatorio
         HttpSession session = req.getSession(false);
-    
-        if (session == null || session.getAttribute("usuario") == null) {
-            ((HttpServletResponse)response).sendRedirect("login.jsp");
+
+        String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
+        String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+
+        if (usuario == null || rol == null) {
+            ((HttpServletResponse) response).sendRedirect("login.jsp");
             return;
         }
-        
+
         chain.doFilter(request, response);
     }
 }

@@ -2,10 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package com.mycom.symphonysias.adminlte01;
-
-
-
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -18,10 +16,9 @@ import com.mycom.symphonysias.adminlte01.dao.UsuarioDAO;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.mycom.symphonysias.adminlte01.util.HashUtil;
-import javax.servlet.annotation.WebServlet;
+
 
 
 
@@ -73,54 +70,69 @@ public class LoginServlet extends HttpServlet {
         Usuario usuario = dao.validar(user, hashedPass); // método que consulta la BD con el hash
         
                
-        if (usuario != null) {
-            System.out.println("[LOGIN] Usuario validado: " + usuario.getUsuario() + " - Rol: " + usuario.getRol());
-            System.out.println("[LOGIN] Validación ejecutada para usuario: " + user);
-            LOGGER.log(Level.INFO, "[LOGIN] Usuario validado: {0} - Rol: {1}", new Object[]{usuario.getUsuario(), usuario.getRol()});
-            
+        if (usuario != null && usuario.isActivo()) {
             HttpSession session = request.getSession();
-            session.setAttribute("usuarioActivo", usuario.getUsuario()); //"usuario"
-            session.setAttribute("nombreActivo", usuario.getNombre()); //"nombre"
-            
-            String rolOriginal = usuario.getRol().trim().toLowerCase();
-        String rolNormalizado;
+            session.setAttribute("usuarioActivo", usuario.getUsuario());
+            session.setAttribute("nombreActivo", usuario.getNombre());
 
-        switch (rolOriginal) {
-            case "admin":
-                rolNormalizado = "administrador";
-                break;
-            case "doc":
-                rolNormalizado = "docente";
-                break;
-            case "coord":
-            case "coordinador":
-                rolNormalizado = "coordinador académico";
-                break;
-            case "dir":
-            case "director":
-                rolNormalizado = "director";
-                break;
-            case "auxadmin":
-            case "auxiliar administrativo":
-                rolNormalizado = "auxiliar administrativo";
-                break;
-            case "auxcont":
-            case "auxiliar contable":
-                rolNormalizado = "auxiliar contable";
-                break;
-            case "est":
-            case "estudiante":
-                rolNormalizado = "estudiante";
-                break;
-            default:
-                rolNormalizado = rolOriginal; // se conserva si no hay coincidencia
-                break;
-        }           
-            session.setAttribute("rolActivo", rolNormalizado); //"rol"
-            response.sendRedirect("dashboard.jsp"); //por error se cambia el index.jsp 04OCT2025h1123
+            String rolOriginal = usuario.getRol().trim().toLowerCase();
+            String rolNormalizado;
+
+            switch (rolOriginal) {
+                case "admin":
+                    rolNormalizado = "administrador";
+                    break;
+                case "doc":
+                case "docente":
+                    rolNormalizado = "docente";
+                    break;
+                case "coord":
+                case "coordinador":
+                    rolNormalizado = "coordinador académico";
+                    break;
+                case "dir":
+                case "director":
+                    rolNormalizado = "director";
+                    break;
+                case "auxadmin":
+                    rolNormalizado = "auxiliar administrativo";
+                    break;
+                case "auxcont":
+                    rolNormalizado = "auxiliar contable";
+                    break;
+                case "est":
+                case "estudiante":
+                    rolNormalizado = "estudiante";
+                    break;
+                default:
+                    rolNormalizado = rolOriginal;
+                    break;
+            }
+
+            session.setAttribute("rolActivo", rolNormalizado);
+
+            // Redirección por rol
+            switch (rolNormalizado) {
+                case "administrador":
+                    response.sendRedirect("admin/dashboard.jsp");
+                    break;
+                case "coordinador académico":
+                    response.sendRedirect("coordinador/dashboard.jsp");
+                    break;
+                case "docente":
+                    response.sendRedirect("docente/dashboard.jsp");
+                    break;
+                case "estudiante":
+                    response.sendRedirect("estudiante/dashboard.jsp");
+                    break;
+                default:
+                    response.sendRedirect("dashboard.jsp");
+                    break;
+            }
+
         } else {
-            request.setAttribute("error", "Credenciales inválidas");
-            request.getRequestDispatcher("login.jsp").forward(request,response);
+            request.setAttribute("error", "Credenciales inválidas o usuario inactivo.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 }
