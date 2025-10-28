@@ -27,8 +27,8 @@
         .register-box {
             background: rgba(250, 250, 250, 0.96);
             padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            border-radius: 12px;            
+            box-sizing: border-box;
             width: 100%;
             max-width: 460px;
             text-align: center;
@@ -60,10 +60,14 @@
 
         .form-control {
             font-size: 1rem;
-            padding: 12px 15px 12px 45px;
+            padding: 12px 15px 12px 40px;
+            padding-left: 40px;
+            box-sizing: border-box;
             border-radius: 8px;
             border: 1px solid #ced4da;
             width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
         .form-group {
@@ -76,6 +80,7 @@
             top: 50%;
             left: 12px;
             transform: translateY(-50%);
+            font-size: 16px;
             color: #6c757d;
         }
 
@@ -122,7 +127,7 @@
                 <i class="fas fa-envelope"></i>
                 <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" required>
             </div>
-
+            
             <div class="form-group text-left">
                 <i class="fas fa-user-tag"></i>
                 <select name="rol" class="form-control" required>
