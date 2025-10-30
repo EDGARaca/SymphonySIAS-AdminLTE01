@@ -85,7 +85,7 @@
                                 <!-- Gestión Estudiantes -->
                                 <div class="col-md-3 mb-3">
                                     <% if ("administrador".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
-                                        <a href="listarEstudiantes.jsp" class="btn btn-outline-success btn-block">
+                                        <a href="estudiantes.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-user-graduate"></i> Gestión Estudiantes <br><small>(Roles autorizados)</small>
                                         </a>
                                     <% } else { %>
@@ -97,8 +97,8 @@
 
                                 <!-- Gestión Profesores -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("director".equals(rol) || "coordinador académico".equals(rol)) { %>
-                                        <a href="gestionProfesores.jsp" class="btn btn-outline-warning btn-block">
+                                    <% if ("administrador".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)) { %>
+                                        <a href="profesores.jsp" class="btn btn-outline-warning btn-block">
                                             <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(Director, Coordinador)</small>
                                         </a>
                                     <% } else { %>

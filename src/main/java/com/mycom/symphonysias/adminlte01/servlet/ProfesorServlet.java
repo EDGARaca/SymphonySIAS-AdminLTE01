@@ -43,12 +43,13 @@ public class ProfesorServlet extends HttpServlet {
                 profesor.setDireccion(request.getParameter("direccion"));
                 profesor.setTelefono(request.getParameter("telefono"));
                 profesor.setCorreo(request.getParameter("correo"));
-                profesor.setFechaNacimiento(java.sql.Date.valueOf(request.getParameter("fechaNacimiento")));
+                profesor.setFecha_nacimiento(request.getParameter("fecha_nacimiento"));
                 profesor.setEspecialidad(request.getParameter("especialidad"));
                 profesor.setGenero(request.getParameter("genero"));
                 profesor.setEstado(request.getParameter("estado"));
+                
 
-                boolean actualizado = new ProfesorDAO().actualizarProfesor(profesor);
+                boolean actualizado = new ProfesorDAO().actualizar_Profesor(profesor);
 
                 if (actualizado) {
                     System.out.println("[PROFESOR-SERVLET] Profesor actualizado correctamente");
@@ -67,16 +68,25 @@ public class ProfesorServlet extends HttpServlet {
                 String direccion = request.getParameter("direccion");
                 String telefono = request.getParameter("telefono");
                 String correo = request.getParameter("correo");
-                String fechaStr = request.getParameter("fechaNacimiento");
+                String fechaStr = request.getParameter("fecha_nacimiento");
                 String especialidad = request.getParameter("especialidad");
                 String genero = request.getParameter("genero");
                 String estado = request.getParameter("estado");
 
-                Date fechaNacimiento = new SimpleDateFormat("yyyy-MM-dd").parse(fechaStr);
+                Date fecha_nacimiento = new SimpleDateFormat("yyyy-MM-dd").parse(fechaStr);
 
-                Profesor profesor = new Profesor(0, nombre, apellido, documento, direccion,
-                        telefono, correo, new java.sql.Date(fechaNacimiento.getTime()),
-                        especialidad, genero, estado);
+                Profesor profesor = new Profesor();
+                profesor.setNombre(nombre);
+                profesor.setApellido(apellido);
+                profesor.setDocumento(documento);
+                profesor.setDireccion(direccion);
+                profesor.setTelefono(telefono);
+                profesor.setCorreo(correo);
+                profesor.setFecha_nacimiento(fechaStr); // o usa Date si tu modelo lo requiere
+                profesor.setEspecialidad(especialidad);
+                profesor.setGenero(genero);
+                profesor.setEstado(estado);
+                profesor.setUsuario_registro(request.getParameter("usuario_registro")); // si aplica
 
                 boolean exito = new ProfesorDAO().insertarProfesor(profesor);
 

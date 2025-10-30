@@ -3,151 +3,110 @@
     Created on : 20/10/2025, 6:37:24 p. m.
     Author     : Spiri
 --%>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    String usuarioRegistro = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
+%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>SymphonySIAS | Registro Profesor</title>
+    <title>Registro de Profesor | SymphonySIAS</title>
     <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
     <style>
         body {
             background-color: #f4f6f9;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 40px 0;
-            overflow-x: hidden;
         }
-
-        .container-fluid {
-            padding-left: 40px;
-            padding-right: 40px;
-        }
-
-        .form-box {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px 60px;
-            border-radius: 12px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        .container-box {
             max-width: 800px;
-            margin: auto;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
-
-        h5 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #007bff;
-            margin-top: 20px;
-            margin-bottom: 25px;
-        }
-
         .form-label {
             font-weight: 500;
-            margin-bottom: 6px;
-            color: #343a40;
-        }
-
-        .form-control {
-            font-size: 1rem;
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid #ced4da;
-        }
-
-        .mb-3 {
-            margin-bottom: 1rem !important;
-        }
-
-        .btn-block {
-            font-size: 1rem;
-            padding: 12px;
-            border-radius: 8px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-        }
-
-        .btn-block:hover {
-            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="form-box">
-            <div class="text-center">
-                <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" class="img-fluid" style="height:80px;">
-                <h5><i class="fas fa-chalkboard-teacher"></i> Registro de Profesor</h5>
+    <div class="container-box">
+        <h4 class="text-primary text-center mb-4">
+            <i class="fas fa-chalkboard-teacher"></i> Registro de Profesor
+        </h4>
+
+        <form action="RegistroProfesorServlet" method="post" accept-charset="UTF-8">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Apellido</label>
+                    <input type="text" name="apellido" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Documento</label>
+                    <input type="text" name="documento" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Dirección</label>
+                    <input type="text" name="direccion" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" name="telefono" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" name="correo" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Fecha de nacimiento</label>
+                    <input type="date" name="fecha_nacimiento" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Especialidad</label>
+                    <input type="text" name="especialidad" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Género</label>
+                    <select name="genero" class="form-control">
+                        <option value="">Seleccione</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="femenino">Femenino</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Estado</label>
+                    <select name="estado" class="form-control">
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Usuario que registra</label>
+                    <input type="text" name="usuario_registro" class="form-control" value="<%= usuarioRegistro %>" readonly>
+                </div>
             </div>
 
-            <form action="ProfesorServlet" method="post" autocomplete="off">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="nombre">Nombre</label>
-                        <input type="text" name="nombre" id="nombre" class="form-control" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="apellido">Apellido</label>
-                        <input type="text" name="apellido" id="apellido" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="documento">Documento</label>
-                        <input type="text" name="documento" id="documento" class="form-control" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="direccion">Dirección</label>
-                        <input type="text" name="direccion" id="direccion" class="form-control">
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="telefono">Teléfono</label>
-                        <input type="text" name="telefono" id="telefono" class="form-control">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="correo">Correo</label>
-                        <input type="email" name="correo" id="correo" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="fechaNacimiento">Fecha de nacimiento</label>
-                        <input type="date" name="fechaNacimiento" id="fechaNacimiento" class="form-control" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="especialidad">Especialidad</label>
-                        <input type="text" name="especialidad" id="especialidad" class="form-control">
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="genero">Género</label>
-                        <select name="genero" id="genero" class="form-control" required>
-                            <option value="">Seleccione</option>
-                            <option value="masculino">Masculino</option>
-                            <option value="femenino">Femenino</option>
-                            <option value="otro">Otro</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="estado">Estado</label>
-                        <select name="estado" id="estado" class="form-control" required>
-                            <option value="activo">Activo</option>
-                            <option value="inactivo">Inactivo</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-block">Guardar profesor</button>
-                    <a href="listarProfesores.jsp" class="btn btn-secondary mt-3">
-                        <i class="fas fa-arrow-left"></i> Cancelar y volver al listado
-                    </a>
-                </div>
-            </form>
-        </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Registrar Profesor
+                </button>
+            </div>
+        </form>
     </div>
 
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/adminlte/js/adminlte.min.js"></script>
 </body>
 </html>

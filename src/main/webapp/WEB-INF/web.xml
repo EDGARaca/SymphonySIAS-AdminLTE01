@@ -44,6 +44,26 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>BuscarProfesoresServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.BuscarProfesoresServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BuscarProfesoresServlet</servlet-name>
+        <url-pattern>/BuscarProfesoresServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>EditarProfesorServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.EditarProfesorServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EditarProfesorServlet</servlet-name>
+        <url-pattern>/EditarProfesorServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
     <servlet-name>ExportarProfesoresServlet</servlet-name>
     <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarProfesoresServlet</servlet-class>
     </servlet>
@@ -77,5 +97,9 @@
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
+    
+    <listener>
+        <listener-class>com.mycom.symphonysias.adminlte01.listener.CleanupListener</listener-class>
+    </listener>
     
 </web-app>

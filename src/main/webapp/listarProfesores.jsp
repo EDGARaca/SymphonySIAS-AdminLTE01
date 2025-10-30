@@ -3,7 +3,9 @@
     Created on : 22/10/2025, 12:10:50 a. m.
     Author     : Spiri
 --%>
-<%@page contentType="text/html; charset=UTF-8" language="java"%>
+
+
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mycom.symphonysias.adminlte01.modelo.Profesor"%>
 <%@page import="com.mycom.symphonysias.adminlte01.dao.ProfesorDAO"%>
@@ -123,10 +125,14 @@
                                     <th>Nombre</th>
                                     <th>Apellido</th>
                                     <th>Documento</th>
+                                    <th>Direccion</th>
+                                    <th>Telefono</th>
                                     <th>Correo</th>
+                                    <th>Fecha_nacimiento</th>
                                     <th>Especialidad</th>
+                                    <th>Genero</th>
                                     <th>Estado</th>
-                                    <th>Reg. por</th>
+                                    <th>Usuario_registro</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -137,10 +143,14 @@
                                         <td><%= p.getNombre() %></td>
                                         <td><%= p.getApellido() %></td>
                                         <td><%= p.getDocumento() %></td>
+                                        <td><%= p.getDireccion() %></td>
+                                        <td><%= p.getTelefono() %></td>
                                         <td><%= p.getCorreo() %></td>
+                                        <td><%= p.getFecha_nacimiento() %></td>
                                         <td><%= p.getEspecialidad() %></td>
+                                        <td><%= p.getGenero() %></td>
                                         <td><%= p.getEstado() %></td>
-                                        <td><%= p.getUsuarioRegistro() %></td>
+                                        <td><%= p.getUsuario_registro() %></td>
                                         <td class="text-center">
                                             <a href="editarProfesor.jsp?id=<%= p.getId() %>" class="btn btn-sm btn-warning">
                                                 <i class="fas fa-edit"></i>

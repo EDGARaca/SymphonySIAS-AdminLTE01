@@ -4,13 +4,12 @@
  */
 
 /**
- *
+ * Modelo para entidad Profesor en SymphonySIAS
  * @author Spiri
  */
 
-package com.mycom.symphonysias.adminlte01.modelo;
 
-import java.sql.Date;
+package com.mycom.symphonysias.adminlte01.modelo;
 
 public class Profesor {
     private int id;
@@ -20,29 +19,12 @@ public class Profesor {
     private String direccion;
     private String telefono;
     private String correo;
-    private Date fechaNacimiento;
+    private String fecha_nacimiento;
     private String especialidad;
     private String genero;
     private String estado;
+    private String usuario_registro;
 
-    // Constructor completo
-    public Profesor(int id, String nombre, String apellido, String documento, String direccion,
-                    String telefono, String correo, Date fechaNacimiento, String especialidad,
-                    String genero, String estado) {
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.documento = documento;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.correo = correo;
-        this.fechaNacimiento = fechaNacimiento;
-        this.especialidad = especialidad;
-        this.genero = genero;
-        this.estado = estado;
-    }
-
-    // Getters y Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -64,8 +46,8 @@ public class Profesor {
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
 
-    public Date getFechaNacimiento() { return fechaNacimiento; }
-    public void setFechaNacimiento(Date fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+    public String getFecha_nacimiento() { return fecha_nacimiento; }
+    public void setFecha_nacimiento(String fecha_nacimiento) { this.fecha_nacimiento = fecha_nacimiento; }
 
     public String getEspecialidad() { return especialidad; }
     public void setEspecialidad(String especialidad) { this.especialidad = especialidad; }
@@ -75,9 +57,7 @@ public class Profesor {
 
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
-    
-    public Profesor() {
-    // Constructor sin parámetros requerido por JDBC y frameworks
-    }
-}
 
+    public String getUsuario_registro() { return usuario_registro; }
+    public void setUsuario_registro(String usuario_registro) { this.usuario_registro = usuario_registro; }
+}

@@ -37,4 +37,19 @@ public class Conexion {
             throw e;
         }
     }
+    
+    public static void cerrarHilosMySQL() {
+    try {
+        com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkedShutdown();
+        System.out.println("[CONEXIÓN] Hilo de limpieza MySQL cerrado correctamente.");
+
+        // 🔧 Anulación explícita del driver JDBC
+        DriverManager.deregisterDriver(DriverManager.getDriver("jdbc:mysql://localhost:33065"));
+        System.out.println("[CONEXIÓN] Driver JDBC anulado correctamente.");
+
+    } catch (Exception e) {
+        System.err.println("[ERROR CONEXIÓN] No se pudo cerrar el hilo de limpieza MySQL: " + e.getMessage());
+    }
+}
+
 }

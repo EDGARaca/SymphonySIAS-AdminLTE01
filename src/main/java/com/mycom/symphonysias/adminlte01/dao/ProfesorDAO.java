@@ -5,7 +5,7 @@
 
 
 /**
- *
+ * DAO para gestión de profesores en SymphonySIAS
  * @author Spiri
  */
 
@@ -13,129 +13,274 @@ package com.mycom.symphonysias.adminlte01.dao;
 
 import com.mycom.symphonysias.adminlte01.modelo.Profesor;
 import com.mycom.symphonysias.adminlte01.util.Conexion;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProfesorDAO {
+    private static final Logger LOGGER = Logger.getLogger(ProfesorDAO.class.getName());
+    private Connection conn;
 
-    public boolean insertarProfesor(Profesor profesor) {
-        String sql = "INSERT INTO profesores (nombre, apellido, documento, direccion, telefono, correo, fecha_nacimiento, especialidad, genero, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (Connection conn = Conexion.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, profesor.getNombre());
-            stmt.setString(2, profesor.getApellido());
-            stmt.setString(3, profesor.getDocumento());
-            stmt.setString(4, profesor.getDireccion());
-            stmt.setString(5, profesor.getTelefono());
-            stmt.setString(6, profesor.getCorreo());
-            stmt.setDate(7, new java.sql.Date(profesor.getFechaNacimiento().getTime()));
-            stmt.setString(8, profesor.getEspecialidad());
-            stmt.setString(9, profesor.getGenero());
-            stmt.setString(10, profesor.getEstado());
-
-            System.out.println("[DAO] Insertando profesor: " + profesor.getNombre());
-            return stmt.executeUpdate() > 0;
-
-        } catch (Exception e) {
-            System.out.println("[ERROR DAO] No se pudo insertar profesor: " + e.getMessage());
-            return false;
+    public ProfesorDAO() {
+        try {
+            conn = Conexion.getConexion();
+            LOGGER.log(Level.INFO, "[DAO] Conexión establecida correctamente");
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al conectar desde ProfesorDAO", e);
         }
     }
 
-    public List<Profesor> listarProfesores() {
-        List<Profesor> lista = new ArrayList<>();
-        String sql = "SELECT * FROM profesores";
+    public boolean insertarProfesor(Profesor p) {
+        boolean resultado = false;
+        PreparedStatement ps = null;
 
-        try (Connection conn = Conexion.getConexion();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        String sql = "INSERT INTO profesores (nombre, apellido, documento, direccion, telefono, correo, fecha_nacimiento, especialidad, genero, estado, usuario_registro) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, p.getNombre());
+            ps.setString(2, p.getApellido());
+            ps.setString(3, p.getDocumento());
+            ps.setString(4, p.getDireccion());
+            ps.setString(5, p.getTelefono());
+            ps.setString(6, p.getCorreo());
+            ps.setString(7, p.getFecha_nacimiento());
+            ps.setString(8, p.getEspecialidad());
+            ps.setString(9, p.getGenero());
+            ps.setString(10, p.getEstado());
+            ps.setString(11, p.getUsuario_registro());
+
+            int filas = ps.executeUpdate();
+            resultado = filas > 0;
+
+            LOGGER.log(Level.INFO, "[DAO] Profesor creado. Filas afectadas: {0}", filas);
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al crear profesor", e);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar PreparedStatement", e);
+            }
+        }
+
+        return resultado;
+    }
+
+    public boolean actualizar_Profesor(Profesor p) {
+        boolean resultado = false;
+        PreparedStatement ps = null;
+
+        String sql = "UPDATE profesores SET nombre = ?, apellido = ?, documento = ?, direccion = ?, telefono = ?, correo = ?, fecha_nacimiento = ?, especialidad = ?, genero = ?, estado = ? WHERE id = ?";
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, p.getNombre());
+            ps.setString(2, p.getApellido());
+            ps.setString(3, p.getDocumento());
+            ps.setString(4, p.getDireccion());
+            ps.setString(5, p.getTelefono());
+            ps.setString(6, p.getCorreo());
+            ps.setString(7, p.getFecha_nacimiento());
+            ps.setString(8, p.getEspecialidad());
+            ps.setString(9, p.getGenero());
+            ps.setString(10, p.getEstado());
+            ps.setInt(11, p.getId());
+
+            int filas = ps.executeUpdate();
+            resultado = filas > 0;
+
+            LOGGER.log(Level.INFO, "[DAO] Profesor actualizado. Filas afectadas: {0}", filas);
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al actualizar profesor", e);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar PreparedStatement", e);
+            }
+        }
+
+        return resultado;
+    }
+
+    public List<Profesor> listar() {
+        List<Profesor> lista = new ArrayList<>();
+
+        String sql = "SELECT id, nombre, apellido, documento, direccion, telefono, correo, fecha_nacimiento, especialidad, genero, estado, usuario_registro FROM profesores";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Profesor prof = new Profesor();
-                prof.setId(rs.getInt("id"));
-                prof.setNombre(rs.getString("nombre"));
-                prof.setApellido(rs.getString("apellido"));
-                prof.setDocumento(rs.getString("documento"));
-                prof.setDireccion(rs.getString("direccion"));
-                prof.setTelefono(rs.getString("telefono"));
-                prof.setCorreo(rs.getString("correo"));
-                prof.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
-                prof.setEspecialidad(rs.getString("especialidad"));
-                prof.setGenero(rs.getString("genero"));
-                prof.setEstado(rs.getString("estado"));
+                Profesor p = new Profesor();
+                p.setId(rs.getInt("id"));
+                p.setNombre(rs.getString("nombre"));
+                p.setApellido(rs.getString("apellido"));
+                p.setDocumento(rs.getString("documento"));
+                p.setDireccion(rs.getString("direccion"));
+                p.setTelefono(rs.getString("telefono"));
+                p.setCorreo(rs.getString("correo"));
+                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setEspecialidad(rs.getString("especialidad"));
+                p.setGenero(rs.getString("genero"));
+                p.setEstado(rs.getString("estado"));
+                p.setUsuario_registro(rs.getString("usuario_registro"));
 
-                lista.add(prof);
+                lista.add(p);
             }
 
         } catch (SQLException e) {
-            System.out.println("[ERROR DAO] No se pudo listar profesores: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Error al listar profesores", e);
         }
 
+        LOGGER.log(Level.INFO, "[DAO] Profesores recuperados: {0}", lista.size());
         return lista;
     }
 
     public Profesor buscarPorId(int id) {
+        Profesor p = null;
         String sql = "SELECT * FROM profesores WHERE id = ?";
-        Profesor prof = null;
-
+        
         try (Connection conn = Conexion.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                prof = new Profesor();
-                prof.setId(rs.getInt("id"));
-                prof.setNombre(rs.getString("nombre"));
-                prof.setApellido(rs.getString("apellido"));
-                prof.setDocumento(rs.getString("documento"));
-                prof.setDireccion(rs.getString("direccion"));
-                prof.setTelefono(rs.getString("telefono"));
-                prof.setCorreo(rs.getString("correo"));
-                prof.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
-                prof.setEspecialidad(rs.getString("especialidad"));
-                prof.setGenero(rs.getString("genero"));
-                prof.setEstado(rs.getString("estado"));
+                p= new Profesor();
+                p.setId(rs.getInt("id"));
+                p.setNombre(rs.getString("nombre"));
+                p.setApellido(rs.getString("apellido"));
+                p.setDocumento(rs.getString("documento"));
+                p.setDireccion(rs.getString("direccion"));
+                p.setTelefono(rs.getString("telefono"));
+                p.setCorreo(rs.getString("correo"));
+                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setEspecialidad(rs.getString("especialidad"));
+                p.setGenero(rs.getString("genero"));
+                p.setEstado(rs.getString("estado"));
+                p.setUsuario_registro(rs.getString("usuario_registro"));
+                
+                System.out.println("[DAO] Usuario que registró: " + p.getUsuario_registro());
+            }
+            
+            
+
+        } catch (SQLException e) {
+            System.err.println("[ERROR DAO] buscarPorId: " + e.getMessage());
+        }
+        return p;
+    }
+    
+    public List<Profesor> buscarPorApellido(String apellido) {
+        List<Profesor> lista = new ArrayList<>();
+        String sql = "SELECT * FROM profesores WHERE apellido LIKE ?";
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + apellido + "%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Profesor p = new Profesor();
+                p.setId(rs.getInt("id"));
+                p.setNombre(rs.getString("nombre"));
+                p.setApellido(rs.getString("apellido"));
+                p.setDocumento(rs.getString("documento"));
+                p.setDireccion(rs.getString("direccion"));
+                p.setTelefono(rs.getString("telefono"));
+                p.setCorreo(rs.getString("correo"));
+                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setEspecialidad(rs.getString("especialidad"));
+                p.setGenero(rs.getString("genero"));
+                p.setEstado(rs.getString("estado"));
+                p.setUsuario_registro(rs.getString("usuario_registro"));
+                lista.add(p);
             }
 
+            System.out.println("[BUSCAR] Filtro por apellido: " + apellido + " → " + lista.size() + " resultados.");
+
         } catch (SQLException e) {
-            System.out.println("[ERROR DAO] No se pudo buscar profesor por ID: " + e.getMessage());
+            System.err.println("[ERROR BUSCAR] Error al buscar por apellido: " + e.getMessage());
         }
-
-        return prof;
+        return lista;
     }
-
-    public boolean actualizarProfesor(Profesor profesor) {
-        String sql = "UPDATE profesores SET nombre=?, apellido=?, documento=?, direccion=?, telefono=?, correo=?, fecha_nacimiento=?, especialidad=?, genero=?, estado=? WHERE id=?";
-
+    
+    public List<Profesor> buscarPorNombre(String nombre) {
+        List<Profesor> lista = new ArrayList<>();
+        String sql = "SELECT * FROM profesores WHERE nombre LIKE ?";
         try (Connection conn = Conexion.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, profesor.getNombre());
-            stmt.setString(2, profesor.getApellido());
-            stmt.setString(3, profesor.getDocumento());
-            stmt.setString(4, profesor.getDireccion());
-            stmt.setString(5, profesor.getTelefono());
-            stmt.setString(6, profesor.getCorreo());
-            stmt.setDate(7, new java.sql.Date(profesor.getFechaNacimiento().getTime()));
-            stmt.setString(8, profesor.getEspecialidad());
-            stmt.setString(9, profesor.getGenero());
-            stmt.setString(10, profesor.getEstado());
-            stmt.setInt(11, profesor.getId());
+            ps.setString(1, "%" + nombre + "%");
+            ResultSet rs = ps.executeQuery();
 
-            System.out.println("[DAO] Actualizando profesor ID: " + profesor.getId());
-            return stmt.executeUpdate() > 0;
+            while (rs.next()) {
+                Profesor p = new Profesor();
+                p.setId(rs.getInt("id"));
+                p.setNombre(rs.getString("nombre"));
+                p.setApellido(rs.getString("apellido"));
+                p.setDocumento(rs.getString("documento"));
+                p.setDireccion(rs.getString("direccion"));
+                p.setTelefono(rs.getString("telefono"));
+                p.setCorreo(rs.getString("correo"));
+                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setEspecialidad(rs.getString("especialidad"));
+                p.setGenero(rs.getString("genero"));
+                p.setEstado(rs.getString("estado"));
+                p.setUsuario_registro(rs.getString("usuario_registro"));
+                lista.add(p);
+            }
+
+            System.out.println("[BUSCAR] Filtro por nombre: " + nombre + " → " + lista.size() + " resultados.");
 
         } catch (SQLException e) {
-            System.out.println("[ERROR DAO] No se pudo actualizar profesor: " + e.getMessage());
-            return false;
+            System.err.println("[ERROR BUSCAR] Error al buscar por nombre: " + e.getMessage());
         }
+        return lista;
     }
+    
+    public List<Profesor> buscarPorDocumento(String documento) {
+        List<Profesor> lista = new ArrayList<>();
+        String sql = "SELECT * FROM profesores WHERE documento LIKE ?";
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + documento + "%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Profesor p = new Profesor();
+                p.setId(rs.getInt("id"));
+                p.setNombre(rs.getString("nombre"));
+                p.setApellido(rs.getString("apellido"));
+                p.setDocumento(rs.getString("documento"));
+                p.setDireccion(rs.getString("direccion"));
+                p.setTelefono(rs.getString("telefono"));
+                p.setCorreo(rs.getString("correo"));
+                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setEspecialidad(rs.getString("especialidad"));
+                p.setGenero(rs.getString("genero"));
+                p.setEstado(rs.getString("estado"));
+                p.setUsuario_registro(rs.getString("usuario_registro"));
+                lista.add(p);
+            }
+
+            System.out.println("[BUSCAR] Filtro por documento: " + documento + " → " + lista.size() + " resultados.");
+
+        } catch (SQLException e) {
+            System.err.println("[ERROR BUSCAR] Error al buscar por documento: " + e.getMessage());
+        }
+        return lista;
+    }
+    
 
     public boolean eliminarProfesor(int id) {
         String sql = "DELETE FROM profesores WHERE id=?";
@@ -151,10 +296,5 @@ public class ProfesorDAO {
             System.out.println("[ERROR DAO] No se pudo eliminar profesor: " + e.getMessage());
             return false;
         }
-    }
-
-    // Método alternativo (puedes eliminar si no se usa)
-    public List<Profesor> listar() {
-        return listarProfesores();
     }
 }
