@@ -104,12 +104,12 @@
                     </li>
                 <% } %>
 
-                <%-- 8. Gestión Asignaturas --%>
+                <%-- 8. Gestión Cursos Libres --%>
                 <% if ("administrador".equals(rol) || "coordinador académico".equals(rol)) { %>
                     <li class="nav-item">
-                        <a href="asignaturas.jsp" class="nav-link">
-                            <i class="nav-icon fas fa-book-open"></i>
-                            <p>Gestión Asignaturas</p>
+                        <a href="listarCursoLibre.jsp" class="nav-link">
+                            <i class="nav-icon fas fa-book-reader"></i>
+                            <p>Gestión Cursos Libres</p>
                         </a>
                     </li>
                 <% } %>
