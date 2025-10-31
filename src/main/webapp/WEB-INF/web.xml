@@ -82,6 +82,16 @@
         <servlet-name>ExportarUsuariosServlet</servlet-name>
         <url-pattern>/ExportarUsuariosServlet</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>RegistroCursoLibreServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.controlador.RegistroCursoLibreServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RegistroCursoLibreServlet</servlet-name>
+        <url-pattern>/RegistroCursoLibreServlet</url-pattern>
+    </servlet-mapping>
 
               
     <!-- Filtro de sesión institucional -->
