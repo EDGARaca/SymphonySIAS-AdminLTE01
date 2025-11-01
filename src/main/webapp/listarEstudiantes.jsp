@@ -163,7 +163,8 @@
                 </div>
             </div>
         </section>
-    </div>
+        <jsp:include page="footer.jsp" />                    
+    </div>                       
 </div>
 
 <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>

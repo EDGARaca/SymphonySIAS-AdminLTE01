@@ -112,7 +112,7 @@
                                 <!-- Gestión Cursos Libres -->
                                 <div class="col-md-3 mb-3">
                                     <% if ("administrador".equals(rol) || "coordinador académico".equals(rol)) { %>
-                                        <a href="listarCursoLibre.jsp" class="btn btn-outline-success btn-block">
+                                        <a href="cursoLibre.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(Administrador, Coordinador)</small>
                                         </a>
                                     <% } else { %>

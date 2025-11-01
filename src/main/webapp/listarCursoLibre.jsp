@@ -89,6 +89,15 @@
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                     </div>
                 <% } %>
+                
+                <% String eliminadoFisico = request.getParameter("eliminadoFisico"); %>
+
+                <% if (eliminadoFisico != null) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>🗑 Curso eliminado permanentemente.</strong>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                <% } %>
             </div>
         </section>
 
@@ -140,10 +149,23 @@
                                         <td><%= c.getEstado() %></td>
                                         <td><%= c.getUsuario_registro() %></td>
                                         <td>
-                                            <a href="editarCursoLibre.jsp?id=<%= c.getId() %>" class="btn btn-sm btn-warning">
+                                            <a href="editarCursoLibre.jsp?id=<%= c.getId() %>&usuario=<%= usuario %>" class="btn btn-sm btn-warning" title="Editar curso">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="CursoLibreServlet?accion=eliminar&id=<%= c.getId() %>" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este curso?');">
+
+                                            <% if ("activo".equals(c.getEstado())) { %>
+                                                <a href="RegistroCursoLibreServlet?accion=desactivar&id=<%= c.getId() %>&usuario=<%= usuario %>" class="btn btn-sm btn-danger" title="Desactivar curso" onclick="return confirm('¿Desactivar este curso?');">
+                                                    <i class="fas fa-ban"></i>
+                                                </a>
+                                            <% } else { %>
+                                                <a href="RegistroCursoLibreServlet?accion=activar&id=<%= c.getId() %>&usuario=<%= usuario %>" class="btn btn-sm btn-success" title="Activar curso" onclick="return confirm('¿Activar este curso?');">
+                                                    <i class="fas fa-check-circle"></i>
+                                                </a>
+                                            <% } %>
+                                            <a href="RegistroCursoLibreServlet?accion=eliminarFisico&id=<%= c.getId() %>&usuario=<%= usuario %>" 
+                                                class="btn btn-sm btn-outline-danger" 
+                                                title="Eliminar definitivamente" 
+                                                onclick="return confirm('⚠ Esta acción eliminará el curso de forma permanente. ¿Continuar?');">
                                                 <i class="fas fa-trash-alt"></i>
                                             </a>
                                         </td>
@@ -155,9 +177,10 @@
                 </div>
             </div>
         </section>
+        <jsp:include page="footer.jsp" />                    
     </div>
 
-    <jsp:include page="footer.jsp" />
+    
 </div>
 
 <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>

@@ -52,10 +52,11 @@ public class CursoLibreDAO {
     // LISTAR TODOS
     public List<CursoLibre> listar() {
         List<CursoLibre> lista = new ArrayList<>();
-        String sql = "SELECT * FROM curso_libre ORDER BY id DESC";
+        String sql = "SELECT * FROM curso_libre ORDER BY " +
+                     "CASE WHEN estado = 'activo' THEN 0 ELSE 1 END, id DESC";
 
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 CursoLibre c = new CursoLibre();
@@ -65,15 +66,11 @@ public class CursoLibreDAO {
                 c.setFrecuencia(rs.getString("frecuencia"));
                 c.setEstado(rs.getString("estado"));
                 c.setUsuario_registro(rs.getString("usuario_registro"));
-
                 lista.add(c);
             }
-
-            System.out.println("[DAO] Cursos listados: " + lista.size());
         } catch (SQLException e) {
             System.out.println("[DAO] Error al listar cursos: " + e.getMessage());
         }
-
         return lista;
     }
 
@@ -125,18 +122,59 @@ public class CursoLibreDAO {
             return false;
         }
     }
+    
+    public boolean actualizarEstado(int id, String estado) {
+        String sql = "UPDATE curso_libre SET estado = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, estado);
+            stmt.setInt(2, id);
+            int filas = stmt.executeUpdate();
+            System.out.println("[DAO] Estado actualizado para ID: " + id + " → " + estado + " | Filas afectadas: " + filas);
+            return filas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("[DAO] Error al actualizar estado: " + e.getMessage());
+            return false;
+        }
+    }
 
     // ELIMINAR (CAMBIO DE ESTADO)
     public boolean eliminar(int id) {
         String sql = "UPDATE curso_libre SET estado = 'inactivo' WHERE id = ?";
+        
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
+            
+            System.out.println("[DAO] Ejecutando eliminación lógica para ID: " + id);
 
             int filas = stmt.executeUpdate();
+            
+            System.out.println("[DAO] Filas afectadas: " + filas);
+            
             System.out.println("[DAO] Curso inactivado con ID: " + id + " | Filas afectadas: " + filas);
             return filas > 0;
         } catch (SQLException e) {
             System.out.println("[DAO] Error al inactivar curso: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean eliminarFisico(int id) {
+        String sql = "DELETE FROM curso_libre WHERE id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            System.out.println("[DAO] Ejecutando eliminación física para ID: " + id);
+
+            int filas = stmt.executeUpdate();
+
+            System.out.println("[DAO] Curso eliminado físicamente con ID: " + id + " | Filas afectadas: " + filas);
+            return filas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("[DAO] Error al eliminar físicamente curso: " + e.getMessage());
             return false;
         }
     }

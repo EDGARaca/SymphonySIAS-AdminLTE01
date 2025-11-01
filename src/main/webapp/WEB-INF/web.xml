@@ -84,6 +84,16 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>ExportarCursosLibresServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarCursosLibresServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ExportarCursosLibresServlet</servlet-name>
+        <url-pattern>/ExportarCursosLibresServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>RegistroCursoLibreServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.controlador.RegistroCursoLibreServlet</servlet-class>
     </servlet>

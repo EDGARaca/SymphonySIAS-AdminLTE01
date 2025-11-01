@@ -107,7 +107,7 @@
                 <%-- 8. Gestión Cursos Libres --%>
                 <% if ("administrador".equals(rol) || "coordinador académico".equals(rol)) { %>
                     <li class="nav-item">
-                        <a href="listarCursoLibre.jsp" class="nav-link">
+                        <a href="cursoLibre.jsp" class="nav-link">
                             <i class="nav-icon fas fa-book-reader"></i>
                             <p>Gestión Cursos Libres</p>
                         </a>
