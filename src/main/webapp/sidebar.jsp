@@ -26,7 +26,7 @@
                 
                 <% if ("administrador".equals(rol)) { %>
                     <li class="nav-item">
-                        <a href="UsuarioServlet" class="nav-link">
+                        <a href="usuarios.jsp" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
                             <p>Gestión de Usuarios</p>
                         </a>

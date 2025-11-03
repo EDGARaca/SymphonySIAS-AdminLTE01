@@ -13,111 +13,131 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.mycom.symphonysias.adminlte01.modelo.Usuario;
 import com.mycom.symphonysias.adminlte01.dao.UsuarioDAO;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.mycom.symphonysias.adminlte01.util.HashUtil;
-
-
-
 
 /**
  * Servlet de autenticación para SymphonySIAS-AdminLTE01
  * @author Spiri
  */
-
-
 public class LoginServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(LoginServlet.class.getName());
-    
-    // Metodo para convertir la clave a SHA-256
-    public static String sha256(String input) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error al generar hash SHA-256", e);
-        }
-    }
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        request.setCharacterEncoding("UTF-8");
+        
         String user = request.getParameter("usuario");
         String pass = request.getParameter("clave");
         
-        // Trazabilidad directa
-        System.out.println("Usuario recibido: " + user);
-        System.out.println("Clave original: " + pass);
+        // Validación de parámetros
+        if (user == null || pass == null || user.trim().isEmpty() || pass.trim().isEmpty()) {
+            LOGGER.warning("[LOGIN] Intento de login con credenciales vacías");
+            request.setAttribute("error", "Debe ingresar usuario y contraseña.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
         
-        //  Convertir la clave ingresada a SHA-256
+        // Trazabilidad
+        LOGGER.info("[LOGIN] Intento de login para usuario: " + user);
+        System.out.println("[LOGIN] Usuario recibido: " + user);
+        System.out.println("[LOGIN] Clave original recibida (longitud): " + pass.length());
+        
+        // Convertir la clave ingresada a SHA-256 (UNA SOLA VEZ)
         String hashedPass = HashUtil.sha256(pass);
-        System.out.println("[DEBUG] Hash generado: " + hashedPass);
+        System.out.println("[LOGIN] Hash SHA-256 generado: " + hashedPass);
         
-        // Trazabilidad del hash
-        System.out.println("Clave cifrada: " + hashedPass);
-        
-        UsuarioDAO dao = new UsuarioDAO();
-        Usuario usuario = dao.validar(user, hashedPass); // método que consulta la BD con el hash
-        
-               
-        if (usuario != null && usuario.isActivo()) {
-            HttpSession session = request.getSession();
-            session.setAttribute("usuarioActivo", usuario.getUsuario());
-            session.setAttribute("nombreActivo", usuario.getNombre());
-
-            String rolOriginal = usuario.getRol().trim().toLowerCase();
-            String rolNormalizado;
-
-            switch (rolOriginal) {
-                case "admin":
-                    rolNormalizado = "administrador";
-                    break;
-                case "doc":
-                case "docente":
-                    rolNormalizado = "docente";
-                    break;
-                case "coord":
-                case "coordinador":
-                    rolNormalizado = "coordinador académico";
-                    break;
-                case "dir":
-                case "director":
-                    rolNormalizado = "director";
-                    break;
-                case "auxadmin":
-                    rolNormalizado = "auxiliar administrativo";
-                    break;
-                case "auxcont":
-                    rolNormalizado = "auxiliar contable";
-                    break;
-                case "est":
-                case "estudiante":
-                    rolNormalizado = "estudiante";
-                    break;
-                default:
-                    rolNormalizado = rolOriginal;
-                    break;
+        try {
+            UsuarioDAO dao = new UsuarioDAO();
+            Usuario usuario = dao.validar(user, hashedPass);
+            
+            if (usuario != null) {
+                System.out.println("[LOGIN] Usuario encontrado: " + usuario.getUsuario());
+                System.out.println("[LOGIN] Estado activo: " + usuario.isActivo());
+                System.out.println("[LOGIN] Rol desde BD: " + usuario.getRol());
+                
+                if (usuario.isActivo()) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("usuarioActivo", usuario.getUsuario());
+                    session.setAttribute("nombreActivo", usuario.getNombre());
+                    
+                    // Normalización de rol para mantener consistencia
+                    String rolOriginal = usuario.getRol().trim().toUpperCase();
+                    String rolNormalizado;
+                    
+                    switch (rolOriginal) {
+                        case "ADMIN":
+                        case "ADMINISTRADOR":
+                        case "ADMINISTRADOR SIAS":
+                            rolNormalizado = "ADMINISTRADOR SIAS";
+                            break;
+                        case "DOC":
+                        case "DOCENTE":
+                            rolNormalizado = "DOCENTE";
+                            break;
+                        case "COORD":
+                        case "COORDINADOR":
+                        case "COORDINADOR ACADÉMICO":
+                        case "COORDINADOR ACADEMICO":
+                            rolNormalizado = "COORDINADOR ACADÉMICO";
+                            break;
+                        case "DIR":
+                        case "DIRECTOR":
+                            rolNormalizado = "DIRECTOR";
+                            break;
+                        case "AUXADMIN":
+                        case "AUXILIAR ADMINISTRATIVO":
+                            rolNormalizado = "AUXILIAR ADMINISTRATIVO";
+                            break;
+                        case "AUXCONT":
+                        case "AUXILIAR CONTABLE":
+                            rolNormalizado = "AUXILIAR CONTABLE";
+                            break;
+                        case "EST":
+                        case "ESTUDIANTE":
+                            rolNormalizado = "ESTUDIANTE";
+                            break;
+                        default:
+                            rolNormalizado = rolOriginal;
+                            break;
+                    }
+                    
+                    session.setAttribute("rolActivo", rolNormalizado);
+                    session.setMaxInactiveInterval(1800); // 30 minutos
+                    
+                    LOGGER.info("[LOGIN] Login exitoso - Usuario: " + user + " | Rol: " + rolNormalizado);
+                    System.out.println("[LOGIN] Sesión creada exitosamente");
+                    System.out.println("[LOGIN] Rol normalizado guardado: " + rolNormalizado);
+                    
+                    // Redirección al dashboard
+                    response.sendRedirect("dashboard.jsp");
+                    
+                } else {
+                    LOGGER.warning("[LOGIN] Usuario inactivo: " + user);
+                    request.setAttribute("error", "Usuario inactivo. Contacte al administrador.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }
+            } else {
+                LOGGER.warning("[LOGIN] Credenciales inválidas para usuario: " + user);
+                System.out.println("[LOGIN] Usuario no encontrado o contraseña incorrecta");
+                request.setAttribute("error", "Credenciales inválidas. Verifique usuario y contraseña.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             }
-
-            session.setAttribute("rolActivo", rolNormalizado);
-
-            // ✅ Redirección centralizada
-            response.sendRedirect("dashboard.jsp");
-
-        } else {
-            request.setAttribute("error", "Credenciales inválidas o usuario inactivo.");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "[LOGIN] Error en el proceso de autenticación", e);
+            System.err.println("[LOGIN ERROR] " + e.getMessage());
+            e.printStackTrace();
+            request.setAttribute("error", "Error del sistema. Intente nuevamente.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendRedirect("login.jsp");
+    }
 }
- 

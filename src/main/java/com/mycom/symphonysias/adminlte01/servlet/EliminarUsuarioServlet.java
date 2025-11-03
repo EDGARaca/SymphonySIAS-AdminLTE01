@@ -19,24 +19,22 @@ import java.io.IOException;
 
 
 
-@WebServlet("/EliminarUsuarioServlet")
 public class EliminarUsuarioServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
         String id = request.getParameter("id");
-        if (id == null || id.trim().isEmpty()) {
-            response.sendRedirect("UsuarioServlet?error=eliminacion");
-            return;
-        }
+        System.out.println("[ELIMINAR USUARIO] ID recibido: " + id);
 
         UsuarioDAO dao = new UsuarioDAO();
         boolean eliminado = dao.eliminarUsuario(id);
 
         if (eliminado) {
-            response.sendRedirect("UsuarioServlet?eliminado=true");
+            response.sendRedirect("listarUsuario.jsp?eliminado=true");
         } else {
-            response.sendRedirect("UsuarioServlet?error=eliminacion");
+            response.sendRedirect("listarUsuario.jsp?error=eliminacion");
         }
     }
 }

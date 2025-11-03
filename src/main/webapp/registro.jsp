@@ -114,30 +114,30 @@
             <i class="fas fa-user-plus"></i> Registro de nuevo usuario
         </h5>
 
-        <form action="RegistroServlet" method="post" autocomplete="off">
+        <form action="RegistroServlet" method="post">
             <div class="form-group text-left mb-4" style="position: relative;">
                 <i class="fas fa-id-card" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #6c757d;"></i>
-                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre completo" autocomplete="off" required style="padding-left: 45px;">
+                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre completo" autocomplete="name" required style="padding-left: 45px;">
             </div>
 
             <div class="form-group text-left mb-4" style="position: relative;">
                 <i class="fas fa-user" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #6c757d;"></i>
-                <input type="text" name="usuario" id="usuario" class="form-control" placeholder="Nombre de usuario" autocomplete="off" required style="padding-left: 45px;">
+                <input type="text" name="usuario" id="usuario" class="form-control" placeholder="Nombre de usuario" autocomplete="username" required style="padding-left: 45px;">
             </div>
 
             <div class="form-group text-left mb-4" style="position: relative;">
                 <i class="fas fa-envelope" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #6c757d;"></i>
-                <input type="email" name="correo" id="correo" class="form-control" placeholder="Correo electrónico" autocomplete="off" required style="padding-left: 45px;">
+                <input type="email" name="correo" id="correo" class="form-control" placeholder="Correo electrónico" autocomplete="email" required style="padding-left: 45px;">
             </div>
 
             <div class="form-group text-left mb-4" style="position: relative;">
                 <i class="fas fa-lock" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #6c757d;"></i>
-                <input type="password" name="clave" id="clave" class="form-control" placeholder="Contraseña" autocomplete="new-password" required style="padding-left: 45px;">
+                <input type="password" name="clave" id="clave" class="form-control" placeholder="Contraseña" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" required style="padding-left: 45px;">
             </div>
 
             <div class="form-group text-left mb-4" style="position: relative;">
                 <i class="fas fa-lock" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #6c757d;"></i>
-                <input type="password" name="confirmar" id="confirmar" class="form-control" placeholder="Confirmar contraseña" autocomplete="new-password" required style="padding-left: 45px;">
+                <input type="password" name="confirmar" id="confirmar" class="form-control" placeholder="Confirmar contraseña" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" required style="padding-left: 45px;">
             </div>
 
             <div class="form-group text-left mb-4">
@@ -165,3 +165,4 @@
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>

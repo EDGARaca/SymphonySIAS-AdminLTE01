@@ -183,22 +183,41 @@ public class UsuarioDAO {
     }
     
     public boolean eliminarUsuario(String id) {
-    boolean eliminado = false;
+        boolean eliminado = false;
 
-    String sql = "DELETE FROM usuarios WHERE id = ?";
+        String sql = "DELETE FROM usuarios WHERE id = ?";
 
-    try (Connection conn = Conexion.getConexion();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        stmt.setString(1, id);
-        int filas = stmt.executeUpdate();
-        eliminado = filas > 0;
+            stmt.setString(1, id);
+            int filas = stmt.executeUpdate();
+            eliminado = filas > 0;
 
-    } catch (SQLException ex) {
-        LOGGER.log(Level.SEVERE, "[ERROR] Fallo al eliminar usuario", ex);
+        } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "[ERROR] Fallo al eliminar usuario", ex);
+        }
+
+        return eliminado;
     }
+    
+    public boolean actualizarEstado(int id, boolean estado) {
+        boolean actualizado = false;
+        String sql = "UPDATE usuarios SET activo = ? WHERE id = ?";
 
-    return eliminado;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setBoolean(1, estado);
+            ps.setInt(2, id);
+
+            int filas = ps.executeUpdate();
+            actualizado = filas > 0;
+
+            LOGGER.log(Level.INFO, "[DAO] Estado actualizado para usuario ID {0}: {1}", new Object[]{id, estado});
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "[ERROR DAO] Fallo al actualizar estado", e);
+        }
+
+        return actualizado;
     }
 
 }

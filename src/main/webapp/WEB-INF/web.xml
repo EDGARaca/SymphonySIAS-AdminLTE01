@@ -14,6 +14,16 @@
     </session-config>
     
     <servlet>
+        <servlet-name>ListarUsuariosServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ListarUsuariosServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListarUsuariosServlet</servlet-name>
+        <url-pattern>/ListarUsuariosServlet</url-pattern>
+    </servlet-mapping>
+
+    
+    <servlet>
     <servlet-name>EstudianteServlet</servlet-name>
     <servlet-class>com.mycom.symphonysias.adminlte01.servlet.EstudianteServlet</servlet-class>
     </servlet>
@@ -24,6 +34,25 @@
     </servlet-mapping>
     
     <servlet>
+    <servlet-name>ActualizarUsuarioServlet</servlet-name>
+    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ActualizarUsuarioServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ActualizarUsuarioServlet</servlet-name>
+        <url-pattern>/ActualizarUsuarioServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>ActualizarEstadoUsuarioServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ActualizarEstadoUsuarioServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ActualizarEstadoUsuarioServlet</servlet-name>
+        <url-pattern>/ActualizarEstadoUsuarioServlet</url-pattern>
+    </servlet-mapping>
+
+    
+    <servlet>
     <servlet-name>BuscarEstudiantesServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.BuscarEstudiantesServlet</servlet-class>
     </servlet>
@@ -31,6 +60,16 @@
     <servlet-mapping>
         <servlet-name>BuscarEstudiantesServlet</servlet-name>
         <url-pattern>/BuscarEstudiantesServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>BuscarProfesoresServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.BuscarProfesoresServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BuscarProfesoresServlet</servlet-name>
+        <url-pattern>/BuscarProfesoresServlet</url-pattern>
     </servlet-mapping>
     
     <servlet>
@@ -44,14 +83,14 @@
     </servlet-mapping>
     
     <servlet>
-        <servlet-name>BuscarProfesoresServlet</servlet-name>
-        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.BuscarProfesoresServlet</servlet-class>
+        <servlet-name>EliminarUsuarioServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.EliminarUsuarioServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
-        <servlet-name>BuscarProfesoresServlet</servlet-name>
-        <url-pattern>/BuscarProfesoresServlet</url-pattern>
+        <servlet-name>EliminarUsuarioServlet</servlet-name>
+        <url-pattern>/EliminarUsuarioServlet</url-pattern>
     </servlet-mapping>
+
     
     <servlet>
         <servlet-name>EditarProfesorServlet</servlet-name>
@@ -103,8 +142,16 @@
         <url-pattern>/RegistroCursoLibreServlet</url-pattern>
     </servlet-mapping>
 
-              
-    <!-- Filtro de sesión institucional -->
+    <servlet>
+    <servlet-name>RegistrarUsuarioServlet</servlet-name>
+    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.RegistrarUsuarioServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RegistrarUsuarioServlet</servlet-name>
+        <url-pattern>/RegistrarUsuarioServlet</url-pattern>
+    </servlet-mapping>          
+    
     <filter>
         <filter-name>SessionFilter</filter-name>
         <filter-class>com.mycom.symphonysias.adminlte01.SessionFilter</filter-class>
