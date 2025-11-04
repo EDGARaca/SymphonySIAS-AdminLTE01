@@ -41,6 +41,13 @@ public class UsuarioDAO {
         String sql = "SELECT * FROM usuarios WHERE usuario = ? AND clave = ? AND activo = 1";
         try (Connection conn = Conexion.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            // 🔧 INICIO trazabilidad DAO
+            System.out.println("[DAO] Usuario recibido: '" + usuario + "'");
+            System.out.println("[DAO] Clave hash recibida: '" + clave + "'");
+            System.out.println("[DAO] Longitud usuario: " + usuario.length());
+            System.out.println("[DAO] Longitud hash: " + clave.length());
+            // 🔧 FIN trazabilidad DAO
 
             stmt.setString(1, usuario);
             stmt.setString(2, clave);

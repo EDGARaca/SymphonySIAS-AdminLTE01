@@ -24,19 +24,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SymphonySIAS | Inicio de sesión</title>
-    <!-- Bootstrap desde CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome desde CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
+       body {
             background: url('assets/adminlte/img/pentagrama.jpg') no-repeat center center fixed;
             background-size: cover;
             background-color: #f4f6f9;
@@ -74,13 +66,13 @@
             text-align: center;
             margin-bottom: 30px;
         }
-
+        
         .input-wrapper {
             position: relative;
             margin-bottom: 25px;
         }
 
-        .input-wrapper i {
+        .input-wrapper i.fas.fa-lock {
             position: absolute;
             left: 18px;
             top: 50%;
@@ -90,25 +82,26 @@
             pointer-events: none;
             z-index: 1;
         }
+        
+        .input-wrapper i.fas.fa-eye,
+        .input-wrapper i.fas.fa-eye-slash {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.1rem;
+            cursor: pointer;
+            z-index: 2;
+        }
 
         .input-field {
             width: 100%;
-            padding: 15px 20px 15px 50px;
+            padding: 15px 50px 15px 50px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 1rem;
-            transition: all 0.3s ease;
             background: white;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-        }
-
-        .input-field::placeholder {
-            color: #aaa;
         }
 
         .btn-submit {
@@ -170,6 +163,19 @@
         .register-link a:hover {
             text-decoration: underline;
         }
+        
+        #toggleClave {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        #toggleClave:hover i {
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
@@ -199,44 +205,39 @@
             </div>
         <% } %>
 
-        <form action="LoginServlet" method="post" id="loginForm" autocomplete="off">
-            <div class="input-wrapper">
-                <i class="fas fa-user"></i>
-                <input 
-                    type="text" 
-                    name="usuario" 
-                    id="usuario" 
-                    class="input-field" 
-                    placeholder="Usuario" 
-                    autocomplete="off"
-                    value=""
-                    required>
+        <form action="LoginServlet" method="post" autocomplete="off">
+            <!-- Campo usuario -->
+            <div class="form-group text-left mb-4" style="position: relative;">
+                <i class="fas fa-user" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #6c757d;"></i>
+                <input type="text" name="usuario" id="usuario" class="form-control"
+                       placeholder="Ingrese su usuario" autocomplete="off" required
+                       style="padding-left: 45px; padding-right: 45px;">
             </div>
 
-            <div class="input-wrapper">
-                <i class="fas fa-lock"></i>
-                <input 
-                    type="password" 
-                    name="clave" 
-                    id="clave" 
-                    class="input-field" 
-                    placeholder="Contraseña" 
-                    autocomplete="off"
-                    value=""
-                    required>
+            <!-- Campo contraseña con ícono de ojo -->
+            <div class="form-group text-left mb-4" style="position: relative;">
+                <i class="fas fa-lock" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #6c757d;"></i>
+                <input type="password" name="clave" id="clave" class="form-control"
+                       placeholder="Ingrese su contraseña" autocomplete="new-password" required
+                       style="padding-left: 45px; padding-right: 45px;">
+                <span id="toggleClave" style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer; z-index: 2;">
+                    <i class="fas fa-eye" id="iconClave" style="color: #6c757d;"></i>
+                </span>
             </div>
-            
-            <button type="submit" class="btn-submit">
-                <i class="fas fa-sign-in-alt"></i> INICIAR SESIÓN
+
+            <!-- Botón -->
+            <button type="submit" class="btn btn-block"
+                    style="background-color: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem;">
+                LOGIN
             </button>
         </form>
+
 
         <div class="register-link">
             ¿No tienes cuenta? <a href="registro.jsp">Crear una cuenta</a>
         </div>
     </div>
 
-    <!-- Scripts desde CDN -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -268,13 +269,13 @@
             }
             
             // Limpiar al cargar
-            limpiarCampos();
+            //limpiarCampos();
             
             // Limpiar después de 50ms (por si el navegador autocompleta después)
-            setTimeout(limpiarCampos, 50);
+            //setTimeout(limpiarCampos, 50);
             
             // Limpiar después de 200ms (segunda verificación)
-            setTimeout(limpiarCampos, 200);
+            // setTimeout(limpiarCampos, 200);
             
             // Monitorear cambios en usuario
             usuarioInput.addEventListener('input', function(e) {
@@ -321,8 +322,8 @@
                     return false;
                 }
                 
-                if (clave.length < 4) {
-                    alert('⚠️ La contraseña debe tener al menos 4 caracteres');
+                if (clave.length < 1) {
+                    alert('⚠️ La contraseña no puede estar vacía');
                     claveInput.focus();
                     return false;
                 }
@@ -342,6 +343,36 @@
                 }
             }, 500);
         });
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const claveInput = document.getElementById('clave');
+                const toggleClave = document.getElementById('toggleClave');
+                const iconClave = document.getElementById('iconClave');
+                const usuarioInput = document.getElementById('usuario');
+
+                // Mostrar/Ocultar contraseña
+                toggleClave.addEventListener('click', function() {
+                    const tipo = claveInput.getAttribute('type');
+                    if (tipo === 'password') {
+                        claveInput.setAttribute('type', 'text');
+                        iconClave.classList.replace('fa-eye', 'fa-eye-slash');
+                    } else {
+                        claveInput.setAttribute('type', 'password');
+                        iconClave.classList.replace('fa-eye-slash', 'fa-eye');
+                    }
+                });
+
+                // Trazabilidad visual en consola
+                usuarioInput.addEventListener('input', function(e) {
+                    console.log('👤 Usuario:', e.target.value, '| Longitud:', e.target.value.length);
+                });
+
+                claveInput.addEventListener('input', function(e) {
+                    console.log('🔒 Clave longitud:', e.target.value.length);
+                });
+            }"");
+        </script>
     </script>
 </body>
 </html>

@@ -1,7 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+
 <%
     String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    rol = (rol != null) ? rol.trim().toLowerCase() : "";
 %>
+
+<%-- out.println("[SIDEBAR] Rol activo: " + rol); --%>
+
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="dashboard.jsp" class="brand-link">
@@ -24,7 +29,7 @@
                 <!-- Módulos Institucionales -->
                 <li class="nav-header">Módulos Institucionales</li>
                 
-                <% if ("administrador".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="usuarios.jsp" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
@@ -35,7 +40,7 @@
 
 
                 <%-- 1. AdministradorSIAS --%>
-                <% if ("administrador".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="auditoria.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-shield"></i>
@@ -45,7 +50,7 @@
                 <% } %>
 
                 <%-- 2. Gestión Estudiantes --%>
-                <% if ("administrador".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="estudiantes.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-graduate"></i>
@@ -55,7 +60,7 @@
                 <% } %>
 
                 <%-- 3. Gestión Profesores --%>
-                <% if ("administrador".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="profesores.jsp" class="nav-link">
                             <i class="nav-icon fas fa-chalkboard-teacher"></i>
@@ -65,7 +70,7 @@
                 <% } %>
 
                 <%-- 4. Gestión Auxiliar Contable --%>
-                <% if ("administrador".equals(rol) || "auxiliar contable".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol) || "auxiliar contable".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="reportesContables.jsp" class="nav-link">
                             <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -75,7 +80,7 @@
                 <% } %>
 
                 <%-- 5. Gestión Auxiliar Administrativo --%>
-                <% if ("administrador".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="ReporterServlet" class="nav-link">
                             <i class="nav-icon fas fa-file-export"></i>
@@ -85,7 +90,7 @@
                 <% } %>
 
                 <%-- 6. Gestión Director --%>
-                <% if ("administrador".equals(rol) || "director".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol) || "director".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="director.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-tie"></i>
@@ -95,7 +100,7 @@
                 <% } %>
 
                 <%-- 7. Gestión Coordinador Académico --%>
-                <% if ("administrador".equals(rol) || "coordinador académico".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol) || "coordinador académico".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="coordinador.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-cog"></i>
@@ -105,7 +110,7 @@
                 <% } %>
 
                 <%-- 8. Gestión Cursos Libres --%>
-                <% if ("administrador".equals(rol) || "coordinador académico".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol) || "coordinador académico".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="cursoLibre.jsp" class="nav-link">
                             <i class="nav-icon fas fa-book-reader"></i>
@@ -115,7 +120,7 @@
                 <% } %>
 
                 <%-- 9. Gestión de Horarios --%>
-                <% if ("administrador".equals(rol) || "estudiante".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol) || "estudiante".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="horarios.jsp" class="nav-link">
                             <i class="nav-icon fas fa-calendar-alt"></i>
@@ -125,7 +130,7 @@
                 <% } %>
 
                 <%-- 10. Gestión de Notas --%>
-                <% if ("administrador".equals(rol) || "docente".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol) || "docente".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="notas.jsp" class="nav-link">
                             <i class="nav-icon fas fa-clipboard-list"></i>
@@ -135,7 +140,7 @@
                 <% } %>
 
                 <%-- 11. Autenticación, Usuarios y Roles --%>
-                <% if ("administrador".equals(rol)) { %>
+                <% if ("administrador sias".equals(rol)) { %>
                     <li class="nav-item">
                         <a href="UsuarioServlet" class="nav-link">
                             <i class="nav-icon fas fa-users-cog"></i>

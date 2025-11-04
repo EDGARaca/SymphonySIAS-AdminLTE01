@@ -12,6 +12,8 @@
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
     String nombre = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
     String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    rol = (rol != null) ? rol.trim().toLowerCase() : "";
+
 
     if (usuario == null || nombre == null || rol == null) {
         response.sendRedirect("login.jsp");
@@ -21,6 +23,9 @@
     // Trazabilidad en consola del servidor
     System.out.println("Acceso autorizado al dashboard por usuario: " + usuario);
 %>
+
+<% out.println("[DASHBOARD] Rol activo: " + rol); %>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -68,7 +73,7 @@
 
                                 <!-- ADMIN SIAS -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador".equals(rol)) { %>
+                                    <% if ("administrador sias".equals(rol)) { %>
                                         <a href="adminSias.jsp" class="btn btn-outline-primary btn-block">
                                             <i class="fas fa-tools"></i> ADMIN SIAS <br><small>(Administrador)</small>
                                         </a>
@@ -84,7 +89,7 @@
 
                                 <!-- Gestión Estudiantes -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
+                                    <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
                                         <a href="estudiantes.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-user-graduate"></i> Gestión Estudiantes <br><small>(Roles autorizados)</small>
                                         </a>
@@ -97,7 +102,7 @@
 
                                 <!-- Gestión Profesores -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)) { %>
+                                    <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)) { %>
                                         <a href="profesores.jsp" class="btn btn-outline-warning btn-block">
                                             <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(Director, Coordinador)</small>
                                         </a>
@@ -111,7 +116,7 @@
                                     
                                 <!-- Gestión Cursos Libres -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador".equals(rol) || "coordinador académico".equals(rol)) { %>
+                                    <% if ("administrador sias".equals(rol) || "coordinador académico".equals(rol)) { %>
                                         <a href="cursoLibre.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(Administrador, Coordinador)</small>
                                         </a>

@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
         }
         
         // Trazabilidad
-        LOGGER.info("[LOGIN] Intento de login para usuario: " + user);
+        LOGGER.log(Level.INFO,"[LOGIN] Intento de login para usuario: {0}", user);
         System.out.println("[LOGIN] Usuario recibido: " + user);
         System.out.println("[LOGIN] Clave original recibida (longitud): " + pass.length());
         
@@ -108,7 +108,7 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("rolActivo", rolNormalizado);
                     session.setMaxInactiveInterval(1800); // 30 minutos
                     
-                    LOGGER.info("[LOGIN] Login exitoso - Usuario: " + user + " | Rol: " + rolNormalizado);
+                    LOGGER.log(Level.INFO,"[LOGIN] Login exitoso - Usuario: {0} | Rol: {1}",new Object[]{user, rolNormalizado});
                     System.out.println("[LOGIN] Sesión creada exitosamente");
                     System.out.println("[LOGIN] Rol normalizado guardado: " + rolNormalizado);
                     
@@ -116,12 +116,12 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("dashboard.jsp");
                     
                 } else {
-                    LOGGER.warning("[LOGIN] Usuario inactivo: " + user);
+                    LOGGER.log(Level.WARNING,"[LOGIN] Usuario inactivo: {0}", user);
                     request.setAttribute("error", "Usuario inactivo. Contacte al administrador.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                 }
             } else {
-                LOGGER.warning("[LOGIN] Credenciales inválidas para usuario: " + user);
+                LOGGER.log(Level.WARNING, "[LOGIN] Credenciales inválidas para usuario: {0}", user);
                 System.out.println("[LOGIN] Usuario no encontrado o contraseña incorrecta");
                 request.setAttribute("error", "Credenciales inválidas. Verifique usuario y contraseña.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
