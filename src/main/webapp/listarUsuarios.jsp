@@ -8,6 +8,14 @@
 <%@page import="java.util.List"%>
 <%@page import="com.mycom.symphonysias.adminlte01.modelo.Usuario" %>
 
+<%
+    HttpSession sesion = request.getSession(false);
+    if (sesion == null || sesion.getAttribute("usuarioActivo") == null) {
+        response.sendRedirect("login.jsp?logout=true");
+        return;
+    }
+%>
+
 <!-- Alertas visuales -->
 <% if ("camposIncompletos".equals(request.getParameter("error"))) { %>
     <div class="alert alert-warning">Debes completar todos los campos antes de registrar.</div>

@@ -17,6 +17,8 @@ public class CursoLibre {
     private String frecuencia;
     private String estado;
     private String usuario_registro;
+    private String horario;
+    private String nombreProfesor;
 
     // Constructor vacío
     public CursoLibre() {}
@@ -79,4 +81,22 @@ public class CursoLibre {
     public void setUsuario_registro(String usuario_registro) {
         this.usuario_registro = usuario_registro;
     }
+    
+    public String getHorario() {
+        return horario;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
+    
+    public String getNombreProfesor() {
+    return nombreProfesor;
+    }
+
+    public void setNombreProfesor(String nombreProfesor) {
+        this.nombreProfesor = nombreProfesor;
+    }
+
+    
 }

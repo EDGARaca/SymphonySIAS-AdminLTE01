@@ -11,22 +11,23 @@
 <%@page import="com.mycom.symphonysias.adminlte01.dao.ProfesorDAO"%>
 
 <%
-    // Validación de sesión
-    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
+   String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
     String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
 
-    if (usuario == null || rol == null ||
-        !(rol.equals("administrador") || rol.equals("coordinador académico") || rol.equals("director"))) {
-        response.sendRedirect("login.jsp");
+    if (usuario == null || rol == null || 
+        !(rol.equalsIgnoreCase("ADMINISTRADOR SIAS") || rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") || rol.equalsIgnoreCase("DIRECTOR"))) {
+        response.sendRedirect("login.jsp?logout=true");
         return;
     }
-
-    // Trazabilidad en consola
-    System.out.println("[PROFESORES] Sesión activa: " + usuario + " (" + rol + ")");
 
     ProfesorDAO dao = new ProfesorDAO();
     List<Profesor> lista = dao.listar();
 %>
+
+<%
+    System.out.println("[JSP] Profesores recuperados: " + lista.size());
+%>
+
 
 <!DOCTYPE html>
 <html lang="es">

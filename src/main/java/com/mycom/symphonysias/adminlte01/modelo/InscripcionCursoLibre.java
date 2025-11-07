@@ -5,8 +5,8 @@
 
 
 /**
- *
- * @author Spiri
+ * Modelo para inscripción a curso libre
+ * @author EdgarACA
  */
 
 

@@ -8,22 +8,30 @@
 <%@page import="java.util.List"%>
 <%@page import="com.mycom.symphonysias.adminlte01.modelo.Estudiante"%>
 <%@page import="com.mycom.symphonysias.adminlte01.dao.EstudianteDAO"%>
+<%@ page import="javax.servlet.http.HttpSession" %>
+
+<%@ page import="javax.servlet.http.HttpSession" %>
 
 <%
-    // Validación de sesión
-    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
+   String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
     String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
 
     if (usuario == null || rol == null || 
-        !(rol.equals("administrador") || rol.equals("coordinador académico") || rol.equals("director"))) {
-        response.sendRedirect("login.jsp");
+        !(rol.equalsIgnoreCase("ADMINISTRADOR SIAS") || rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") || rol.equalsIgnoreCase("DIRECTOR"))) {
+        response.sendRedirect("login.jsp?logout=true");
         return;
     }
 
-    // Obtener lista de estudiantes
     EstudianteDAO dao = new EstudianteDAO();
     List<Estudiante> lista = dao.listarEstudiantes();
 %>
+
+
+<%
+    System.out.println("🧪 Usuario activo: " + usuario);
+    System.out.println("🧪 Rol activo: " + rol);
+%>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -163,7 +171,7 @@
                 </div>
             </div>
         </section>
-        <jsp:include page="footer.jsp" />                    
+        <jsp:include page="componentes/footer.jsp" />                    
     </div>                       
 </div>
 

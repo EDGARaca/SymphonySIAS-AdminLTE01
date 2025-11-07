@@ -1,29 +1,28 @@
 <%-- 
-    Document   : auditoria
-    Created on : 22/10/2025, 11:40:27 a. m.
+    Document   : AdministradorSIAS
+    Created on : 7/11/2025, 9:26:21 a. m.
     Author     : Spiri
 --%>
 
 <%@page contentType="text/html; charset=UTF-8" language="java"%>
-
 <%
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
     String nombre = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
     String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
 
-    if (usuario == null || nombre == null || rol == null){
+    if (usuario == null || nombre == null || rol == null || !"administrador sias".equals(rol.trim().toLowerCase())) {
         response.sendRedirect("login.jsp");
         return;
     }
 
-    System.out.println("[ADMINISTRADORSIAS] Sesión activa: " + usuario + " (" + rol + ")");
+    System.out.println("[AdministradorSIAS] Acceso autorizado por: " + usuario + " (" + rol + ")");
 %>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>AdministradorSIAS</title>
+    <title>AdministradorSIAS | SymphonySIAS</title>
     <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
@@ -32,8 +31,8 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-    <jsp:include page="header.jsp" />
-    <jsp:include page="sidebar.jsp" />
+    <jsp:include page="componentes/header.jsp" />
+    <jsp:include page="componentes/sidebar.jsp" />
 
     <div class="content-wrapper">
         <section class="content-header">
@@ -49,7 +48,7 @@
             <div class="container-fluid">
                 <div class="row">
 
-                    <%-- Accesos rápidos a los 12 módulos --%>
+                    <!-- Accesos rápidos -->
                     <div class="col-md-3 mb-3">
                         <a href="estudiantes.jsp" class="btn btn-outline-primary btn-block">
                             <i class="fas fa-user-graduate"></i> Gestión Estudiantes
@@ -87,10 +86,11 @@
                     </div>
 
                     <div class="col-md-3 mb-3">
-                        <a href="asignaturas.jsp" class="btn btn-outline-primary btn-block">
-                            <i class="fas fa-book-open"></i> Asignaturas
+                        <a href="cursoLibre.jsp" class="btn btn-outline-primary btn-block">
+                            <i class="fas fa-book-reader"></i> Cursos Libres
                         </a>
                     </div>
+
 
                     <div class="col-md-3 mb-3">
                         <a href="horarios.jsp" class="btn btn-outline-primary btn-block">
@@ -121,8 +121,11 @@
         </section>
     </div>
 
-    <jsp:include page="footer.jsp" />
-
+    <jsp:include page="componentes/footer.jsp" />
 </div>
+
+<script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
+<script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/adminlte/js/adminlte.min.js"></script>
 </body>
 </html>

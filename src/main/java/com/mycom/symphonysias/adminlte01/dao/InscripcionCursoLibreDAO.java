@@ -50,7 +50,7 @@ public class InscripcionCursoLibreDAO {
                 i.setIdCursoLibre(rs.getInt("id_curso_libre"));
                 i.setFechaInscripcion(rs.getDate("fecha_inscripcion"));
                 i.setEstadoPago(rs.getString("estado_pago"));
-                i.setUsuarioRegistro(rs.getString("usuario_registro"));
+                i.setUsuarioRegistro(rs.getString("usuario_registro"));                
                 lista.add(i);
             }
             System.out.println("[DAO] Inscripciones recuperadas: " + lista.size());
@@ -111,5 +111,7 @@ public class InscripcionCursoLibreDAO {
             System.out.println("[ERROR DAO] No se pudo actualizar inscripción: " + e.getMessage());
             return false;
         }
-    }   
+    } 
+    
+    
 }

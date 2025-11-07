@@ -133,6 +133,16 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>InscripcionCursoLibreServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.InscripcionCursoLibreServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>InscripcionCursoLibreServlet</servlet-name>
+        <url-pattern>/InscripcionCursoLibreServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>RegistroCursoLibreServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.controlador.RegistroCursoLibreServlet</servlet-class>
     </servlet>

@@ -52,8 +52,12 @@ public class CursoLibreDAO {
     // LISTAR TODOS
     public List<CursoLibre> listar() {
         List<CursoLibre> lista = new ArrayList<>();
-        String sql = "SELECT * FROM curso_libre ORDER BY " +
-                     "CASE WHEN estado = 'activo' THEN 0 ELSE 1 END, id DESC";
+        String sql = "SELECT cl.*, p.nombre AS nombre_profesor " +
+             "FROM curso_libre cl " +
+             "LEFT JOIN profesores p ON cl.id_profesor = p.id " +
+             "ORDER BY CASE WHEN cl.estado = 'activo' THEN 0 ELSE 1 END, cl.id DESC";
+
+
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -62,15 +66,19 @@ public class CursoLibreDAO {
                 CursoLibre c = new CursoLibre();
                 c.setId(rs.getInt("id"));
                 c.setNombre(rs.getString("nombre"));
+                c.setNombreProfesor(rs.getString("nombre_profesor"));
                 c.setValor(rs.getInt("valor"));
                 c.setFrecuencia(rs.getString("frecuencia"));
                 c.setEstado(rs.getString("estado"));
                 c.setUsuario_registro(rs.getString("usuario_registro"));
+                System.out.println("[DAO] Curso: " + c.getNombre() + " | Profesor: " + c.getNombreProfesor());
                 lista.add(c);
+                
             }
         } catch (SQLException e) {
             System.out.println("[DAO] Error al listar cursos: " + e.getMessage());
         }
+        System.out.println("[DAO] Total cursos encontrados: " + lista.size());
         return lista;
     }
 
@@ -178,4 +186,15 @@ public class CursoLibreDAO {
             return false;
         }
     }
+    
+    private String nombreProfesor;
+
+    public String getNombreProfesor() {
+        return nombreProfesor;
+    }
+
+    public void setNombreProfesor(String nombreProfesor) {
+        this.nombreProfesor = nombreProfesor;
+    }
+    
 }

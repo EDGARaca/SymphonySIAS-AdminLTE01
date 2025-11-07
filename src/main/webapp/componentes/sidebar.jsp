@@ -9,7 +9,7 @@
 
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="dashboard.jsp" class="brand-link">
+    <a href="AdministradorSIAS.jsp" class="brand-link">
         <span class="brand-text font-weight-light">SymphonySIAS</span>
     </a>
 
@@ -42,7 +42,7 @@
                 <%-- 1. AdministradorSIAS --%>
                 <% if ("administrador sias".equals(rol)) { %>
                     <li class="nav-item">
-                        <a href="auditoria.jsp" class="nav-link">
+                        <a href="AdministradorSIAS.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-shield"></i>
                             <p>AdministradorSIAS</p>
                         </a>

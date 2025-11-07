@@ -24,7 +24,7 @@
     System.out.println("Acceso autorizado al dashboard por usuario: " + usuario);
 %>
 
-<% out.println("[DASHBOARD] Rol activo: " + rol); %>
+
 
 
 <!DOCTYPE html>
@@ -35,20 +35,20 @@
     <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
     <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" integrity="sha384-...hash..." crossorigin="anonymous">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <%-- Navbar --%>
-        <jsp:include page="header.jsp" />
+        <jsp:include page="componentes/header.jsp" />
 
         <%-- Sidebar --%>
-        <jsp:include page="sidebar.jsp" />
+        <jsp:include page="componentes/sidebar.jsp" />
 
         <%-- Content Wrapper --%>
         <div class="content-wrapper">
+            <h3 class="text-primary text-center mt-3">[DASHBOARD] Rol activo: <%= rol %></h3>            
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row align-items-center mb-3">
@@ -74,7 +74,7 @@
                                 <!-- ADMIN SIAS -->
                                 <div class="col-md-3 mb-3">
                                     <% if ("administrador sias".equals(rol)) { %>
-                                        <a href="adminSias.jsp" class="btn btn-outline-primary btn-block">
+                                        <a href="AdministradorSIAS.jsp" class="btn btn-outline-primary btn-block">
                                             <i class="fas fa-tools"></i> ADMIN SIAS <br><small>(Administrador)</small>
                                         </a>
                                     <% } else { %>
@@ -244,14 +244,15 @@
                 </div>
             </section>
             <%-- Scripts --%>
-            <jsp:include page="componentes/chatbot.jspf" />
+            <% if (!"administrador sias".equals(rol)) { %>
+                <jsp:include page="componentes/chatbot.jspf" />
+            <% } %>
 
-            <jsp:include page="footer.jsp" />                                   
+
+            <jsp:include page="componentes/footer.jsp" />                                   
         </div>   
     </div>    
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/adminlte/js/adminlte.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    </body>
 </html>

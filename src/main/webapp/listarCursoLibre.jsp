@@ -15,18 +15,33 @@
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
     String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
 
-    if (usuario == null || rol == null ||
-        !(rol.equals("administrador") || rol.equals("coordinador académico") || rol.equals("director"))) {
-        response.sendRedirect("login.jsp");
+    if (usuario == null || rol == null) {
+        response.sendRedirect("login.jsp?logout=true");
         return;
     }
 
-    // Trazabilidad en consola
-    System.out.println("[CURSOS LIBRES] Sesión activa: " + usuario + " (" + rol + ")");
+    // Acceso permitido para roles institucionales y estudiante en modo visualización
+    boolean accesoPermitido = rol.equalsIgnoreCase("ADMINISTRADOR SIAS") ||
+                              rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") ||
+                              rol.equalsIgnoreCase("DIRECTOR") ||
+                              rol.equalsIgnoreCase("ESTUDIANTE");
+
+    if (!accesoPermitido) {
+        response.sendRedirect("login.jsp?logout=true");
+        return;
+    }
 
     CursoLibreDAO dao = new CursoLibreDAO();
     List<CursoLibre> lista = dao.listar();
+    System.out.println("[JSP] Total cursos libres cargados: " + lista.size());
 %>
+
+
+<%
+    System.out.println("🧪 Usuario activo: " + usuario);
+    System.out.println("🧪 Rol activo: " + rol);
+%>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -132,6 +147,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Nombre</th>
+                                    <th>Profesor</th>
                                     <th>Valor</th>
                                     <th>Frecuencia</th>
                                     <th>Estado</th>
@@ -144,11 +160,24 @@
                                     <tr>
                                         <td><%= c.getId() %></td>
                                         <td><%= c.getNombre() %></td>
+                                        <td><%= (c.getNombreProfesor() != null && !c.getNombreProfesor().trim().isEmpty()) ? c.getNombreProfesor() : "Sin asignar" %></td>
                                         <td>$<%= c.getValor() %></td>
                                         <td><%= c.getFrecuencia() %></td>
                                         <td><%= c.getEstado() %></td>
                                         <td><%= c.getUsuario_registro() %></td>
                                         <td>
+                                        <% if ("ESTUDIANTE".equalsIgnoreCase(rol) || "ADMINISTRADOR SIAS".equalsIgnoreCase(rol)) { %>
+                                            <form action="InscripcionCursoLibreServlet" method="post" style="display:inline;">
+                                                <input type="hidden" name="id_curso" value="<%= c.getId() %>">
+                                                <input type="hidden" name="id_estudiante" value="<%= session.getAttribute("idUsuarioActivo") %>">
+                                                <button type="submit" class="btn btn-success btn-sm">Inscribirme</button>
+                                            </form>
+                                        <% } %>  
+                                        
+                                        <%
+                                            System.out.println("[JSP] Curso: " + c.getNombre() + " | Profesor: " + c.getNombreProfesor());
+                                            System.out.println("[JSP] Rol activo: " + rol);
+                                        %>
                                             <a href="editarCursoLibre.jsp?id=<%= c.getId() %>&usuario=<%= usuario %>" class="btn btn-sm btn-warning" title="Editar curso">
                                                 <i class="fas fa-edit"></i>
                                             </a>

@@ -109,7 +109,7 @@
 </head>
 <body>
     <div class="register-box text-center">
-        <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" class="img-fluid mb-3" style="height:120px;">
+        <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" class="img-fluid mb-3" style="height:120px; opacity:0.9; border-radius:8px;">
         <h5 class="text-primary mb-4">
             <i class="fas fa-user-plus"></i> Registro de nuevo usuario
         </h5>

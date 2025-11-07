@@ -1,11 +1,15 @@
 <!-- BURBUJA FLOTANTE -->
-<button class="chat-bubble" id="chatToggle" aria-label="Abrir chat con el bot">ðŸ’¬</button>
+<button class="chat-bubble" id="chatToggle" aria-label="Abrir chat con el bot">
+  <i class="fas fa-comment-dots"></i>
+</button>
 
 <!-- CONTENEDOR PRINCIPAL DEL CHAT -->
 <div class="chat-container" id="chatContainer" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
     <div class="chat-header">
         <span id="chatTitle">Chat SYMPHONY-BOT</span>
-        <button class="close-btn" id="closeChat" aria-label="Cerrar chat">âœ–</button>
+        <button class="close-btn" id="closeChat" aria-label="Cerrar chat">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
     <div class="messages" id="messages" role="log" aria-live="polite"></div>
     <div class="input-area">
@@ -164,15 +168,15 @@ function botResponse(input) {
     if (pregunta.includes("hola")) {
         return "Hola soy ChatBot SYMPHONY, me encanta ayudarte a resolver tus melodiosas preguntas frecuentes.";
     } else if (pregunta.includes("instrumentos")) {
-        return "Puedes aprender Piano, Guitarra, BaterÃ­a, ViolÃ­n, Trompeta, SaxofÃ³n, Tiple.";
+        return "Puedes aprender Piano, Guitarra, Batería, Violín, Trompeta, Saxofón, Tiple.";
     } else if (pregunta.includes("cursos")) {
-        return "Tenemos Preparatorio 1 y 2, BÃ¡sico 1 a 4.";
+        return "Tenemos Preparatorio 1 y 2, Básico 1 a 4.";
     } else if (pregunta.includes("valor")) {
-        return "El semestre cuesta $3.850.000 COP. Con ArmonÃ­a Aplicada: $5.000.000 COP.";
+        return "El semestre cuesta $3.850.000 COP. Con Armonía Aplicada: $5.000.000 COP.";
     } else if (pregunta.includes("forma")) {
         return "Puedes pagar en efectivo, Daviplata, Nequi o PayPal.";
     } else {
-        return "Lo siento, aÃºn no tengo respuesta para esa pregunta.";
+        return "Lo siento, aún no tengo respuesta para esa pregunta.";
     }
 }
 

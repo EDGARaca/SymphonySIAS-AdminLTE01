@@ -1,0 +1,127 @@
+/* == Estilos para lo general == */
+body {
+    font-family: sans-serif; /* Me ayuda a definir la fuente del texto en la página */
+    margin: 0; /* Elimina los márgenes predeterminados del navegador */
+    padding: 0; /* Elimina el espacio interno del cuerpo */
+    background-color: #00BFFF; /* Fondo gris claro para mejorar la visualización */
+}
+
+/* == Estilos del HEADER == */
+header {
+    background-color: #00BFFF; /* Fondo azul oscuro */
+    color: white; /* Texto en color blanco */
+    text-align: center; /* Centra el contenido del header */
+    padding: 20px; /* Agrega espacio interno alrededor del header */
+}
+
+/* == Estilo del logo "SYMPHONY" == */
+.logo {
+    max-width: 200px; /* Establece un ancho máximo para el logo */
+    display: block; /* Asegura que el logo se comporte como un bloque */
+    margin: 0 auto; /* Centra el logo horizontalmente */
+
+    /* Bordes redondeados */
+    border-radius: 15px; /* Suaviza los bordes del logo */
+
+    /* Marco llamativo */
+    border:  5px solid #8d8c8b; /* Borde gris */
+    padding: 8px; /* Espaciado interno para separar el borde de la imagen */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Efecto de sombra para destacar el logo */
+}
+
+/* == ESTILOS para organizar la barra de navegación == */
+nav.navbar {
+    background-color: #7ace97 !important; /* Color verde y !important para asegurar la aplicación */
+}
+
+.navbar-brand {
+    font-weight: bold; /* Hace el texto del logo de la barra más grueso */
+    color: white !important; /* Asegura que el color del texto sea blanco */
+}
+
+.navbar-nav .nav-link {
+    color: white !important; /* Asegura que los enlaces sean blancos */
+    font-weight: bold; /* Hace el texto de los enlaces más grueso */
+    padding: 10px; /* Espaciado interno para mejorar accesibilidad */
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #8d8c8b; /* Cambia el fondo cuando el mouse pasa sobre los enlaces */
+    border-radius: 5px; /* Redondea los bordes del efecto hover */
+}
+
+/* ====== ESTILOS DE LAS SECCIONES ====== */
+section {
+    margin: 20px; /* Espacio exterior entre secciones */
+    padding: 20px; /* Espaciado interno */
+    background-color: white; /* Fondo blanco para destacar la sección */
+    border-radius: 10px; /* Bordes redondeados para una apariencia más elegante */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para un efecto tridimensional */
+}
+
+/* ====== ESTILO DE IMÁGENES EN SECCIONES ====== */
+section img {
+    width: 75%; /* La imagen ocupará el 90% del ancho disponible */
+    max-width: 150px; /* Establece un ancho máximo de 200px */
+    display: block; /* Evita que haya espacios alrededor de la imagen */
+    margin: 10px auto; /* Centra la imagen */
+    border-radius: 20px; /* Aplica bordes redondeados */
+}
+
+/* ====== ESTILO DEL ASIDE ====== */
+aside {
+    background-color: #e3e3e3; /* Fondo gris claro */
+    padding: 15px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* == Ajuste de imagen en aside ==*/
+aside img {
+    width: 80%; /* La imagen ocupará solo el 80% del ancho disponible */
+    max-width: 200px; /* No será más grande de 150px */
+    display: block; /* Evita espacios no deseados alrededor */
+    margin: 15px auto; /* Centra la imagen */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* --Aplica los mismos estilos de section a article-- */
+article {
+    margin: 20px; /* Espacio exterior entre artículos */
+    padding: 20px; /* Espaciado interno */
+    background-color: white; /* Fondo blanco para destacar el contenido */
+    border-radius: 10px; /* Bordes redondeados para una apariencia más elegante */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para un efecto tridimensional */
+}
+
+/* == Ajuste de imagen en article ==*/
+article img {
+    width: 80%; /* La imagen ocupará solo el 80% del ancho disponible */
+    max-width: 250px; /* No será más grande de 150px */
+    display: block; /* Evita espacios no deseados alrededor */
+    margin: 15px auto; /* Centra la imagen */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* ====== ESTILOS DE BOTONES ====== */
+.btn {
+    text-decoration: none; /* Quita el subrayado de los botones/enlaces */
+    background-color: #d3d3d3; /* Color gris para los botones */
+    color: #333; /* Texto oscuro */
+    padding: 10px 15px; /* Espaciado interno para mejorar usabilidad */
+    border-radius: 5px; /* Bordes redondeados */
+    font-weight: bold; /* Hace el texto más grueso */
+    transition: background-color 0.3s; /* Agrega una animación suave al cambiar de color */
+}
+
+.btn:hover {
+    background-color: #8d8c8b; /* Cambia el color del botón al pasar el mouse */
+    color: white; /* Hace el texto más visible en el hover */
+}
+
+/* ====== ESTILOS DEL FOOTER ====== */
+footer {
+    text-align: center; /* Centra el contenido */
+    padding: 15px; /* Espaciado interno */
+    background-color: #00BFFF; /* Fondo azul */
+    color: white; /* Texto en color blanco */
+}

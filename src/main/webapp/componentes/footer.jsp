@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 
-<footer class="bg-light text-dark mt-5 pt-4 pb-3 border-top shadow-sm">
+<footer class="bg-primary text-white text-center p-3 mt-4" style="background-color:#00BFFF;">
     <div class="container-fluid">
         <div class="row">
 
@@ -36,15 +36,16 @@
                     <a href="#" class="text-dark"><i class="fab fa-x-twitter fa-lg"></i></a>
                 </div>
             </div>
-
         </div>
 
         <hr>
         <div class="text-center small text-muted">
-            Copyright © Domain. All Rights Reserved. | Designed by Edgar | Año: 2025
+            Copyright © Domain. All Rights Reserved. | Desarrollado por Edgar Ceballos - Ficha 2977514 ADSO | Año: 2025
         </div>
     </div>
+    
 </footer>
+<jsp:include page="chatbot.jspf" />
 
 <!-- Scripts finales -->
 <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>

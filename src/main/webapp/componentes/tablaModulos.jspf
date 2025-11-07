@@ -1,0 +1,36 @@
+<%-- Fragmento: tablaModulos.jspf --%>
+<table class="table table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Módulo</th>
+            <th>Ruta JSP</th>
+            <th>Roles autorizados</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Gestión Estudiantes</td>
+            <td><code>estudiantes.jsp</code></td>
+            <td>administrador sias, director, coordinador académico, auxiliar administrativo</td>
+            <td><span class="badge bg-success">Activo</span></td>
+            <td><button class="btn btn-sm btn-outline-danger">Desactivar</button></td>
+        </tr>
+        <tr>
+            <td>Gestión Profesores</td>
+            <td><code>profesores.jsp</code></td>
+            <td>administrador sias, director, coordinador académico</td>
+            <td><span class="badge bg-success">Activo</span></td>
+            <td><button class="btn btn-sm btn-outline-danger">Desactivar</button></td>
+        </tr>
+        <tr>
+            <td>Gestión Cursos Libres</td>
+            <td><code>cursoLibre.jsp</code></td>
+            <td>administrador sias, coordinador académico</td>
+            <td><span class="badge bg-warning">En revisión</span></td>
+            <td><button class="btn btn-sm btn-outline-success">Activar</button></td>
+        </tr>
+        <!-- Puedes agregar más filas según tus módulos -->
+    </tbody>
+</table>
