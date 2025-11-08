@@ -1,0 +1,23 @@
+# Archivos de NetBeans
+nbproject/private/
+build/
+dist/
+*.class
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de entorno
+.env
+
+# Archivos de despliegue
+*.war
+*.ear
+
+# Carpeta generada por Maven
+/target/
