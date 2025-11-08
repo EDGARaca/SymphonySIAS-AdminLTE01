@@ -75,11 +75,11 @@
                                 <div class="col-md-3 mb-3">
                                     <% if ("administrador sias".equals(rol)) { %>
                                         <a href="AdministradorSIAS.jsp" class="btn btn-outline-primary btn-block">
-                                            <i class="fas fa-tools"></i> ADMIN SIAS <br><small>(Administrador)</small>
+                                            <i class="fas fa-tools"></i> AdministradorSIAS <br><small>(Administrador)</small>
                                         </a>
                                     <% } else { %>
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-tools"></i> ADMIN SIAS <br><small>(Administrador)</small>
+                                            <i class="fas fa-tools"></i> AdministradorSIAS <br><small>(Administrador)</small>
                                         </a>
                                     <% } %>
                                     

@@ -55,8 +55,8 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-    <jsp:include page="header.jsp" />
-    <jsp:include page="sidebar.jsp" />
+    <jsp:include page="componentes/header.jsp" />
+    <jsp:include page="componentes/sidebar.jsp" />
 
     <div class="content-wrapper">
 
@@ -95,7 +95,7 @@
                     </div>
                 <% } else if (eliminado != null) { %>
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong>🗑 Curso eliminado correctamente.</strong>
+                        <strong>? Curso eliminado correctamente.</strong>
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                     </div>
                 <% } else if (error != null) { %>
@@ -206,7 +206,7 @@
                 </div>
             </div>
         </section>
-        <jsp:include page="footer.jsp" />                    
+        <jsp:include page="componentes/footer.jsp" />                    
     </div>
 
     

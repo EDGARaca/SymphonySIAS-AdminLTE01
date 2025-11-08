@@ -13,7 +13,7 @@ package com.mycom.symphonysias.adminlte01.modelo;
 public class CursoLibre {
     private int id;
     private String nombre;
-    private int valor;
+    private double valor;
     private String frecuencia;
     private String estado;
     private String usuario_registro;
@@ -50,11 +50,11 @@ public class CursoLibre {
         this.nombre = nombre;
     }
 
-    public int getValor() {
+    public double getValor() {
         return valor;
     }
 
-    public void setValor(int valor) {
+    public void setValor(double valor) {
         this.valor = valor;
     }
 
