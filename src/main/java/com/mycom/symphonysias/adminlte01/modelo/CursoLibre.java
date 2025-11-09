@@ -13,27 +13,29 @@ package com.mycom.symphonysias.adminlte01.modelo;
 public class CursoLibre {
     private int id;
     private String nombre;
+    private int idProfesor;
+    private String nombreProfesor;
     private double valor;
     private String frecuencia;
     private String estado;
     private String usuario_registro;
-    private String horario;
-    private String nombreProfesor;
-
-    // Constructor vacío
-    public CursoLibre() {}
 
     // Constructor completo
-    public CursoLibre(int id, String nombre, int valor, String frecuencia, String estado, String usuario_registro) {
+    public CursoLibre(int id, String nombre, double valor, String frecuencia, String estado, String usuario_registro) {
         this.id = id;
         this.nombre = nombre;
+        this.idProfesor = idProfesor;
         this.valor = valor;
         this.frecuencia = frecuencia;
         this.estado = estado;
         this.usuario_registro = usuario_registro;
     }
 
-    // Getters y Setters
+    // Constructor vacío (necesario para DAO)
+    public CursoLibre() {
+    }
+
+    // Getters y setters
     public int getId() {
         return id;
     }
@@ -48,6 +50,22 @@ public class CursoLibre {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public int getIdProfesor() {
+        return idProfesor;
+    }
+
+    public void setIdProfesor(int idProfesor) {
+        this.idProfesor = idProfesor;
+    }
+
+    public String getNombreProfesor() {
+        return nombreProfesor;
+    }
+
+    public void setNombreProfesor(String nombreProfesor) {
+        this.nombreProfesor = nombreProfesor;
     }
 
     public double getValor() {
@@ -81,22 +99,4 @@ public class CursoLibre {
     public void setUsuario_registro(String usuario_registro) {
         this.usuario_registro = usuario_registro;
     }
-    
-    public String getHorario() {
-        return horario;
-    }
-
-    public void setHorario(String horario) {
-        this.horario = horario;
-    }
-    
-    public String getNombreProfesor() {
-    return nombreProfesor;
-    }
-
-    public void setNombreProfesor(String nombreProfesor) {
-        this.nombreProfesor = nombreProfesor;
-    }
-
-    
 }

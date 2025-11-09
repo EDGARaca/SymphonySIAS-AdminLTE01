@@ -32,7 +32,7 @@
     }
 
     CursoLibreDAO dao = new CursoLibreDAO();
-    List<CursoLibre> lista = dao.listar();
+    List<CursoLibre> lista = dao.listarActivos();
     System.out.println("[JSP] Total cursos libres cargados: " + lista.size());
 %>
 

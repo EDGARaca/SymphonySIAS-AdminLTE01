@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
  * Servlet de autenticación para SymphonySIAS-AdminLTE01
  * @author Spiri
  */
-@WebServlet("/UsuarioServlet")
+
 public class UsuarioServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(UsuarioServlet.class.getName());
 

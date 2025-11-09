@@ -5,6 +5,27 @@
 --%>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page import="java.util.List"%>
+<%@page import="com.mycom.symphonysias.adminlte01.modelo.Profesor"%>
+<%@page import="com.mycom.symphonysias.adminlte01.dao.ProfesorDAO"%>
+
+<%
+    ProfesorDAO profesorDAO = new ProfesorDAO();
+    List<Profesor> profesores = profesorDAO.listar();
+%>
+
+<select name="id_profesor" class="form-control" required>
+    <option value="">Seleccione un profesor</option>
+    <%
+        for (Profesor p : profesores) {
+    %>
+        <option value="<%= p.getId() %>"><%= p.getNombre() %></option>
+    <%
+        }
+    %>
+</select>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -102,6 +123,22 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="usuario_registro">Usuario que registra</label>
                         <input type="text" name="usuario_registro" id="usuario_registro" class="form-control" value="<%= session.getAttribute("usuarioActivo") %>" readonly>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="id_profesor">Profesor asignado</label>
+                        <select name="id_profesor" id="id_profesor" class="form-control" required>
+                            <option value="">Seleccione un profesor</option>
+                            <%
+                                com.mycom.symphonysias.adminlte01.dao.ProfesorDAO profesorDAO = new com.mycom.symphonysias.adminlte01.dao.ProfesorDAO();
+                                List<com.mycom.symphonysias.adminlte01.modelo.Profesor> profesores = profesorDAO.listar();
+                                for (com.mycom.symphonysias.adminlte01.modelo.Profesor p : profesores) {
+                            %>
+                                <option value="<%= p.getId() %>"><%= p.getNombre() %></option>
+                            <%
+                                }
+                            %>
+                        </select>
                     </div>
                 </div>
 

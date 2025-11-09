@@ -2,26 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
-
 /**
  *
  * @author Spiri
  */
 
-
 package com.mycom.symphonysias.adminlte01.servlet;
 
 import java.io.IOException;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.mycom.symphonysias.adminlte01.dao.InscripcionCursoLibreDAO;
 import com.mycom.symphonysias.adminlte01.modelo.InscripcionCursoLibre;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 
 public class InscripcionCursoLibreServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(InscripcionCursoLibreServlet.class.getName());
@@ -35,8 +32,11 @@ public class InscripcionCursoLibreServlet extends HttpServlet {
         String idEstudianteStr = request.getParameter("id_estudiante");
         String idCursoStr = request.getParameter("id_curso");
 
-        if (idEstudianteStr == null || idCursoStr == null || idEstudianteStr.trim().isEmpty() || idCursoStr.trim().isEmpty()) {
-            LOGGER.warning("[INSCRIPCIÓN] Parámetros vacíos");
+        if (idEstudianteStr == null || idCursoStr == null ||
+            idEstudianteStr.trim().isEmpty() || idCursoStr.trim().isEmpty() ||
+            "null".equalsIgnoreCase(idEstudianteStr.trim()) || "null".equalsIgnoreCase(idCursoStr.trim())) {
+
+            LOGGER.warning("[INSCRIPCIÓN] Parámetros vacíos o inválidos - id_estudiante: " + idEstudianteStr + ", id_curso: " + idCursoStr);
             response.sendRedirect("inscripcionCursoLibre.jsp?error=true");
             return;
         }
@@ -44,14 +44,13 @@ public class InscripcionCursoLibreServlet extends HttpServlet {
         try {
             int idEstudiante = Integer.parseInt(idEstudianteStr);
             int idCurso = Integer.parseInt(idCursoStr);
-            
 
             InscripcionCursoLibre insc = new InscripcionCursoLibre();
             insc.setIdEstudiante(idEstudiante);
             insc.setIdCursoLibre(idCurso);
-            insc.setFechaInscripcion(new java.util.Date()); // fecha actual
-            insc.setEstadoPago("PENDIENTE"); // puedes ajustar según tu lógica
-            insc.setUsuarioRegistro((String) request.getSession().getAttribute("usuarioActivo")); // trazabilidad
+            insc.setFechaInscripcion(new java.util.Date());
+            insc.setEstadoPago("PENDIENTE");
+            insc.setUsuarioRegistro((String) request.getSession().getAttribute("usuarioActivo"));
 
             InscripcionCursoLibreDAO dao = new InscripcionCursoLibreDAO();
             boolean exito = dao.registrar(insc);

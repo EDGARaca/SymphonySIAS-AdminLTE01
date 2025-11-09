@@ -30,7 +30,7 @@ public class ExportarCursosLibresServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<CursoLibre> lista = new CursoLibreDAO().listar();
+        List<CursoLibre> lista = new CursoLibreDAO().listarActivos();
 
         if (lista == null || lista.isEmpty()) {
             System.out.println("[SERVLET] No hay cursos libres para exportar");

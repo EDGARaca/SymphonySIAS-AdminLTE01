@@ -151,5 +151,41 @@ public class EstudianteDAO {
             return false;
         }
     }
+    
+    
+   public Estudiante buscarPorDocumento(String documento) {
+        Estudiante est = null;
+        String sql = "SELECT * FROM estudiante WHERE documento = ?";
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, documento);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                est = new Estudiante();
+                est.setId(rs.getInt("id"));
+                est.setNombre(rs.getString("nombre"));
+                est.setDocumento(rs.getString("documento"));
+                est.setUsuarioRegistro(rs.getString("usuario_registro"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return est;
+    }
+
+    public boolean registrar(Estudiante est) {
+        String sql = "INSERT INTO estudiante (nombre, documento, usuario_registro) VALUES (?, ?, ?)";
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, est.getNombre());
+            ps.setString(2, est.getDocumento());
+            ps.setString(3, est.getUsuarioRegistro());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    } 
+    
 
 }

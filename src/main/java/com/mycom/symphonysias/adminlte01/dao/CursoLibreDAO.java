@@ -56,6 +56,7 @@ public class CursoLibreDAO {
                 curso.setFrecuencia(rs.getString("frecuencia"));
                 curso.setEstado(rs.getString("estado"));
                 curso.setUsuario_registro(rs.getString("usuario_registro"));
+                curso.setNombreProfesor(rs.getString("nombre_profesor"));
                 lista.add(curso);
             }
 
@@ -66,31 +67,37 @@ public class CursoLibreDAO {
         return lista;
     }
     
-    public static List<CursoLibre> listar() {
-        List<CursoLibre> lista = new ArrayList<>();
-        String sql = "SELECT * FROM curso_libre";
+    public List<CursoLibre> listarActivos() {
+    List<CursoLibre> lista = new ArrayList<>();
+    String sql = "SELECT c.id, c.nombre, c.valor, c.frecuencia, c.estado, c.usuario_registro, p.nombre AS nombre_profesor " +
+             "FROM curso_libre c " +
+             "LEFT JOIN profesores p ON c.id_profesor = p.id " +
+             "WHERE c.estado = 'activo'";
+    
+    try (Connection con = Conexion.getConexion();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            CursoLibre c = new CursoLibre(
+                rs.getInt("id"),
+                rs.getString("nombre"),
+                rs.getDouble("valor"),
+                rs.getString("frecuencia"),
+                rs.getString("estado"),
+                rs.getString("usuario_registro")
+            );
 
-            while (rs.next()) {
-                CursoLibre curso = new CursoLibre();
-                curso.setId(rs.getInt("id"));
-                curso.setNombre(rs.getString("nombre"));
-                curso.setValor(rs.getDouble("valor"));
-                curso.setFrecuencia(rs.getString("frecuencia"));
-                curso.setEstado(rs.getString("estado"));
-                curso.setUsuario_registro(rs.getString("usuario_registro"));
-                lista.add(curso);
-            }
-
-        } catch (Exception e) {
-            System.err.println("[ERROR DAO] listar(): " + e.getMessage());
+            c.setNombreProfesor(rs.getString("nombre_profesor"));
+            lista.add(c);
         }
 
-        return lista;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+
+    return lista;
+}
     
     public static boolean insertar(CursoLibre curso) {
         String sql = "INSERT INTO curso_libre (nombre, valor, frecuencia, estado, usuario_registro) VALUES (?, ?, ?, ?, ?)";
@@ -165,6 +172,32 @@ public class CursoLibreDAO {
         }
     }
     
-    
+    public List<CursoLibre> listarSinProfesor() {
+        List<CursoLibre> lista = new ArrayList<>();
+        String sql = "SELECT id, nombre, valor, frecuencia, estado, usuario_registro FROM curso_libre WHERE estado = 'activo' AND id_profesor IS NULL";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                CursoLibre curso = new CursoLibre();
+                curso.setId(rs.getInt("id"));
+                curso.setNombre(rs.getString("nombre"));
+                curso.setValor(rs.getDouble("valor"));
+                curso.setFrecuencia(rs.getString("frecuencia"));
+                curso.setEstado(rs.getString("estado"));
+                curso.setUsuario_registro(rs.getString("usuario_registro"));
+                curso.setIdProfesor(0); // trazabilidad: sin asignar
+                curso.setNombreProfesor("Sin asignar");
+                lista.add(curso);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
     
 }
