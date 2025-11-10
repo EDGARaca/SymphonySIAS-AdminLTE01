@@ -33,8 +33,8 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-    <jsp:include page="header.jsp" />
-    <jsp:include page="sidebar.jsp" />
+    <jsp:include page="componentes/header.jsp" />
+    <jsp:include page="componentes/sidebar.jsp" />
 
     <div class="content-wrapper">
         <section class="content-header">
@@ -118,7 +118,7 @@
         </section>
     </div>
 
-    <jsp:include page="footer.jsp" />
+    <jsp:include page="componentes/footer.jsp" />
 
 </div>
 </body>

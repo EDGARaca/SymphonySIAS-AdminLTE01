@@ -13,6 +13,7 @@
 package com.mycom.symphonysias.adminlte01.dao;
 
 import com.mycom.symphonysias.adminlte01.modelo.InscripcionCursoLibre;
+import com.mycom.symphonysias.adminlte01.util.Conexion;
 import java.sql.*;
 import java.util.*;
 
@@ -97,21 +98,40 @@ public class InscripcionCursoLibreDAO {
 
     public boolean actualizar(InscripcionCursoLibre insc) {
         String sql = "UPDATE inspcurlibre SET id_estudiante=?, id_curso_libre=?, fecha_inscripcion=?, estado_pago=?, usuario_registro=? WHERE id=?";
-        try (Connection con = conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setInt(1, insc.getIdEstudiante());
             ps.setInt(2, insc.getIdCursoLibre());
             ps.setDate(3, new java.sql.Date(insc.getFechaInscripcion().getTime()));
             ps.setString(4, insc.getEstadoPago());
             ps.setString(5, insc.getUsuarioRegistro());
             ps.setInt(6, insc.getId());
+
             int filas = ps.executeUpdate();
             System.out.println("[DAO] Inscripción actualizada. Filas afectadas: " + filas);
             return filas > 0;
+
         } catch (SQLException e) {
             System.out.println("[ERROR DAO] No se pudo actualizar inscripción: " + e.getMessage());
             return false;
         }
-    } 
+    }
+    
+    public boolean existeInscripcion(int idEstudiante, int idCurso) {
+        String sql = "SELECT COUNT(*) FROM inscripcion_curso_libre WHERE id_estudiante = ? AND id_curso = ?";
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idEstudiante);
+            ps.setInt(2, idCurso);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     
     
 }

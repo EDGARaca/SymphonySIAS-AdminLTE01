@@ -46,8 +46,8 @@
 <div class="wrapper">
 
     <%-- Navbar y Sidebar --%>
-    <jsp:include page="header.jsp" />
-    <jsp:include page="sidebar.jsp" />
+    <jsp:include page="componentes/header.jsp" />
+    <jsp:include page="componentes/sidebar.jsp" />
 
     <div class="content-wrapper">
         

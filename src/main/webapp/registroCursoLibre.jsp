@@ -16,15 +16,11 @@
 
 <select name="id_profesor" class="form-control" required>
     <option value="">Seleccione un profesor</option>
-    <%
-        for (Profesor p : profesores) {
-    %>
+    <% for (Profesor p : profesores) { %>
         <option value="<%= p.getId() %>"><%= p.getNombre() %></option>
-    <%
-        }
-    %>
+    <% } %> 
+    
 </select>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -130,8 +126,6 @@
                         <select name="id_profesor" id="id_profesor" class="form-control" required>
                             <option value="">Seleccione un profesor</option>
                             <%
-                                com.mycom.symphonysias.adminlte01.dao.ProfesorDAO profesorDAO = new com.mycom.symphonysias.adminlte01.dao.ProfesorDAO();
-                                List<com.mycom.symphonysias.adminlte01.modelo.Profesor> profesores = profesorDAO.listar();
                                 for (com.mycom.symphonysias.adminlte01.modelo.Profesor p : profesores) {
                             %>
                                 <option value="<%= p.getId() %>"><%= p.getNombre() %></option>

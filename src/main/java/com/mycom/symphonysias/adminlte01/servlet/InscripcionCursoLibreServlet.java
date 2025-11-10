@@ -42,8 +42,11 @@ public class InscripcionCursoLibreServlet extends HttpServlet {
         }
 
         try {
-            int idEstudiante = Integer.parseInt(idEstudianteStr);
-            int idCurso = Integer.parseInt(idCursoStr);
+            int idCurso = Integer.parseInt(request.getParameter("id_curso"));
+            int idEstudiante = Integer.parseInt(request.getParameter("id_estudiante"));
+
+            System.out.println("[Servlet] idCurso recibido: " + idCurso);
+            System.out.println("[Servlet] idEstudiante recibido: " + idEstudiante);
 
             InscripcionCursoLibre insc = new InscripcionCursoLibre();
             insc.setIdEstudiante(idEstudiante);

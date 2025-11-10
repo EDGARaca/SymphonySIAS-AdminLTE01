@@ -147,6 +147,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Nombre</th>
+                                    <th>Horario</th>
                                     <th>Profesor</th>
                                     <th>Valor</th>
                                     <th>Frecuencia</th>
@@ -160,6 +161,7 @@
                                     <tr>
                                         <td><%= c.getId() %></td>
                                         <td><%= c.getNombre() %></td>
+                                        <td><%= c.getHorario() != null && !c.getHorario().trim().isEmpty() ? c.getHorario() : "No definido" %></td>
                                         <td><%= (c.getNombreProfesor() != null && !c.getNombreProfesor().trim().isEmpty()) ? c.getNombreProfesor() : "Sin asignar" %></td>
                                         <td>$<%= c.getValor() %></td>
                                         <td><%= c.getFrecuencia() %></td>

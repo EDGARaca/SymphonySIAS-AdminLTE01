@@ -52,6 +52,7 @@ public class CursoLibreDAO {
                 CursoLibre curso = new CursoLibre();
                 curso.setId(rs.getInt("id"));
                 curso.setNombre(rs.getString("nombre"));
+                curso.setHorario(rs.getString("horario"));
                 curso.setValor(rs.getDouble("valor"));
                 curso.setFrecuencia(rs.getString("frecuencia"));
                 curso.setEstado(rs.getString("estado"));
@@ -68,36 +69,38 @@ public class CursoLibreDAO {
     }
     
     public List<CursoLibre> listarActivos() {
-    List<CursoLibre> lista = new ArrayList<>();
-    String sql = "SELECT c.id, c.nombre, c.valor, c.frecuencia, c.estado, c.usuario_registro, p.nombre AS nombre_profesor " +
+        List<CursoLibre> lista = new ArrayList<>();
+        String sql = "SELECT c.id, c.nombre, c.horario, c.valor, c.frecuencia, c.estado, c.usuario_registro, p.nombre AS nombre_profesor " +
              "FROM curso_libre c " +
              "LEFT JOIN profesores p ON c.id_profesor = p.id " +
              "WHERE c.estado = 'activo'";
-    
-    try (Connection con = Conexion.getConexion();
-         PreparedStatement ps = con.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
 
-        while (rs.next()) {
-            CursoLibre c = new CursoLibre(
-                rs.getInt("id"),
-                rs.getString("nombre"),
-                rs.getDouble("valor"),
-                rs.getString("frecuencia"),
-                rs.getString("estado"),
-                rs.getString("usuario_registro")
-            );
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-            c.setNombreProfesor(rs.getString("nombre_profesor"));
-            lista.add(c);
+            while (rs.next()) {
+                CursoLibre c = new CursoLibre(
+                    rs.getInt("id"),
+                    rs.getString("nombre"),
+                    rs.getString("horario"),    
+                    rs.getDouble("valor"),
+                    rs.getString("frecuencia"),
+                    rs.getString("estado"),
+                    rs.getString("usuario_registro")
+                        
+                );
+
+                c.setNombreProfesor(rs.getString("nombre_profesor"));
+                lista.add(c);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-    } catch (Exception e) {
-        e.printStackTrace();
+        return lista;
     }
-
-    return lista;
-}
     
     public static boolean insertar(CursoLibre curso) {
         String sql = "INSERT INTO curso_libre (nombre, valor, frecuencia, estado, usuario_registro) VALUES (?, ?, ?, ?, ?)";

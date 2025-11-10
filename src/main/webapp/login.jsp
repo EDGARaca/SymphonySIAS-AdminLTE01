@@ -216,14 +216,33 @@
 
             <!-- Campo contraseña con ícono de ojo -->
             <div class="form-group text-left mb-4" style="position: relative;">
-                <i class="fas fa-lock" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #6c757d;"></i>
+                <i class="fas fa-lock" style="
+                    position: absolute;
+                    top: 50%;
+                    left: 15px;
+                    transform: translateY(-50%);
+                    color: #6c757d;
+                    pointer-events: none;
+                    z-index: 1;
+                "></i>
+
                 <input type="password" name="clave" id="clave" class="form-control"
                        placeholder="Ingrese su contraseña" autocomplete="new-password" required
-                       style="padding-left: 45px; padding-right: 45px;">
-                <span id="toggleClave" style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer; z-index: 2;">
+                       style="padding-left: 45px; padding-right: 45px; height: 45px;">
+
+                <span id="toggleClave" style="
+                    position: absolute;
+                    top: 50%;
+                    right: 15px;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    z-index: 2;
+                    display: none;
+                ">
                     <i class="fas fa-eye" id="iconClave" style="color: #6c757d;"></i>
                 </span>
             </div>
+
 
             <!-- Botón -->
             <button type="submit" class="btn btn-block"

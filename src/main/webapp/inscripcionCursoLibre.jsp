@@ -65,8 +65,13 @@
                         <section id="formulario" class="mt-4">
                             <h2><i class="fas fa-book-open"></i> Formulario de Inscripción</h2>
 
-                            <% if ("true".equals(request.getParameter("error"))) { %>
+                            <% String error = request.getParameter("error"); %>
+                            <% if ("true".equals(error)) { %>
                                 <div class="alert alert-danger mt-3">⚠️ Error: Debes seleccionar estudiante y curso.</div>
+                            <% } else if ("duplicado".equals(error)) { %>
+                                <div class="alert alert-warning mt-3">⚠️ Ya estás inscrito en este curso.</div>
+                            <% } else if ("bd".equals(error)) { %>
+                                <div class="alert alert-danger mt-3">⚠️ Error en la base de datos. Intenta nuevamente.</div>
                             <% } else if ("true".equals(request.getParameter("exito"))) { %>
                                 <div class="alert alert-success mt-3">✅ Inscripción realizada correctamente.</div>
                             <% } %>
@@ -126,12 +131,11 @@
 <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script>
     document.querySelector("form").addEventListener("submit", function(e) {
-        const nombre = document.getElementById("nombre_estudiante").value;
-        const documento = document.getElementById("documento_estudiante").value;
+        const estudiante = document.getElementById("id_estudiante").value;
         const curso = document.getElementById("id_curso").value;
 
-        if (!nombre || !documento || !curso) {
-            alert("⚠️ Debes completar todos los campos antes de inscribirte.");
+        if (!estudiante || !curso) {
+            alert("⚠️ Debes seleccionar estudiante y curso antes de inscribirte.");
             e.preventDefault();
         }
     });

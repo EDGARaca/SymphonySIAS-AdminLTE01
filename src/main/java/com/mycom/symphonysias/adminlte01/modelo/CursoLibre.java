@@ -7,7 +7,6 @@
  *
  * @author Spiri
  */
-
 package com.mycom.symphonysias.adminlte01.modelo;
 
 public class CursoLibre {
@@ -19,17 +18,18 @@ public class CursoLibre {
     private String frecuencia;
     private String estado;
     private String usuario_registro;
+    private String horario;
 
     // Constructor completo
-    public CursoLibre(int id, String nombre, double valor, String frecuencia, String estado, String usuario_registro) {
-        this.id = id;
-        this.nombre = nombre;
-        this.idProfesor = idProfesor;
-        this.valor = valor;
-        this.frecuencia = frecuencia;
-        this.estado = estado;
-        this.usuario_registro = usuario_registro;
-    }
+    public CursoLibre(int id, String nombre, String horario, double valor, String frecuencia, String estado, String usuario_registro) {
+    this.id = id;
+    this.nombre = nombre;
+    this.horario = horario;
+    this.valor = valor;
+    this.frecuencia = frecuencia;
+    this.estado = estado;
+    this.usuario_registro = usuario_registro;
+}
 
     // Constructor vacío (necesario para DAO)
     public CursoLibre() {
@@ -98,5 +98,13 @@ public class CursoLibre {
 
     public void setUsuario_registro(String usuario_registro) {
         this.usuario_registro = usuario_registro;
+    }
+
+    public String getHorario() {
+        return horario;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
     }
 }
