@@ -204,7 +204,7 @@
                                         </a>
                                     <% } %>
                                 </div>
-
+                                
                                 <!-- Contenidos -->
                                 <div class="col-md-3 mb-3">
                                     <% if ("docente".equals(rol) || "estudiante".equals(rol)) { %>
@@ -236,6 +236,22 @@
                                     <a href="notificaciones.jsp" class="btn btn-outline-danger btn-block">
                                         <i class="fas fa-bell"></i> Notificaciones <br><small>(Todos los roles)</small>
                                     </a>
+                                </div>
+                                
+                                <!-- Productos Músicales -->
+                                <div class="col-lg-3 col-6">
+                                    <div class="small-box bg-info">
+                                        <div class="inner">
+                                            <h4>Productos Musicales</h4>
+                                            <p>Compra instrumentos</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </div>
+                                        <a href="catalogoProductos.jsp" class="small-box-footer">
+                                            Ir al catálogo <i class="fas fa-arrow-circle-right"></i>
+                                        </a>
+                                    </div>
                                 </div>
 
                             </div>

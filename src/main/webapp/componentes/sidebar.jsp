@@ -138,6 +138,14 @@
                         </a>
                     </li>
                 <% } %>
+                
+                <li class="nav-item">
+                    <a href="catalogoProductos.jsp" class="nav-link">
+                        <i class="nav-icon fas fa-music"></i>
+                        <p>Productos Musicales</p>
+                    </a>
+                </li>
+
 
                 <%-- 11. Autenticación, Usuarios y Roles --%>
                 <% if ("administrador sias".equals(rol)) { %>

@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
-    <!-- Configuración de sessión -->
+<web-app version="4.0"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+
+    <!-- Configuración de sesión -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- Página de inicio -->
+    <welcome-file-list>
+        <welcome-file>login.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- Filtro de sesión -->
+    <filter>
+        <filter-name>SessionFilter</filter-name>
+        <filter-class>com.mycom.symphonysias.adminlte01.SessionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SessionFilter</filter-name>
+        <url-pattern>/index.jsp</url-pattern>
+    </filter-mapping>
+
+    <!-- Listener -->
+    <listener>
+        <listener-class>com.mycom.symphonysias.adminlte01.listener.CleanupListener</listener-class>
+    </listener>
+
+    <!-- Servlets institucionales -->
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.LoginServlet</servlet-class>
@@ -9,10 +38,7 @@
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
     </servlet-mapping>
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
-    
+
     <servlet>
         <servlet-name>ListarUsuariosServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ListarUsuariosServlet</servlet-class>
@@ -22,26 +48,24 @@
         <url-pattern>/ListarUsuariosServlet</url-pattern>
     </servlet-mapping>
 
-    
     <servlet>
-    <servlet-name>EstudianteServlet</servlet-name>
-    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.EstudianteServlet</servlet-class>
+        <servlet-name>EstudianteServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.EstudianteServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>EstudianteServlet</servlet-name>
         <url-pattern>/EstudianteServlet</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
-    <servlet-name>ActualizarUsuarioServlet</servlet-name>
-    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ActualizarUsuarioServlet</servlet-class>
+        <servlet-name>ActualizarUsuarioServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ActualizarUsuarioServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ActualizarUsuarioServlet</servlet-name>
         <url-pattern>/ActualizarUsuarioServlet</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>ActualizarEstadoUsuarioServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ActualizarEstadoUsuarioServlet</servlet-class>
@@ -51,37 +75,33 @@
         <url-pattern>/ActualizarEstadoUsuarioServlet</url-pattern>
     </servlet-mapping>
 
-    
     <servlet>
-    <servlet-name>BuscarEstudiantesServlet</servlet-name>
+        <servlet-name>BuscarEstudiantesServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.BuscarEstudiantesServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>BuscarEstudiantesServlet</servlet-name>
         <url-pattern>/BuscarEstudiantesServlet</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>BuscarProfesoresServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.BuscarProfesoresServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>BuscarProfesoresServlet</servlet-name>
         <url-pattern>/BuscarProfesoresServlet</url-pattern>
     </servlet-mapping>
-    
-    <servlet>
-    <servlet-name>ExportarEstudiantesServlet</servlet-name>
-    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarEstudiantesServlet</servlet-class>
-    </servlet>
 
+    <servlet>
+        <servlet-name>ExportarEstudiantesServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarEstudiantesServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ExportarEstudiantesServlet</servlet-name>
         <url-pattern>/ExportarEstudiantesServlet</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>EliminarUsuarioServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.EliminarUsuarioServlet</servlet-class>
@@ -91,92 +111,106 @@
         <url-pattern>/EliminarUsuarioServlet</url-pattern>
     </servlet-mapping>
 
-    
     <servlet>
         <servlet-name>EditarProfesorServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.EditarProfesorServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>EditarProfesorServlet</servlet-name>
         <url-pattern>/EditarProfesorServlet</url-pattern>
     </servlet-mapping>
-    
-    <servlet>
-    <servlet-name>ExportarProfesoresServlet</servlet-name>
-    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarProfesoresServlet</servlet-class>
-    </servlet>
 
+    <servlet>
+        <servlet-name>ExportarProfesoresServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarProfesoresServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ExportarProfesoresServlet</servlet-name>
         <url-pattern>/ExportarProfesoresServlet</url-pattern>
     </servlet-mapping>
-    
-    <servlet>
-    <servlet-name>ExportarUsuariosServlet</servlet-name>
-    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarUsuariosServlet</servlet-class>
-    </servlet>
 
+    <servlet>
+        <servlet-name>ExportarUsuariosServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarUsuariosServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ExportarUsuariosServlet</servlet-name>
         <url-pattern>/ExportarUsuariosServlet</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>ExportarCursosLibresServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ExportarCursosLibresServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>ExportarCursosLibresServlet</servlet-name>
         <url-pattern>/ExportarCursosLibresServlet</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>InscripcionCursoLibreServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.InscripcionCursoLibreServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>InscripcionCursoLibreServlet</servlet-name>
         <url-pattern>/InscripcionCursoLibreServlet</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>RegistroCursoLibreServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.controlador.RegistroCursoLibreServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>RegistroCursoLibreServlet</servlet-name>
         <url-pattern>/RegistroCursoLibreServlet</url-pattern>
     </servlet-mapping>
 
     <servlet>
-    <servlet-name>RegistrarUsuarioServlet</servlet-name>
-    <servlet-class>com.mycom.symphonysias.adminlte01.servlet.RegistrarUsuarioServlet</servlet-class>
+        <servlet-name>RegistrarUsuarioServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.RegistrarUsuarioServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>RegistrarUsuarioServlet</servlet-name>
         <url-pattern>/RegistrarUsuarioServlet</url-pattern>
-    </servlet-mapping>          
+    </servlet-mapping>
+
+    <!-- Módulo de productos musicales -->
+    <servlet>
+        <servlet-name>AgregarCarritoServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.controlador.AgregarCarritoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AgregarCarritoServlet</servlet-name>
+        <url-pattern>/agregar-carrito</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EliminarCarritoServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.controlador.EliminarCarritoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EliminarCarritoServlet</servlet-name>
+        <url-pattern>/eliminar-carrito</url-pattern>
+    </servlet-mapping>
     
-    <filter>
-        <filter-name>SessionFilter</filter-name>
-        <filter-class>com.mycom.symphonysias.adminlte01.SessionFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>SessionFilter</filter-name>
-        <url-pattern>/index.jsp</url-pattern>
-    </filter-mapping>
-    <!-- Página de inicio opcional -->
-    <welcome-file-list>
-        <welcome-file>login.jsp</welcome-file>
-    </welcome-file-list>
-    
-    <listener>
-        <listener-class>com.mycom.symphonysias.adminlte01.listener.CleanupListener</listener-class>
-    </listener>
-    
+        <servlet>
+        <servlet-name>RegistrarProductoServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.controlador.RegistrarProductoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegistrarProductoServlet</servlet-name>
+        <url-pattern>/registrar-producto</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ActualizarCantidadServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.controlador.ActualizarCantidadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ActualizarCantidadServlet</servlet-name>
+        <url-pattern>/actualizar-cantidad</url-pattern>
+    </servlet-mapping>
+
 </web-app>
+
+   
