@@ -24,20 +24,22 @@ import java.sql.SQLException;
 
 public class DetalleCompraDAO {
     public void registrarDetalle(DetalleCompra detalle) {
-        String sql = "INSERT INTO detalle_compra (id_compra, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = Conexion.getConexion();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                 "INSERT INTO detalle_compras (id_compra, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)")) {
 
-            ps.setInt(1, detalle.getIdCompra());
-            ps.setInt(2, detalle.getIdProducto());
-            ps.setInt(3, detalle.getCantidad());
-            ps.setDouble(4, detalle.getPrecioUnitario());
-            ps.setDouble(5, detalle.getSubtotal());
-            ps.executeUpdate();
+            stmt.setInt(1, detalle.getIdCompra());
+            stmt.setInt(2, detalle.getIdProducto());
+            stmt.setInt(3, detalle.getCantidad());
+            stmt.setDouble(4, detalle.getPrecioUnitario());
+            stmt.setDouble(5, detalle.getSubtotal());
+            stmt.executeUpdate();
+
         } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al registrar detalle: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
     
     public List<DetalleCompra> listarPorCompra(int idCompra) {
         List<DetalleCompra> lista = new ArrayList<>();

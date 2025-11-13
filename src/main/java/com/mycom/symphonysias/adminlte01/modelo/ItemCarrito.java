@@ -10,11 +10,11 @@
 
 package com.mycom.symphonysias.adminlte01.modelo;
 
-import com.mycom.symphonysias.adminlte01.modelo.ProductoMusical;
-
 public class ItemCarrito {
     private ProductoMusical producto;
     private int cantidad;
+    
+    public ItemCarrito() {}
 
     public ItemCarrito(ProductoMusical producto, int cantidad) {
         this.producto = producto;
@@ -44,4 +44,19 @@ public class ItemCarrito {
             : producto.getPrecio();
         return precioFinal * cantidad;
     }
+    
+    // 🔁 Método nuevo para aplicar descuento si la oferta está activa
+    public double getSubtotalConDescuento() {
+        double precio = producto.getPrecio();
+        int cantidad = this.cantidad;
+       
+        if (producto.isOfertaActiva()) {
+            double descuento = producto.getDescuento(); // Ej: 15 (%)
+            return (precio * cantidad) * (1 - descuento / 100);
+        } else {
+            return precio * cantidad;
+        }
+    }
+
+    
 }

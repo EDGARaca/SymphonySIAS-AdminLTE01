@@ -19,21 +19,26 @@ import java.util.List;
 
 
 public class FinalizarCompraServlet extends HttpServlet {
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         List<ItemCarrito> carrito = (List<ItemCarrito>) session.getAttribute("carrito");
         String usuario = (String) session.getAttribute("usuario");
+        
+        // Validación de sesión y carrit
 
         if (carrito == null || carrito.isEmpty() || usuario == null) {
             response.sendRedirect("carrito.jsp");
             return;
         }
-
+        
+        // Calcular total
         double total = 0;
         for (ItemCarrito item : carrito) {
             total += item.getSubtotal();
         }
-
+        
+        // Registrar compra
         Compra compra = new Compra();
         compra.setUsuario(usuario);
         compra.setFecha(new Timestamp(System.currentTimeMillis()));
@@ -41,7 +46,8 @@ public class FinalizarCompraServlet extends HttpServlet {
 
         CompraDAO compraDAO = new CompraDAO();
         int idCompra = compraDAO.registrarCompra(compra);
-
+        
+        // Registrar detalles
         DetalleCompraDAO detalleDAO = new DetalleCompraDAO();
         for (ItemCarrito item : carrito) {
             DetalleCompra detalle = new DetalleCompra();
@@ -53,7 +59,15 @@ public class FinalizarCompraServlet extends HttpServlet {
             detalleDAO.registrarDetalle(detalle);
         }
 
+        // Limpiar carrito y confirmar
         session.removeAttribute("carrito");
-        response.sendRedirect("catalogoProductos.jsp");
+        session.setAttribute("mensajeCompra", "¡Compra realizada exitosamente!");
+
+        response.sendRedirect("verCarrito.jsp");
+    }
+
+    @Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
     }
 }

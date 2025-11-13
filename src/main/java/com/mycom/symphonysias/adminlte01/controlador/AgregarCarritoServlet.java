@@ -21,36 +21,56 @@ import java.util.ArrayList;
 import com.mycom.symphonysias.adminlte01.modelo.ItemCarrito;
 import com.mycom.symphonysias.adminlte01.modelo.ProductoMusical;
 import com.mycom.symphonysias.adminlte01.dao.ProductoMusicalDAO;
+import javax.servlet.annotation.WebServlet;
 
+
+
+@WebServlet("/AgregarCarritoServlet")
 
 public class AgregarCarritoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int idProducto = Integer.parseInt(request.getParameter("id"));
-        int cantidad = Integer.parseInt(request.getParameter("cantidad"));
+        try {
+            int idProducto = Integer.parseInt(request.getParameter("id"));
+            int cantidad = Integer.parseInt(request.getParameter("cantidad"));
+            
+            System.out.println("[Servlet] ID recibido: " + idProducto);
+            System.out.println("[Servlet] Cantidad recibida: " + cantidad);
 
-        HttpSession session = request.getSession();
-        List<ItemCarrito> carrito = (List<ItemCarrito>) session.getAttribute("carrito");
-        if (carrito == null) {
-            carrito = new ArrayList<>();
-        }
 
-        ProductoMusicalDAO dao = new ProductoMusicalDAO();
-        ProductoMusical producto = dao.buscarPorId(idProducto);
-
-        boolean encontrado = false;
-        for (ItemCarrito item : carrito) {
-            if (item.getProducto().getId() == idProducto) {
-                item.setCantidad(item.getCantidad() + cantidad);
-                encontrado = true;
-                break;
+            HttpSession session = request.getSession();
+            List<ItemCarrito> carrito = (List<ItemCarrito>) session.getAttribute("carrito");
+            if (carrito == null) {
+                carrito = new ArrayList<>();
             }
-        }
 
-        if (!encontrado) {
-            carrito.add(new ItemCarrito(producto, cantidad));
-        }
+            ProductoMusicalDAO dao = new ProductoMusicalDAO();
+            ProductoMusical producto = dao.buscarPorId(idProducto);
 
-        session.setAttribute("carrito", carrito);
-        response.sendRedirect("catalogoProductos.jsp");
+            boolean encontrado = false;
+            for (ItemCarrito item : carrito) {
+                if (item.getProducto().getIdProducto() == idProducto) {
+                    item.setCantidad(item.getCantidad() + cantidad);
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                carrito.add(new ItemCarrito(producto, cantidad));
+            }
+            
+            System.out.println("[Servlet] Producto agregado: " + producto.getNombre());
+            System.out.println("[Servlet] Carrito actual:");
+            for (ItemCarrito item : carrito) {
+                System.out.println(" - " + item.getProducto().getNombre() + " x" + item.getCantidad());
+            }
+
+            
+            session.setAttribute("carrito", carrito);
+            response.sendRedirect("verCarrito.jsp");
+
+        } catch (NumberFormatException | NullPointerException e) {
+            response.sendRedirect("error.jsp"); // O muestra un mensaje de error
+        }
     }
 }

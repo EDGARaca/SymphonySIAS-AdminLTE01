@@ -15,6 +15,15 @@ public class Compra {
     private String usuario;
     private Timestamp fecha;
     private double total;
+    
+    public Compra() {}
+
+    public Compra(int id, String usuario, Timestamp fecha, double total) {
+        this.id = id;
+        this.usuario = usuario;
+        this.fecha = fecha;
+        this.total = total;
+    }
 
     public int getId() {
         return id;

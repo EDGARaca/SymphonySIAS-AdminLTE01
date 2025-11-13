@@ -1,7 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%
+    String base = request.getContextPath();
+%>
 
-<footer class="bg-primary text-white text-center p-3 mt-4" style="background-color:#00BFFF;">
-    <div class="container-fluid">
+<!-- Footer institucional -->
+<footer class="bg-primary text-white text-center p-2 mt-2" style="background-color:#00BFFD;">
+    <div class="container">
         <div class="row">
 
             <!-- Información institucional -->
@@ -17,11 +21,11 @@
             <div class="col-md-4 mb-3">
                 <h5 class="text-primary">Accesos rápidos</h5>
                 <ul class="list-unstyled">
-                    <li><a href="dashboard.jsp" class="text-dark"><i class="fas fa-home"></i> Inicio</a></li>
-                    <li><a href="contacto.jsp" class="text-dark"><i class="fas fa-envelope-open-text"></i> Contáctanos</a></li>
-                    <li><a href="privacidad.jsp" class="text-dark"><i class="fas fa-user-shield"></i> Política de privacidad</a></li>
-                    <li><a href="terminos.jsp" class="text-dark"><i class="fas fa-file-contract"></i> Términos y condiciones</a></li>
-                    <li><a href="ayuda.jsp" class="text-dark"><i class="fas fa-question-circle"></i> Ayuda</a></li>
+                    <li><a href="<%= base %>/vistas/dashboard.jsp" class="text-dark"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="<%= base %>/vistas/contacto.jsp" class="text-dark"><i class="fas fa-envelope-open-text"></i> Contáctanos</a></li>
+                    <li><a href="<%= base %>/vistas/privacidad.jsp" class="text-dark"><i class="fas fa-user-shield"></i> Política de privacidad</a></li>
+                    <li><a href="<%= base %>/vistas/terminos.jsp" class="text-dark"><i class="fas fa-file-contract"></i> Términos y condiciones</a></li>
+                    <li><a href="<%= base %>/vistas/ayuda.jsp" class="text-dark"><i class="fas fa-question-circle"></i> Ayuda</a></li>
                 </ul>
             </div>
 
@@ -43,14 +47,15 @@
             Copyright © Domain. All Rights Reserved. | Desarrollado por Edgar Ceballos - Ficha 2977514 ADSO | Año: 2025
         </div>
     </div>
-    
 </footer>
-<jsp:include page="chatbot.jspf" />
+
+<!-- Chatbot institucional -->
+<jsp:include page="/componentes/chatbot.jspf" />
 
 <!-- Scripts finales -->
-<script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
-<script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/adminlte/js/adminlte.min.js"></script>
+<script src="<%= base %>/assets/adminlte/plugins/jquery/jquery.min.js"></script>
+<script src="<%= base %>/assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<%= base %>/assets/adminlte/js/adminlte.min.js"></script>
 
 <script>
     // Ocultar alertas después de 8 segundos
@@ -62,3 +67,7 @@
         });
     }, 8000);
 </script>
+
+</div> <!-- /.wrapper -->
+</body>
+</html>

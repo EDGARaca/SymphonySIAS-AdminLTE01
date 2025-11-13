@@ -16,6 +16,17 @@ public class DetalleCompra {
     private int cantidad;
     private double precioUnitario;
     private double subtotal;
+    
+    public DetalleCompra() {}
+
+    public DetalleCompra(int id, int idCompra, int idProducto, int cantidad, double precioUnitario, double subtotal) {
+        this.id = id;
+        this.idCompra = idCompra;
+        this.idProducto = idProducto;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+        this.subtotal = subtotal;
+    }    
 
     public int getId() {
         return id;

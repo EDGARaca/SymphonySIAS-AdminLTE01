@@ -25,16 +25,19 @@ import java.sql.SQLException;
 
 public class CompraDAO {
     public int registrarCompra(Compra compra) {
-        String sql = "INSERT INTO compras (id_usuario, fecha, total) VALUES (?, ?, ?)";
+        int idGenerado = -1;
         try (Connection conn = Conexion.getConexion();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                 "INSERT INTO compras (usuario, fecha, total) VALUES (?, ?, ?)",
+                 Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, compra.getUsuario());
-            ps.setTimestamp(2, compra.getFecha());
-            ps.setDouble(3, compra.getTotal());
-            ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
+            stmt.setString(1, compra.getUsuario());
+            stmt.setTimestamp(2, compra.getFecha());
+            stmt.setDouble(3, compra.getTotal());
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 return rs.getInt(1); // ID generado
             }
