@@ -53,7 +53,7 @@
             </div>
         </section>
 
-        <jsp:include page=""componentes/footer.jsp" />
+        <jsp:include page="componentes/footer.jsp" />
     </div>
 
 </div>

@@ -33,11 +33,11 @@
             <div class="col-md-4 mb-3">
                 <h5 class="text-primary">Síguenos</h5>
                 <div class="d-flex gap-3">
-                    <a href="#" class="text-dark"><i class="fab fa-facebook fa-lg"></i></a>
-                    <a href="#" class="text-dark"><i class="fab fa-instagram fa-lg"></i></a>
-                    <a href="#" class="text-dark"><i class="fab fa-whatsapp fa-lg"></i></a>
-                    <a href="#" class="text-dark"><i class="fab fa-youtube fa-lg"></i></a>
-                    <a href="#" class="text-dark"><i class="fab fa-x-twitter fa-lg"></i></a>
+                    <a href="#" class="mx-2 text-light"><i class="fab fa-facebook fa-lg"></i></a>
+                    <a href="#" class="mx-2 text-light"><i class="fab fa-instagram fa-lg"></i></a>
+                    <a href="#" class="mx-2 text-light"><i class="fab fa-whatsapp fa-lg"></i></a>
+                    <a href="#" class="mx-2 text-light"><i class="fab fa-youtube fa-lg"></i></a>
+                    <a href="#" class="mx-2 text-light"><i class="fab fa-x-twitter fa-lg"></i></a>
                 </div>
             </div>
         </div>
