@@ -21,7 +21,7 @@
     }
 
     // Trazabilidad en consola del servidor
-    System.out.println("Acceso autorizado al dashboard por usuario: " + usuario);
+    System.out.println("Acceso autorizado al dashboard por usuario22: " + usuario);
 %>
 
 
@@ -48,7 +48,6 @@
 
         <%-- Content Wrapper --%>
         <div class="content-wrapper">
-            <h3 class="text-primary text-center mt-3">[DASHBOARD] Rol activo: <%= rol %></h3>            
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row align-items-center mb-3">

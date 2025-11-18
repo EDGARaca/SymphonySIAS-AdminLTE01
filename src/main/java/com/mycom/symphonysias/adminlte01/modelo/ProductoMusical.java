@@ -10,8 +10,12 @@
 package com.mycom.symphonysias.adminlte01.modelo;
 
 import java.sql.Timestamp;
+import java.io.Serializable;
 
-public class ProductoMusical {
+
+public class ProductoMusical implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int idProducto;
     private String nombre;
     private String descripcion;

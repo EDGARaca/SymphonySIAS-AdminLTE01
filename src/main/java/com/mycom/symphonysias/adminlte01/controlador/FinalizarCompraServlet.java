@@ -22,15 +22,27 @@ public class FinalizarCompraServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        System.out.println("[FinalizarCompraServlet] Invocado correctamente");
+
         List<ItemCarrito> carrito = (List<ItemCarrito>) session.getAttribute("carrito");
         String usuario = (String) session.getAttribute("usuario");
-        
+
+        // 🔍 Validación directa en consola
+        System.out.println("[FinalizarCompraServlet] Usuario en sesión: " + usuario);
+        System.out.println("[FinalizarCompraServlet] Carrito en sesión: " + (carrito != null ? carrito.size() : "null"));
+           
         // Validación de sesión y carrit
 
         if (carrito == null || carrito.isEmpty() || usuario == null) {
-            response.sendRedirect("carrito.jsp");
+            response.sendRedirect("verCarrito.jsp");
             return;
         }
+        
+        session.removeAttribute("carrito");
+        session.setAttribute("mensajeCompra", "¡Compra realizada exitosamente!");
+        System.out.println("[FinalizarCompraServlet] Compra registrada, redirigiendo");
+
+
         
         // Calcular total
         double total = 0;

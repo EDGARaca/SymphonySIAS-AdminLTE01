@@ -63,6 +63,9 @@ public class LoginServlet extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("usuarioActivo", usuario.getUsuario());
                     session.setAttribute("nombreActivo", usuario.getNombre());
+                    session.setAttribute("usuario", usuario.getUsuario());
+                    System.out.println("[LOGIN] Usuario guardado en sesión como 'usuario': " + usuario.getUsuario());
+
                     
                     // Normalización de rol para mantener consistencia
                     String rolOriginal = usuario.getRol().trim().toUpperCase();

@@ -210,6 +210,20 @@
         <servlet-name>ActualizarCantidadServlet</servlet-name>
         <url-pattern>/actualizar-cantidad</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>FinalizarCompraServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.controlador.FinalizarCompraServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FinalizarCompraServlet</servlet-name>
+        <url-pattern>/FinalizarCompraServlet</url-pattern>
+    </servlet-mapping>
+
+    
+    
+    
 
 </web-app>
 

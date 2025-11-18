@@ -19,6 +19,22 @@
     <section class="content">
         <div class="container-fluid">
             <%
+                String mensaje = (String) session.getAttribute("mensajeCompra");
+                if (mensaje != null) {
+            %>
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    <h4 class="alert-heading"><i class="fas fa-check-circle"></i> ¡Gracias por tu compra!</h4>
+                    <p><%= mensaje %></p>
+                    <hr>
+                    <p class="mb-0">Puedes revisar tus pedidos o seguir explorando nuevos productos.</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            <%
+                    session.removeAttribute("mensajeCompra");
+                }
+            %>
+      
+            <%
                 List<ItemCarrito> carrito = (List<ItemCarrito>) session.getAttribute("carrito");
                 double total = 0;
                 if (carrito != null && !carrito.isEmpty()) {
@@ -62,13 +78,18 @@
                 </tfoot>
             </table>
                     
-            <div class="mt-4 d-flex justify-content-between">
+            <div class="d-flex justify-content-center gap-3 mt-4">
                 <a href="catalogoProductos.jsp" class="btn btn-outline-primary">
-                    ← Seguir comprando
+                    <i class="fas fa-shopping-bag"></i> Seguir comprando
                 </a>
-                <a href="FinalizarCompraServlet" class="btn btn-success">
-                    Finalizar compra
+                <a href="misPedidos.jsp" class="btn btn-outline-secondary">
+                    <i class="fas fa-box"></i> Ver mis pedidos
                 </a>
+                <form action="<%= request.getContextPath() %>/FinalizarCompraServlet" method="post">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-credit-card"></i> Finalizar compra
+                    </button>
+                </form>
             </div>
 
             <%

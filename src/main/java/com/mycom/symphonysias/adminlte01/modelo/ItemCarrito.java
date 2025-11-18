@@ -10,7 +10,11 @@
 
 package com.mycom.symphonysias.adminlte01.modelo;
 
-public class ItemCarrito {
+import java.io.Serializable;
+
+public class ItemCarrito implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private ProductoMusical producto;
     private int cantidad;
     
@@ -56,7 +60,5 @@ public class ItemCarrito {
         } else {
             return precio * cantidad;
         }
-    }
-
-    
+    }    
 }

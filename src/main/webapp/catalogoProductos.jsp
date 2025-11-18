@@ -78,7 +78,9 @@
                             <input type="hidden" name="id" value="<%= producto.getId() %>">
                             <div class="input-group mb-2">
                                 <input type="number" name="cantidad" value="1" min="1" class="form-control">
-                                <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                                </button>
                             </div>
                         </form>
                     </div>
