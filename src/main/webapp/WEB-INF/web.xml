@@ -221,8 +221,26 @@
         <url-pattern>/FinalizarCompraServlet</url-pattern>
     </servlet-mapping>
 
-    
-    
+    <servlet>
+        <servlet-name>DetallePedidoServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.controlador.DetallePedidoServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DetallePedidoServlet</servlet-name>
+        <url-pattern>/DetallePedidoServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MisPedidosServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.controlador.MisPedidosServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>MisPedidosServlet</servlet-name>
+        <url-pattern>/misPedidosServlet</url-pattern>
+    </servlet-mapping>
+
     
 
 </web-app>

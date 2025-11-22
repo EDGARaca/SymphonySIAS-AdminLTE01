@@ -14,85 +14,54 @@ import com.mycom.symphonysias.adminlte01.modelo.Compra;
 import com.mycom.symphonysias.adminlte01.util.Conexion;
 
 import java.sql.*;
-import java.util.List;
 import java.util.ArrayList;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-
-
-
+import java.util.List;
 
 public class CompraDAO {
-    public int registrarCompra(Compra compra) {
-        int idGenerado = -1;
-        try (Connection conn = Conexion.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(
-                 "INSERT INTO compras (usuario, fecha, total) VALUES (?, ?, ?)",
-                 Statement.RETURN_GENERATED_KEYS)) {
 
-
-            stmt.setString(1, compra.getUsuario());
-            stmt.setTimestamp(2, compra.getFecha());
-            stmt.setDouble(3, compra.getTotal());
-            stmt.executeUpdate();
-
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1); // ID generado
-            }
-        } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al registrar compra: " + e.getMessage());
-        }
-        return -1;
-    }
-    
-    
-    public List<Compra> listarPorUsuario(String usuario) {
-        List<Compra> lista = new ArrayList<>();
-        String sql = "SELECT * FROM compras WHERE id_usuario = ? ORDER BY fecha DESC";
-        try (Connection conn = Conexion.getConexion();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    // Registrar compra en tabla compras
+    public int registrarCompra(String usuario, double total) {
+        String sql = "INSERT INTO compras (id_usuario, fecha, total) VALUES (?, NOW(), ?)";
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, usuario);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Compra c = new Compra();
-                c.setId(rs.getInt("id"));
-                c.setUsuario(rs.getString("id_usuario"));
-                c.setFecha(rs.getTimestamp("fecha"));
-                c.setTotal(rs.getDouble("total"));
-                lista.add(c);
-            }
-        } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al listar compras por usuario: " + e.getMessage());
-        }
-        return lista;
-    }
-    
-    
-    
-    public List<Compra> listarTodas() {
-        List<Compra> lista = new ArrayList<>();
-        String sql = "SELECT * FROM compras ORDER BY fecha DESC";
-        try (Connection conn = Conexion.getConexion();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+            ps.setDouble(2, total);
+            int affected = ps.executeUpdate();
 
-            while (rs.next()) {
-                Compra c = new Compra();
-                c.setId(rs.getInt("id"));
-                c.setUsuario(rs.getString("id_usuario"));
-                c.setFecha(rs.getTimestamp("fecha"));
-                c.setTotal(rs.getDouble("total"));
-                lista.add(c);
+            if (affected > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) return rs.getInt(1);
+                }
             }
-        } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al listar todas las compras: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return lista;
+        return 0;
     }
-    
-    
+
+    // Listar compras por usuario
+    public List<Compra> listarComprasPorUsuario(String usuario) {
+        List<Compra> compras = new ArrayList<>();
+        String sql = "SELECT id, id_usuario, fecha, total FROM compras WHERE LOWER(id_usuario)=? ORDER BY fecha DESC";
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, usuario.toLowerCase().trim());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Compra c = new Compra();
+                    c.setId(rs.getInt("id"));
+                    c.setUsuario(rs.getString("id_usuario")); // ⚠️ propiedad debe llamarse usuario en Compra.java
+                    c.setFecha(rs.getTimestamp("fecha"));
+                    c.setTotal(rs.getDouble("total"));
+                    compras.add(c);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return compras;
+    }
+
 }
-

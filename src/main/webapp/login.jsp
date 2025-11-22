@@ -261,114 +261,99 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // FORZAR LIMPIEZA INMEDIATA - antes de que cargue todo
-        (function() {
-            console.log('🧹 Limpieza preventiva iniciada...');
-            const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
-            inputs.forEach(function(input) {
-                input.value = '';
-                input.setAttribute('value', '');
-            });
-        })();
+            // FORZAR LIMPIEZA INMEDIATA - antes de que cargue todo
+            (function() {
+                console.log('🧹 Limpieza preventiva iniciada...');
+                const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+                inputs.forEach(function(input) {
+                    input.value = '';
+                    input.setAttribute('value', '');
+                });
+            })();
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const usuarioInput = document.getElementById('usuario');
-            const claveInput = document.getElementById('clave');
-            const loginForm = document.getElementById('loginForm');
-            
-            console.log('✅ Login form cargado');
-            
-            // TRIPLE LIMPIEZA para asegurar que no quede nada del navegador
-            function limpiarCampos() {
-                usuarioInput.value = '';
-                claveInput.value = '';
-                usuarioInput.setAttribute('value', '');
-                claveInput.setAttribute('value', '');
-                console.log('🧹 Campos limpiados');
-            }
-            
-            // Limpiar al cargar
-            //limpiarCampos();
-            
-            // Limpiar después de 50ms (por si el navegador autocompleta después)
-            //setTimeout(limpiarCampos, 50);
-            
-            // Limpiar después de 200ms (segunda verificación)
-            // setTimeout(limpiarCampos, 200);
-            
-            // Monitorear cambios en usuario
-            usuarioInput.addEventListener('input', function(e) {
-                const valor = e.target.value || '';
-                console.log('👤 Usuario:', valor, '| Longitud:', valor.length);
-            });
-            
-            // Monitorear cambios en clave
-            claveInput.addEventListener('input', function(e) {
-                const valor = e.target.value || '';
-                console.log('🔒 Clave longitud:', valor.length);
-            });
-            
-            // Prevenir Enter accidental en campo usuario
-            usuarioInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    claveInput.focus();
-                    return false;
-                }
-            });
-            
-            // Al enviar el formulario
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const usuario = usuarioInput.value.trim();
-                const clave = claveInput.value.trim();
-                
-                console.log('📤 INTENTANDO ENVIAR LOGIN:');
-                console.log('   Usuario:', usuario);
-                console.log('   Clave longitud:', clave.length);
-                
-                // Validaciones
-                if (!usuario || usuario === '') {
-                    alert('⚠️ Por favor ingrese su usuario');
-                    usuarioInput.focus();
-                    return false;
-                }
-                
-                if (!clave || clave === '') {
-                    alert('⚠️ Por favor ingrese su contraseña');
-                    claveInput.focus();
-                    return false;
-                }
-                
-                if (clave.length < 1) {
-                    alert('⚠️ La contraseña no puede estar vacía');
-                    claveInput.focus();
-                    return false;
-                }
-                
-                // Todo OK - enviar
-                console.log('✅ Validaciones OK, enviando formulario...');
-                loginForm.submit();
-            });
-            
-            // EXTRA: Detectar si el navegador intenta autocompletar
-            setTimeout(function() {
-                if (usuarioInput.value !== '' || claveInput.value !== '') {
-                    console.warn('⚠️ DETECTADO: El navegador autocompletó los campos');
-                    console.log('   Usuario autocompletado:', usuarioInput.value);
-                    console.log('   Clave autocompletada (longitud):', claveInput.value.length);
-                    limpiarCampos();
-                }
-            }, 500);
-        });
-        
-        <script>
             document.addEventListener('DOMContentLoaded', function() {
+                const usuarioInput = document.getElementById('usuario');
                 const claveInput = document.getElementById('clave');
+                const loginForm = document.getElementById('loginForm');
                 const toggleClave = document.getElementById('toggleClave');
                 const iconClave = document.getElementById('iconClave');
-                const usuarioInput = document.getElementById('usuario');
+
+                console.log('✅ Login form cargado');
+
+                // TRIPLE LIMPIEZA para asegurar que no quede nada del navegador
+                function limpiarCampos() {
+                    usuarioInput.value = '';
+                    claveInput.value = '';
+                    usuarioInput.setAttribute('value', '');
+                    claveInput.setAttribute('value', '');
+                    console.log('🧹 Campos limpiados');
+                }
+
+                // Monitorear cambios en usuario
+                usuarioInput.addEventListener('input', function(e) {
+                    const valor = e.target.value || '';
+                    console.log('👤 Usuario:', valor, '| Longitud:', valor.length);
+                });
+
+                // Monitorear cambios en clave
+                claveInput.addEventListener('input', function(e) {
+                    const valor = e.target.value || '';
+                    console.log('🔒 Clave longitud:', valor.length);
+                });
+
+                // Prevenir Enter accidental en campo usuario
+                usuarioInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        claveInput.focus();
+                        return false;
+                    }
+                });
+
+                // Al enviar el formulario
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const usuario = usuarioInput.value.trim();
+                    const clave = claveInput.value.trim();
+
+                    console.log('📤 INTENTANDO ENVIAR LOGIN:');
+                    console.log('   Usuario:', usuario);
+                    console.log('   Clave longitud:', clave.length);
+
+                    // Validaciones
+                    if (!usuario || usuario === '') {
+                        alert('⚠️ Por favor ingrese su usuario');
+                        usuarioInput.focus();
+                        return false;
+                    }
+
+                    if (!clave || clave === '') {
+                        alert('⚠️ Por favor ingrese su contraseña');
+                        claveInput.focus();
+                        return false;
+                    }
+
+                    if (clave.length < 1) {
+                        alert('⚠️ La contraseña no puede estar vacía');
+                        claveInput.focus();
+                        return false;
+                    }
+
+                    // Todo OK - enviar
+                    console.log('✅ Validaciones OK, enviando formulario...');
+                    loginForm.submit();
+                });
+
+                // EXTRA: Detectar si el navegador intenta autocompletar
+                setTimeout(function() {
+                    if (usuarioInput.value !== '' || claveInput.value !== '') {
+                        console.warn('⚠️ DETECTADO: El navegador autocompletó los campos');
+                        console.log('   Usuario autocompletado:', usuarioInput.value);
+                        console.log('   Clave autocompletada (longitud):', claveInput.value.length);
+                        limpiarCampos();
+                    }
+                }, 500);
 
                 // Mostrar/Ocultar contraseña
                 toggleClave.addEventListener('click', function() {
@@ -381,16 +366,7 @@
                         iconClave.classList.replace('fa-eye-slash', 'fa-eye');
                     }
                 });
-
-                // Trazabilidad visual en consola
-                usuarioInput.addEventListener('input', function(e) {
-                    console.log('👤 Usuario:', e.target.value, '| Longitud:', e.target.value.length);
-                });
-
-                claveInput.addEventListener('input', function(e) {
-                    console.log('🔒 Clave longitud:', e.target.value.length);
-                });
-            }"");
+            });
         </script>
     </script>
 </body>

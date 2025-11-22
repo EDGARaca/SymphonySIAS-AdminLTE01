@@ -61,10 +61,13 @@ public class LoginServlet extends HttpServlet {
                 
                 if (usuario.isActivo()) {
                     HttpSession session = request.getSession();
-                    session.setAttribute("usuarioActivo", usuario.getUsuario());
+                    String usuarioNormalizado = usuario.getUsuario().trim().toLowerCase();
+
+                    session.setAttribute("usuarioActivo", usuarioNormalizado);
                     session.setAttribute("nombreActivo", usuario.getNombre());
-                    session.setAttribute("usuario", usuario.getUsuario());
-                    System.out.println("[LOGIN] Usuario guardado en sesión como 'usuario': " + usuario.getUsuario());
+                    session.setAttribute("usuario", usuarioNormalizado);
+
+                    System.out.println("[LOGIN] Usuario guardado en sesión como 'usuario': " + usuarioNormalizado);
 
                     
                     // Normalización de rol para mantener consistencia

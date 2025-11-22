@@ -3,9 +3,8 @@
     Created on : 11/11/2025, 2:43:16 p. m.
     Author     : Spiri
 --%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.*, com.mycom.symphonysias.adminlte01.modelo.ItemCarrito" %>
+<%@ page import="java.util.*, com.mycom.symphonysias.adminlte01.modelo.ItemCarrito, com.mycom.symphonysias.adminlte01.modelo.ProductoMusical" %>
 <jsp:include page="componentes/header.jsp" />
 <jsp:include page="componentes/sidebar.jsp" />
 
@@ -22,29 +21,30 @@
                 String mensaje = (String) session.getAttribute("mensajeCompra");
                 if (mensaje != null) {
             %>
-                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                    <h4 class="alert-heading"><i class="fas fa-check-circle"></i> ¡Gracias por tu compra!</h4>
-                    <p><%= mensaje %></p>
-                    <hr>
-                    <p class="mb-0">Puedes revisar tus pedidos o seguir explorando nuevos productos.</p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-                </div>
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                <h4 class="alert-heading"><i class="fas fa-check-circle"></i> ¡Gracias por tu compra!</h4>
+                <p><%= mensaje %></p>
+                <hr>
+                <p class="mb-0">Puedes revisar tus pedidos o seguir explorando nuevos productos.</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
             <%
                     session.removeAttribute("mensajeCompra");
                 }
             %>
-      
+
             <%
                 List<ItemCarrito> carrito = (List<ItemCarrito>) session.getAttribute("carrito");
                 double total = 0;
                 if (carrito != null && !carrito.isEmpty()) {
-            %>            
-            <table class="table table-bordered table-hover">
+            %>
+            <table class="table table-bordered table-hover mt-3">
                 <thead class="table-dark">
                     <tr>
                         <th>Producto</th>
                         <th>Descripción</th>
                         <th>Precio Unitario</th>
+                        <th>Precio con descuento</th>
                         <th>Descuento</th>
                         <th>Cantidad</th>
                         <th>Subtotal</th>
@@ -53,18 +53,23 @@
                 <tbody>
                     <%
                         for (ItemCarrito item : carrito) {
-                            double subtotal = item.getSubtotalConDescuento();
+                            ProductoMusical prod = item.getProducto();
+                            double precioOriginal = prod.getPrecio();
+                            double precioConDescuento = precioOriginal;
+                            if (prod.isOfertaActiva()) {
+                                precioConDescuento -= (precioOriginal * prod.getDescuento() / 100);
+                            }
+                            double subtotal = precioConDescuento * item.getCantidad();
                             total += subtotal;
                     %>
                     <tr>
-                        <td><%= item.getProducto().getNombre() %></td>
-                        <td><%= item.getProducto().getDescripcion() %></td>
-                        <td>$<%= item.getProducto().getPrecio() %></td>
-                        <td>
-                            <%= item.getProducto().isOfertaActiva() ? item.getProducto().getDescuento() + "%" : "—" %>
-                        </td>
+                        <td><%= prod.getNombre() %></td>
+                        <td><%= prod.getDescripcion() %></td>
+                        <td>$<%= String.format("%.2f", precioOriginal) %></td>
+                        <td>$<%= String.format("%.2f", precioConDescuento) %></td>
+                        <td><%= prod.getDescuento() %> %</td>
                         <td><%= item.getCantidad() %></td>
-                        <td>$<%= subtotal %></td>
+                        <td>$<%= String.format("%.2f", subtotal) %></td>
                     </tr>
                     <%
                         }
@@ -72,17 +77,17 @@
                 </tbody>
                 <tfoot>
                     <tr class="table-secondary">
-                        <td colspan="5" class="text-end fw-bold">Total:</td>
-                        <td class="fw-bold text-success">$<%= total %></td>
+                        <td colspan="6" class="text-end fw-bold">Total:</td>
+                        <td class="fw-bold text-success">$<%= String.format("%.2f", total) %></td>
                     </tr>
                 </tfoot>
             </table>
-                    
+
             <div class="d-flex justify-content-center gap-3 mt-4">
                 <a href="catalogoProductos.jsp" class="btn btn-outline-primary">
                     <i class="fas fa-shopping-bag"></i> Seguir comprando
                 </a>
-                <a href="misPedidos.jsp" class="btn btn-outline-secondary">
+                <a href="misPedidosServlet" class="btn btn-outline-secondary">
                     <i class="fas fa-box"></i> Ver mis pedidos
                 </a>
                 <form action="<%= request.getContextPath() %>/FinalizarCompraServlet" method="post">
@@ -104,6 +109,5 @@
         </div>
     </section>
 </div>
-
 
 <jsp:include page="componentes/footer.jsp" />

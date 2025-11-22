@@ -6,25 +6,32 @@
  *
  * @author Spiri
  */
-
-
 package com.mycom.symphonysias.adminlte01.modelo;
 
-import java.io.Serializable;
-
-public class ItemCarrito implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class ItemCarrito {
     private ProductoMusical producto;
     private int cantidad;
-    
-    public ItemCarrito() {}
+    private double subtotal;
 
+    // Constructor vacío
+    public ItemCarrito() {
+    }
+
+    // Constructor con parámetros
+    public ItemCarrito(ProductoMusical producto, int cantidad, double subtotal) {
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.subtotal = subtotal;
+    }
+
+    // Constructor con producto y cantidad
     public ItemCarrito(ProductoMusical producto, int cantidad) {
         this.producto = producto;
         this.cantidad = cantidad;
+        this.subtotal = producto.getPrecio() * cantidad; // calcula subtotal automáticamente
     }
 
+    // Getters y Setters
     public ProductoMusical getProducto() {
         return producto;
     }
@@ -42,23 +49,26 @@ public class ItemCarrito implements Serializable {
     }
 
     public double getSubtotal() {
-        if (producto == null) return 0;
-        double precioFinal = producto.isOfertaActiva()
-            ? producto.getPrecio() * (1 - producto.getDescuento())
-            : producto.getPrecio();
-        return precioFinal * cantidad;
+        return subtotal;
     }
-    
-    // 🔁 Método nuevo para aplicar descuento si la oferta está activa
-    public double getSubtotalConDescuento() {
-        double precio = producto.getPrecio();
-        int cantidad = this.cantidad;
-       
-        if (producto.isOfertaActiva()) {
-            double descuento = producto.getDescuento(); // Ej: 15 (%)
-            return (precio * cantidad) * (1 - descuento / 100);
-        } else {
-            return precio * cantidad;
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    // Método auxiliar para calcular subtotal automáticamente
+    public void calcularSubtotal() {
+        if (producto != null) {
+            this.subtotal = producto.getPrecio() * cantidad;
         }
-    }    
+    }
+
+    // 🔹 Subtotal con descuento aplicado desde el modelo
+    public double getSubtotalConDescuento() {
+        if (producto != null) {
+            double precioConDescuento = producto.getPrecioConDescuento(); // usa lógica del modelo
+            return precioConDescuento * cantidad;
+        }
+        return subtotal;
+    }
 }

@@ -7,6 +7,7 @@
  * @author Spiri
  */
 
+
 package com.mycom.symphonysias.adminlte01.dao;
 
 import com.mycom.symphonysias.adminlte01.modelo.ProductoMusical;
@@ -17,9 +18,10 @@ import java.util.List;
 
 public class ProductoMusicalDAO {
 
+    // Listar todos los productos
     public List<ProductoMusical> listar() {
         List<ProductoMusical> lista = new ArrayList<>();
-        String sql = "SELECT * FROM instrumentos_musicales";
+        String sql = "SELECT id_producto, nombre, descripcion, precio, imagen_url, descuento, oferta_activa FROM productos";
 
         try (Connection conn = Conexion.getConexion();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -27,53 +29,50 @@ public class ProductoMusicalDAO {
 
             while (rs.next()) {
                 ProductoMusical p = new ProductoMusical();
-                p.setId(rs.getInt("id"));
+                p.setId(rs.getInt("id_producto"));
                 p.setNombre(rs.getString("nombre"));
                 p.setDescripcion(rs.getString("descripcion"));
-                p.setImagen(rs.getString("imagen"));
                 p.setPrecio(rs.getDouble("precio"));
+                p.setImagen(rs.getString("imagen_url"));
                 p.setDescuento(rs.getDouble("descuento"));
                 p.setOfertaActiva(rs.getBoolean("oferta_activa"));
-                p.setCantidadDisponible(rs.getInt("cantidad_disponible"));
-                p.setUsuarioRegistro(rs.getString("usuario_registro"));
-                p.setFechaRegistro(rs.getTimestamp("fecha_registro"));
                 lista.add(p);
             }
         } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al listar productos: " + e.getMessage());
+            System.err.println("[ERROR DAO] listar productos: " + e.getMessage());
         }
         return lista;
     }
 
-    public ProductoMusical buscarPorId(int id) {
-        String sql = "SELECT * FROM instrumentos_musicales WHERE id = ?";
+    // Buscar producto por ID
+    public ProductoMusical buscarPorId(int idProducto) {
+        String sql = "SELECT id_producto, nombre, descripcion, precio, imagen_url, descuento, oferta_activa FROM productos WHERE id_producto = ?";
         try (Connection conn = Conexion.getConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                ProductoMusical p = new ProductoMusical();
-                p.setId(rs.getInt("id"));
-                p.setNombre(rs.getString("nombre"));
-                p.setDescripcion(rs.getString("descripcion"));
-                p.setImagen(rs.getString("imagen"));
-                p.setPrecio(rs.getDouble("precio"));
-                p.setDescuento(rs.getDouble("descuento"));
-                p.setOfertaActiva(rs.getBoolean("oferta_activa"));
-                p.setCantidadDisponible(rs.getInt("cantidad_disponible"));
-                p.setUsuarioRegistro(rs.getString("usuario_registro"));
-                p.setFechaRegistro(rs.getTimestamp("fecha_registro"));
-                return p;
+            ps.setInt(1, idProducto);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    ProductoMusical p = new ProductoMusical();
+                    p.setId(rs.getInt("id_producto"));
+                    p.setNombre(rs.getString("nombre"));
+                    p.setDescripcion(rs.getString("descripcion"));
+                    p.setPrecio(rs.getDouble("precio"));
+                    p.setImagen(rs.getString("imagen_url"));
+                    p.setDescuento(rs.getDouble("descuento"));
+                    p.setOfertaActiva(rs.getBoolean("oferta_activa"));
+                    return p;
+                }
             }
         } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al buscar producto por ID: " + e.getMessage());
+            System.err.println("[ERROR DAO] buscarPorId: " + e.getMessage());
         }
         return null;
     }
 
+    // Registrar nuevo producto
     public void registrar(ProductoMusical p) {
-        String sql = "INSERT INTO instrumentos_musicales (nombre, descripcion, precio, imagen, descuento, oferta_activa, cantidad_disponible, usuario_registro, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO productos (nombre, descripcion, precio, imagen_url, descuento, oferta_activa) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = Conexion.getConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -83,17 +82,15 @@ public class ProductoMusicalDAO {
             ps.setString(4, p.getImagen());
             ps.setDouble(5, p.getDescuento());
             ps.setBoolean(6, p.isOfertaActiva());
-            ps.setInt(7, p.getCantidadDisponible());
-            ps.setString(8, p.getUsuarioRegistro());
-            ps.setTimestamp(9, p.getFechaRegistro());
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al registrar producto: " + e.getMessage());
+            System.err.println("[ERROR DAO] registrar producto: " + e.getMessage());
         }
     }
 
+    // Actualizar producto existente
     public void actualizar(ProductoMusical p) {
-        String sql = "UPDATE instrumentos_musicales SET nombre = ?, descripcion = ?, precio = ?, imagen = ?, descuento = ?, oferta_activa = ?, cantidad_disponible = ?, usuario_registro = ?, fecha_registro = ? WHERE id = ?";
+        String sql = "UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, imagen_url = ?, descuento = ?, oferta_activa = ? WHERE id_producto = ?";
         try (Connection conn = Conexion.getConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -103,38 +100,23 @@ public class ProductoMusicalDAO {
             ps.setString(4, p.getImagen());
             ps.setDouble(5, p.getDescuento());
             ps.setBoolean(6, p.isOfertaActiva());
-            ps.setInt(7, p.getCantidadDisponible());
-            ps.setString(8, p.getUsuarioRegistro());
-            ps.setTimestamp(9, p.getFechaRegistro());
-            ps.setInt(10, p.getId());
+            ps.setInt(7, p.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al actualizar producto: " + e.getMessage());
+            System.err.println("[ERROR DAO] actualizar producto: " + e.getMessage());
         }
     }
 
-    public void eliminar(int id) {
-        String sql = "DELETE FROM instrumentos_musicales WHERE id = ?";
+    // Eliminar producto por ID
+    public void eliminar(int idProducto) {
+        String sql = "DELETE FROM productos WHERE id_producto = ?";
         try (Connection conn = Conexion.getConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, id);
+            ps.setInt(1, idProducto);
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al eliminar producto: " + e.getMessage());
-        }
-    }
-
-    public void actualizarCantidad(int id, int nuevaCantidad) {
-        String sql = "UPDATE instrumentos_musicales SET cantidad_disponible = ? WHERE id = ?";
-        try (Connection conn = Conexion.getConexion();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, nuevaCantidad);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("[ERROR DAO] al actualizar cantidad: " + e.getMessage());
+            System.err.println("[ERROR DAO] eliminar producto: " + e.getMessage());
         }
     }
 }

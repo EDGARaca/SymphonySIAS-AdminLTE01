@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 public class Compra {
     private int id;
     private String usuario;
+    private String idUsuario;
     private Timestamp fecha;
     private double total;
     
@@ -32,6 +33,15 @@ public class Compra {
     public void setId(int id) {
         this.id = id;
     }
+    
+    public String getIdUsuario() { 
+        return idUsuario; 
+    }
+    
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario; 
+    }
+
 
     public String getUsuario() {
         return usuario;
