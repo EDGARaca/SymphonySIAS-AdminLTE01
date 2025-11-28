@@ -71,7 +71,7 @@
                         </div>
                     <% } %>
                     <h4 class="mb-3 text-success">
-                        <i class="fas fa-book-open"></i> Cursos Libres Registrados
+                        <i class="fas fa-book-open"></i> Cursos Libres Activos
                     </h4>
                 </div>
             </div>

@@ -110,7 +110,8 @@
         <servlet-name>EliminarUsuarioServlet</servlet-name>
         <url-pattern>/EliminarUsuarioServlet</url-pattern>
     </servlet-mapping>
-
+    
+    <!-- EditarProfesorServlet -->
     <servlet>
         <servlet-name>EditarProfesorServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.servlet.EditarProfesorServlet</servlet-class>
@@ -128,6 +129,27 @@
         <servlet-name>ExportarProfesoresServlet</servlet-name>
         <url-pattern>/ExportarProfesoresServlet</url-pattern>
     </servlet-mapping>
+    
+    <!-- RegistroProfesorServlet -->
+    <servlet>
+        <servlet-name>RegistroProfesorServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.RegistroProfesorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegistroProfesorServlet</servlet-name>
+        <url-pattern>/RegistroProfesorServlet</url-pattern>
+    </servlet-mapping>
+    
+    <!-- ProfesorServlet -->
+    <servlet>
+        <servlet-name>ProfesorServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.ProfesorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProfesorServlet</servlet-name>
+        <url-pattern>/ProfesorServlet</url-pattern>
+    </servlet-mapping>
+
 
     <servlet>
         <servlet-name>ExportarUsuariosServlet</servlet-name>

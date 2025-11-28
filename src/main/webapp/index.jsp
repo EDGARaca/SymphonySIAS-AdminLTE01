@@ -27,11 +27,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset=UTF-8">
+        <meta charset="UTF-8">
         <title>Dashboard - SymphonySIAS</title>
-        <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/adminlte/dist/css/adminlte.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" integrity="sha384-...hash..." crossorigin="anonymous">
+               
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
+        <link rel="stylesheet" href="assets/adminlte/css/estilos.css">
         
         <style>  
         /* === CONTENEDOR DEL CHATBOT (oculto inicialmente) === */

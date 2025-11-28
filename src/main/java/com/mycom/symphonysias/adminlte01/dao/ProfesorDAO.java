@@ -47,7 +47,7 @@ public class ProfesorDAO {
             ps.setString(4, p.getDireccion());
             ps.setString(5, p.getTelefono());
             ps.setString(6, p.getCorreo());
-            ps.setString(7, p.getFecha_nacimiento());
+            ps.setDate(7, p.getFecha_nacimiento());
             ps.setString(8, p.getEspecialidad());
             ps.setString(9, p.getGenero());
             ps.setString(10, p.getEstado());
@@ -85,7 +85,7 @@ public class ProfesorDAO {
             ps.setString(4, p.getDireccion());
             ps.setString(5, p.getTelefono());
             ps.setString(6, p.getCorreo());
-            ps.setString(7, p.getFecha_nacimiento());
+            ps.setDate(7, p.getFecha_nacimiento());
             ps.setString(8, p.getEspecialidad());
             ps.setString(9, p.getGenero());
             ps.setString(10, p.getEstado());
@@ -126,7 +126,7 @@ public class ProfesorDAO {
                 p.setDireccion(rs.getString("direccion"));
                 p.setTelefono(rs.getString("telefono"));
                 p.setCorreo(rs.getString("correo"));
-                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setFecha_nacimiento(rs.getDate("fecha_nacimiento"));
                 p.setEspecialidad(rs.getString("especialidad"));
                 p.setGenero(rs.getString("genero"));
                 p.setEstado(rs.getString("estado"));
@@ -162,7 +162,7 @@ public class ProfesorDAO {
                 p.setDireccion(rs.getString("direccion"));
                 p.setTelefono(rs.getString("telefono"));
                 p.setCorreo(rs.getString("correo"));
-                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setFecha_nacimiento(rs.getDate("fecha_nacimiento"));
                 p.setEspecialidad(rs.getString("especialidad"));
                 p.setGenero(rs.getString("genero"));
                 p.setEstado(rs.getString("estado"));
@@ -197,7 +197,7 @@ public class ProfesorDAO {
                 p.setDireccion(rs.getString("direccion"));
                 p.setTelefono(rs.getString("telefono"));
                 p.setCorreo(rs.getString("correo"));
-                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setFecha_nacimiento(rs.getDate("fecha_nacimiento"));
                 p.setEspecialidad(rs.getString("especialidad"));
                 p.setGenero(rs.getString("genero"));
                 p.setEstado(rs.getString("estado"));
@@ -231,7 +231,7 @@ public class ProfesorDAO {
                 p.setDireccion(rs.getString("direccion"));
                 p.setTelefono(rs.getString("telefono"));
                 p.setCorreo(rs.getString("correo"));
-                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setFecha_nacimiento(rs.getDate("fecha_nacimiento"));
                 p.setEspecialidad(rs.getString("especialidad"));
                 p.setGenero(rs.getString("genero"));
                 p.setEstado(rs.getString("estado"));
@@ -265,7 +265,7 @@ public class ProfesorDAO {
                 p.setDireccion(rs.getString("direccion"));
                 p.setTelefono(rs.getString("telefono"));
                 p.setCorreo(rs.getString("correo"));
-                p.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
+                p.setFecha_nacimiento(rs.getDate("fecha_nacimiento"));
                 p.setEspecialidad(rs.getString("especialidad"));
                 p.setGenero(rs.getString("genero"));
                 p.setEstado(rs.getString("estado"));
@@ -293,8 +293,25 @@ public class ProfesorDAO {
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
+            e.printStackTrace(); // ✅ muestra el error real
             System.out.println("[ERROR DAO] No se pudo eliminar profesor: " + e.getMessage());
             return false;
         }
     }
+    
+    
+    public boolean cambiarEstadoProfesor(int id, String nuevoEstado) {
+        String sql = "UPDATE profesores SET estado=? WHERE id=?";
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, nuevoEstado);
+            stmt.setInt(2, id);
+            System.out.println("[DAO] Cambio de estado profesor ID: " + id + " → " + nuevoEstado);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("[ERROR DAO] No se pudo cambiar estado del profesor: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

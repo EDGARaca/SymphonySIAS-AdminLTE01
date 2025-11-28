@@ -63,7 +63,8 @@
             </div>
 
             <div class="container-fluid">
-                <% String registrado = request.getParameter("registrado");
+                <% 
+                   String registrado = request.getParameter("registrado");
                    String editado = request.getParameter("editado");
                    String eliminado = request.getParameter("eliminado");
                    String error = request.getParameter("error");
@@ -81,16 +82,22 @@
                     </div>
                 <% } else if (eliminado != null) { %>
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong>🗑 Profesor eliminado correctamente.</strong>
+                        <strong>🗑 Profesor eliminado definitivamente.</strong>
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                     </div>
-                <% } else if (error != null) { %>
+                <% } else if ("activo".equals(error)) { %>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>⚠ Ocurrió un error al procesar la solicitud.</strong>
+                        <strong>⚠ No se puede eliminar un profesor activo. Primero debe inactivarse.</strong>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                <% } else if ("eliminacion".equals(error)) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>⚠ Ocurrió un error al eliminar el profesor. Revise dependencias o integridad referencial.</strong>
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                     </div>
                 <% } %>
             </div>
+
         </section>
 
         <section class="content">
@@ -153,19 +160,51 @@
                                         <td><%= p.getEstado() %></td>
                                         <td><%= p.getUsuario_registro() %></td>
                                         <td class="text-center">
-                                            <a href="editarProfesor.jsp?id=<%= p.getId() %>" class="btn btn-sm btn-warning">
+                                            <!-- Botón Editar -->
+                                            <a href="editarProfesor.jsp?id=<%= p.getId() %>" 
+                                               class="btn btn-sm btn-warning" 
+                                               title="Editar profesor">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="ProfesorServlet?accion=eliminar&id=<%= p.getId() %>" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este profesor?');">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
+
+                                            <%
+                                                // Normalizar el estado para evitar errores por espacios o mayúsculas
+                                                String estado = p.getEstado() != null ? p.getEstado().trim().toLowerCase() : "";
+                                            %>
+
+                                            <% if ("inactivo".equals(estado)) { %>
+                                                <!-- Botón Activar -->
+                                                <a href="ProfesorServlet?accion=activar&id=<%= p.getId() %>" 
+                                                   class="btn btn-sm btn-success" 
+                                                   title="Activar profesor"
+                                                   onclick="return confirm('¿Activar este profesor?');">
+                                                    <i class="fas fa-check-circle"></i>
+                                                </a>
+
+                                                <!-- Botón Eliminar definitivo (solo si está inactivo) -->
+                                                <a href="ProfesorServlet?accion=eliminar&id=<%= p.getId() %>" 
+                                                   class="btn btn-sm btn-danger" 
+                                                   title="Eliminar definitivamente"
+                                                   onclick="return confirm('⚠ ¿Está seguro de eliminar definitivamente este profesor?');">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            <% } else { %>
+                                                <!-- Botón Inactivar -->
+                                                <a href="ProfesorServlet?accion=inactivar&id=<%= p.getId() %>" 
+                                                   class="btn btn-sm btn-secondary" 
+                                                   title="Inactivar profesor"
+                                                   onclick="return confirm('¿Marcar este profesor como inactivo?');">
+                                                    <i class="fas fa-ban"></i>
+                                                </a>
+                                            <% } %>
                                         </td>
+
                                     </tr>
                                 <% } %>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> 
             </div>
         </section>
         <jsp:include page="componentes/footer.jsp" />                    

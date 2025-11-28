@@ -13,16 +13,16 @@ package com.mycom.symphonysias.adminlte01.servlet;
 import com.mycom.symphonysias.adminlte01.dao.ProfesorDAO;
 import com.mycom.symphonysias.adminlte01.modelo.Profesor;
 import java.io.IOException;
+import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
+
 
 public class EditarProfesorServlet extends HttpServlet {
     
     public EditarProfesorServlet() {
         System.out.println("[SERVLET] EditarProfesorServlet cargado correctamente.");
-    }
-
-    
+    }   
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -41,7 +41,8 @@ public class EditarProfesorServlet extends HttpServlet {
             String direccion = request.getParameter("direccion");
             String telefono = request.getParameter("telefono");
             String correo = request.getParameter("correo");
-            String fecha_nacimiento = request.getParameter("fecha_nacimiento");
+            String fechaStr = request.getParameter("fecha_nacimiento");
+            Date fecha_nacimiento = Date.valueOf(fechaStr);           
             String especialidad = request.getParameter("especialidad");
             String genero = request.getParameter("genero");
             String estado = request.getParameter("estado");
@@ -66,7 +67,7 @@ public class EditarProfesorServlet extends HttpServlet {
             profesorExistente.setEspecialidad(especialidad);
             profesorExistente.setGenero(genero);
             profesorExistente.setEstado(estado);
-            profesorExistente.setUsuario_registro(usuario_registro); // ✅ CORREGIDO
+            //profesorExistente.setUsuario_registro(usuario_registro); // ✅ CORREGIDO
 
             boolean actualizado = dao.actualizar_Profesor(profesorExistente);
 

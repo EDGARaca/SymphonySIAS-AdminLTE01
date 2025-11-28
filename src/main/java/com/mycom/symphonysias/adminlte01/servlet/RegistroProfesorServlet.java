@@ -15,10 +15,10 @@ import com.mycom.symphonysias.adminlte01.modelo.Profesor;
 import com.mycom.symphonysias.adminlte01.dao.ProfesorDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+import java.sql.Date;
 import javax.servlet.http.*;
 
-@WebServlet("/RegistroProfesorServlet")
+
 public class RegistroProfesorServlet extends HttpServlet {
     
     
@@ -38,7 +38,8 @@ public class RegistroProfesorServlet extends HttpServlet {
         String direccion = request.getParameter("direccion");
         String telefono = request.getParameter("telefono");
         String correo = request.getParameter("correo");
-        String fecha_nacimiento = request.getParameter("fecha_nacimiento");
+        String fechaStr = request.getParameter("fecha_nacimiento");
+        Date fechaNacimiento = Date.valueOf(fechaStr);
         String especialidad = request.getParameter("especialidad");
         String genero = request.getParameter("genero");
         String estado = request.getParameter("estado");
@@ -50,8 +51,8 @@ public class RegistroProfesorServlet extends HttpServlet {
         profesor.setDocumento(documento);
         profesor.setDireccion(direccion);
         profesor.setTelefono(telefono);
-        profesor.setCorreo(correo);
-        profesor.setFecha_nacimiento(fecha_nacimiento);
+        profesor.setCorreo(correo);        
+        profesor.setFecha_nacimiento(fechaNacimiento);
         profesor.setEspecialidad(especialidad);
         profesor.setGenero(genero);
         profesor.setEstado(estado);

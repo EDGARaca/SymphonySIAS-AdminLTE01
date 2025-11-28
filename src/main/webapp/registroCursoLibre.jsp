@@ -14,14 +14,6 @@
     List<Profesor> profesores = profesorDAO.listar();
 %>
 
-<select name="id_profesor" class="form-control" required>
-    <option value="">Seleccione un profesor</option>
-    <% for (Profesor p : profesores) { %>
-        <option value="<%= p.getId() %>"><%= p.getNombre() %></option>
-    <% } %> 
-    
-</select>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

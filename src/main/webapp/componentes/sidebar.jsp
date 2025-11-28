@@ -9,6 +9,7 @@
 
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
     <a href="AdministradorSIAS.jsp" class="brand-link">
         <span class="brand-text font-weight-light">SymphonySIAS</span>
     </a>
@@ -141,7 +142,7 @@
                 
                 <li class="nav-item">
                     <a href="catalogoProductos.jsp" class="nav-link">
-                        <i class="nav-icon fas fa-music"></i>
+                        <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>Productos Musicales</p>
                     </a>
                 </li>

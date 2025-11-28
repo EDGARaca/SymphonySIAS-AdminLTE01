@@ -11,7 +11,7 @@
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <h1 class="text-primary">Resumen de tu carrito</h1>
+            <h1 class="text-primary">Resumen de tu carrito de compras</h1>
         </div>
     </section>
 

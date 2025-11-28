@@ -69,20 +69,20 @@ section img {
 }
 
 /* ====== ESTILO DEL ASIDE ====== */
-aside {
-    background-color: #e3e3e3; /* Fondo gris claro */
-    padding: 15px; /* Espaciado interno */
-    border-radius: 10px; /* Bordes redondeados */
-}
+/*aside {*/
+    /*background-color: #e3e3e3; /* Fondo gris claro */
+    /*padding: 15px; /* Espaciado interno */
+    /*border-radius: 10px; /* Bordes redondeados */
+/*}*/
 
 /* == Ajuste de imagen en aside ==*/
-aside img {
-    width: 80%; /* La imagen ocupará solo el 80% del ancho disponible */
-    max-width: 200px; /* No será más grande de 150px */
-    display: block; /* Evita espacios no deseados alrededor */
-    margin: 15px auto; /* Centra la imagen */
-    border-radius: 10px; /* Bordes redondeados */
-}
+/*aside img {*/
+    /*width: 80%; /* La imagen ocupará solo el 80% del ancho disponible */
+    /*max-width: 200px; /* No será más grande de 150px */
+    /*display: block; /* Evita espacios no deseados alrededor */
+    /*margin: 15px auto; /* Centra la imagen */
+    /*border-radius: 10px; /* Bordes redondeados */
+/*}*/
 
 /* --Aplica los mismos estilos de section a article-- */
 article {
@@ -124,4 +124,22 @@ footer {
     padding: 15px; /* Espaciado interno */
     background-color: #00BFFF; /* Fondo azul */
     color: white; /* Texto en color blanco */
+}
+
+/* Estilo blindado para el sidebar Symphony */
+body aside.main-sidebar.sidebar-dark-primary {
+  background-color: #00BFFF !important; /* azul Symphony */
+  color: #fff !important;
+}
+
+body aside.main-sidebar.sidebar-symphony .nav-link {
+  color: #fff !important;
+}
+
+body aside.main-sidebar.sidebar-symphony .nav-link:hover {
+  background-color: #0099cc !important;
+}
+
+body aside.main-sidebar.sidebar-symphony .nav-link.active {
+  background-color: #007ACC !important;
 }

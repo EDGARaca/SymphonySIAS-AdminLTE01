@@ -101,7 +101,7 @@
 
                                 <!-- Gestión Profesores -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)) { %>
+                                    <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)|| "profesor".equals(rol)) { %>
                                         <a href="profesores.jsp" class="btn btn-outline-warning btn-block">
                                             <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(Director, Coordinador)</small>
                                         </a>
@@ -115,7 +115,7 @@
                                     
                                 <!-- Gestión Cursos Libres -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rol) || "coordinador académico".equals(rol)) { %>
+                                    <% if ("administrador sias".equals(rol) || "coordinador académico".equals(rol) || "estudiante".equals(rol) ) { %>
                                         <a href="cursoLibre.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(Administrador, Coordinador)</small>
                                         </a>
@@ -154,7 +154,7 @@
 
                                 <!-- Clases y Horarios -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("docente".equals(rol) || "coordinador académico".equals(rol) || "director".equals(rol)) { %>
+                                    <% if ("docente".equals(rol) || "coordinador académico".equals(rol) || "director".equals(rol) || "estudiante".equals(rol) ) { %>
                                         <a href="gestionClases.jsp" class="btn btn-outline-info btn-block">
                                             <i class="fas fa-calendar-alt"></i> Clases y Horarios <br><small>(Docente, Coordinador, Director)</small>
                                         </a>
@@ -238,20 +238,13 @@
                                 </div>
                                 
                                 <!-- Productos Músicales -->
-                                <div class="col-lg-3 col-6">
-                                    <div class="small-box bg-info">
-                                        <div class="inner">
-                                            <h4>Productos Musicales</h4>
-                                            <p>Compra instrumentos</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fas fa-shopping-cart"></i>
-                                        </div>
-                                        <a href="catalogoProductos.jsp" class="small-box-footer">
-                                            Ir al catálogo <i class="fas fa-arrow-circle-right"></i>
-                                        </a>
-                                    </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="catalogoProductos.jsp" class="btn btn-outline-info btn-block">
+                                        <i class="fas fa-shopping-cart fa-lg"></i> Productos Musicales <br><small>Compra instrumentos</small>
+                                    </a>
                                 </div>
+
+
 
                             </div>
                         </div>

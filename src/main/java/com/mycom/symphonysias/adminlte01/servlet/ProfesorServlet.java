@@ -8,20 +8,16 @@
  *
  * @author Spiri
  */
-
 package com.mycom.symphonysias.adminlte01.servlet;
 
 import com.mycom.symphonysias.adminlte01.dao.ProfesorDAO;
 import com.mycom.symphonysias.adminlte01.modelo.Profesor;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-@WebServlet("/ProfesorServlet")
+
 public class ProfesorServlet extends HttpServlet {
 
     @Override
@@ -43,11 +39,12 @@ public class ProfesorServlet extends HttpServlet {
                 profesor.setDireccion(request.getParameter("direccion"));
                 profesor.setTelefono(request.getParameter("telefono"));
                 profesor.setCorreo(request.getParameter("correo"));
-                profesor.setFecha_nacimiento(request.getParameter("fecha_nacimiento"));
+                String fechaStr = request.getParameter("fecha_nacimiento");
+                java.sql.Date fecha_nacimiento = java.sql.Date.valueOf(fechaStr);
+                profesor.setFecha_nacimiento(fecha_nacimiento);
                 profesor.setEspecialidad(request.getParameter("especialidad"));
                 profesor.setGenero(request.getParameter("genero"));
                 profesor.setEstado(request.getParameter("estado"));
-                
 
                 boolean actualizado = new ProfesorDAO().actualizar_Profesor(profesor);
 
@@ -59,7 +56,7 @@ public class ProfesorServlet extends HttpServlet {
                     response.sendRedirect("editarProfesor.jsp?id=" + id + "&error=edicion");
                 }
 
-            } else {
+            } else { // Registro de nuevo profesor
                 System.out.println("[PROFESOR-SERVLET] Registro de nuevo profesor");
 
                 String nombre = request.getParameter("nombre");
@@ -73,7 +70,7 @@ public class ProfesorServlet extends HttpServlet {
                 String genero = request.getParameter("genero");
                 String estado = request.getParameter("estado");
 
-                Date fecha_nacimiento = new SimpleDateFormat("yyyy-MM-dd").parse(fechaStr);
+                java.sql.Date fecha_nacimiento = java.sql.Date.valueOf(fechaStr);
 
                 Profesor profesor = new Profesor();
                 profesor.setNombre(nombre);
@@ -82,11 +79,11 @@ public class ProfesorServlet extends HttpServlet {
                 profesor.setDireccion(direccion);
                 profesor.setTelefono(telefono);
                 profesor.setCorreo(correo);
-                profesor.setFecha_nacimiento(fechaStr); // o usa Date si tu modelo lo requiere
+                profesor.setFecha_nacimiento(fecha_nacimiento);
                 profesor.setEspecialidad(especialidad);
                 profesor.setGenero(genero);
                 profesor.setEstado(estado);
-                profesor.setUsuario_registro(request.getParameter("usuario_registro")); // si aplica
+                profesor.setUsuario_registro(request.getParameter("usuario_registro"));
 
                 boolean exito = new ProfesorDAO().insertarProfesor(profesor);
 
@@ -112,25 +109,50 @@ public class ProfesorServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String accion = request.getParameter("accion");
 
-        if ("eliminar".equals(accion)) {
-            try {
+        try {
+            ProfesorDAO dao = new ProfesorDAO();
+
+            if ("eliminar".equals(accion)) { // Eliminación definitiva
                 int id = Integer.parseInt(request.getParameter("id"));
-                boolean eliminado = new ProfesorDAO().eliminarProfesor(id);
+                boolean eliminado = dao.eliminarProfesor(id); //
 
                 if (eliminado) {
-                    System.out.println("[PROFESOR-SERVLET] Profesor eliminado correctamente");
+                    System.out.println("[PROFESOR-SERVLET] Profesor eliminado definitivamente");
                     response.sendRedirect("listarProfesores.jsp?eliminado=1");
                 } else {
                     System.out.println("[PROFESOR-SERVLET] Error al eliminar profesor");
                     response.sendRedirect("listarProfesores.jsp?error=eliminacion");
                 }
 
-            } catch (Exception e) {
-                System.out.println("[ERROR SERVLET] " + e.getMessage());
-                response.sendRedirect("listarProfesores.jsp?error=eliminacion");
+            } else if ("inactivar".equals(accion)) { // Cambio de estado a inactivo
+                int id = Integer.parseInt(request.getParameter("id"));
+                boolean inactivado = dao.cambiarEstadoProfesor(id, "inactivo");
+
+                if (inactivado) {
+                    System.out.println("[PROFESOR-SERVLET] Profesor marcado como inactivo");
+                    response.sendRedirect("listarProfesores.jsp?inactivado=1");
+                } else {
+                    response.sendRedirect("listarProfesores.jsp?error=inactivacion");
+                }
+
+            } else if ("activar".equals(accion)) { // Cambio de estado a activo
+                int id = Integer.parseInt(request.getParameter("id"));
+                boolean activado = dao.cambiarEstadoProfesor(id, "activo");
+
+                if (activado) {
+                    System.out.println("[PROFESOR-SERVLET] Profesor reactivado");
+                    response.sendRedirect("listarProfesores.jsp?activado=1");
+                } else {
+                    response.sendRedirect("listarProfesores.jsp?error=activacion");
+                }
+
+            } else {
+                response.sendRedirect("listarProfesores.jsp");
             }
-        } else {
-            response.sendRedirect("listarProfesores.jsp");
+
+        } catch (Exception e) {
+            System.out.println("[ERROR SERVLET] " + e.getMessage());
+            response.sendRedirect("listarProfesores.jsp?error=accion");
         }
     }
 }

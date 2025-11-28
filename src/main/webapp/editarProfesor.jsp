@@ -14,10 +14,18 @@
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
     String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
 
-    if (usuario == null || rol == null || !(rol.equals("administrador") || rol.equals("coordinador académico") || rol.equals("director"))) {
-        response.sendRedirect("login.jsp");
+    if (usuario == null || rol == null || 
+        !(rol.equalsIgnoreCase("ADMINISTRADOR SIAS") || rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") || rol.equalsIgnoreCase("DIRECTOR"))) {
+        response.sendRedirect("login.jsp?logout=true");
         return;
     }
+
+    
+    if (usuario == null || rol == null || !(rol.equalsIgnoreCase("ADMINISTRADOR SIAS") || rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") || rol.equalsIgnoreCase("DIRECTOR"))) {
+        response.sendRedirect("login.jsp?logout=true");
+        return;
+    }
+
 
     String idParam = request.getParameter("id");
     if (idParam == null || idParam.isEmpty()) {

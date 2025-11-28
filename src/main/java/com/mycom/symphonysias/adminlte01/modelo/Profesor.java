@@ -11,6 +11,9 @@
 
 package com.mycom.symphonysias.adminlte01.modelo;
 
+import java.sql.Date;
+
+
 public class Profesor {
     private int id;
     private String nombre;
@@ -19,7 +22,7 @@ public class Profesor {
     private String direccion;
     private String telefono;
     private String correo;
-    private String fecha_nacimiento;
+    private Date fecha_nacimiento;
     private String especialidad;
     private String genero;
     private String estado;
@@ -46,8 +49,8 @@ public class Profesor {
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
 
-    public String getFecha_nacimiento() { return fecha_nacimiento; }
-    public void setFecha_nacimiento(String fecha_nacimiento) { this.fecha_nacimiento = fecha_nacimiento; }
+    public Date getFecha_nacimiento() { return fecha_nacimiento; }
+    public void setFecha_nacimiento(Date fecha_nacimiento) { this.fecha_nacimiento = fecha_nacimiento; }
 
     public String getEspecialidad() { return especialidad; }
     public void setEspecialidad(String especialidad) { this.especialidad = especialidad; }
