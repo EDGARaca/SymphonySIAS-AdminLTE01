@@ -203,4 +203,50 @@ public class CursoLibreDAO {
         return lista;
     }
     
+    public List<CursoLibre> listarCursosPorProfesor(int idProfesor) {
+        List<CursoLibre> lista = new ArrayList<>();
+        String sql = "SELECT * FROM curso_libre WHERE id_profesor=?";
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idProfesor);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CursoLibre c = new CursoLibre();
+                c.setId(rs.getInt("id"));
+                c.setNombre(rs.getString("nombre"));
+                c.setHorario(rs.getString("horario"));
+                c.setValor(rs.getDouble("valor"));
+                c.setFrecuencia(rs.getString("frecuencia"));
+                c.setEstado(rs.getString("estado"));
+                c.setUsuario_registro(rs.getString("usuario_registro"));
+                lista.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public List<CursoLibre> listarCursos() {
+        List<CursoLibre> lista = new ArrayList<>();
+        String sql = "SELECT * FROM curso_libre";
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                CursoLibre curso = new CursoLibre();
+                curso.setId(rs.getInt("id"));
+                curso.setNombre(rs.getString("nombre"));
+                curso.setHorario(rs.getString("horario"));
+                curso.setValor(rs.getDouble("valor"));
+                curso.setFrecuencia(rs.getString("frecuencia"));
+                curso.setEstado(rs.getString("estado"));
+                curso.setUsuario_registro(rs.getString("usuario_registro"));
+                lista.add(curso);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }

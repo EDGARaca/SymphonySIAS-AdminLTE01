@@ -18,6 +18,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 public class EstudianteServlet extends HttpServlet {
@@ -101,8 +102,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
         String accion = request.getParameter("accion");
 
-        if ("eliminar".equals(accion)) {
-            try {
+        try {
+            if ("eliminar".equals(accion)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 boolean eliminado = new EstudianteDAO().eliminarEstudiante(id);
 
@@ -114,14 +115,22 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
                     response.sendRedirect("listarEstudiantes.jsp?error=eliminar");
                 }
 
-            } catch (Exception e) {
-                System.out.println("[ERROR SERVLET] " + e.getMessage());
-                response.sendRedirect("listarEstudiantes.jsp?error=eliminar");
+            } else if ("listarPorProfesor".equals(accion)) {
+                int idProfesor = Integer.parseInt(request.getParameter("id"));
+                EstudianteDAO dao = new EstudianteDAO();
+                List<Estudiante> estudiantes = dao.listarEstudiantesPorProfesor(idProfesor);
+
+                request.setAttribute("listaEstudiantes", estudiantes);
+                request.getRequestDispatcher("listarEstudiantesPorProfesor.jsp").forward(request, response);
+                
+            } else {
+                // acción por defecto
+                response.sendRedirect("listarEstudiantes.jsp");
             }
-        } else {
-            response.sendRedirect("listarEstudiantes.jsp");
+
+        } catch (Exception e) {
+            System.out.println("[ERROR SERVLET] " + e.getMessage());
+            response.sendRedirect("listarEstudiantes.jsp?error=listarPorProfesor");
         }
     }
-
-
 }

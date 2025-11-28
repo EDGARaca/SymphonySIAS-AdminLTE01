@@ -51,33 +51,57 @@
             <div class="container-fluid">
                 <div class="row">
 
-                    <%-- Acceso a listado --%>
-                    <div class="col-md-4 mb-3">
-                        <a href="listarProfesores.jsp" class="btn btn-outline-primary btn-block">
-                            <i class="fas fa-list"></i> Listar Profesores
-                        </a>
-                    </div>
+                <%-- Acceso a listado: disponible para todos los roles --%>
+                <div class="col-md-4 mb-3">
+                    <a href="listarProfesores.jsp" class="btn btn-outline-primary btn-block">
+                        <i class="fas fa-list"></i> Listar Profesores
+                    </a>
+                </div>
 
-                    <%-- Acceso a búsqueda con filtro --%>
+                <%-- Acceso a búsqueda con filtro: solo roles administrativos --%>
+                <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)) { %>
                     <div class="col-md-4 mb-3">
                         <a href="buscarProfesores.jsp" class="btn btn-outline-info btn-block">
                             <i class="fas fa-filter"></i> Buscar con Filtro
                         </a>
                     </div>
+                    <% } %>
 
-                    <%-- Acceso a registro --%>
-                    <div class="col-md-4 mb-3">
-                        <a href="registroProfesor.jsp" class="btn btn-outline-success btn-block">
-                            <i class="fas fa-user-plus"></i> Registrar Profesor
-                        </a>
-                    </div>
+                    <%-- Acceso a registro: solo roles administrativos --%>
+                    <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)) { %>
+                        <div class="col-md-4 mb-3">
+                            <a href="registroProfesor.jsp" class="btn btn-outline-success btn-block">
+                                <i class="fas fa-user-plus"></i> Registrar Profesor
+                            </a>
+                        </div>
+                    <% } %>
 
-                    <%-- Acceso a exportación PDF --%>
+                    <%-- Acceso a exportación PDF: disponible para todos los roles --%>
                     <div class="col-md-4 mb-3">
                         <a href="ExportarProfesoresServlet" class="btn btn-outline-danger btn-block">
                             <i class="fas fa-file-pdf"></i> Exportar PDF
                         </a>
                     </div>
+
+                    <%-- Acceso a cursos libres: solo rol profesor --%>
+                    <% if ("profesor".equals(rol)) { %>
+                        <div class="col-md-4 mb-3">
+                            <a href="CursoLibreServlet?accion=listarPorProfesor&id=<%= session.getAttribute("id_profesor") %>" 
+                               class="btn btn-outline-warning btn-block">
+                                <i class="fas fa-book"></i> Mis Cursos Libres
+                            </a>
+                        </div>
+                    <% } %>
+
+                    <%-- Acceso a estudiantes inscritos: solo rol profesor --%>
+                    <% if ("profesor".equals(rol)) { %>
+                        <div class="col-md-4 mb-3">
+                            <a href="EstudianteServlet?accion=listarPorProfesor&id=<%= session.getAttribute("id_profesor") %>" 
+                               class="btn btn-outline-info btn-block">
+                                <i class="fas fa-users"></i> Estudiantes Inscritos
+                            </a>
+                        </div>
+                    <% } %>
 
                 </div>
             </div>

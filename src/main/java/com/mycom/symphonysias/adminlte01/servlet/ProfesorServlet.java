@@ -26,10 +26,22 @@ public class ProfesorServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         String accion = request.getParameter("accion");
+        
+        HttpSession sesion = request.getSession();
+        String rol = (String) sesion.getAttribute("rol");
+        Integer idProfesorSesion = (Integer) sesion.getAttribute("id_profesor");
 
         try {
             if ("editar".equals(accion)) {
                 int id = Integer.parseInt(request.getParameter("id"));
+                
+                // 🔒 Restricción: si es profesor, solo puede editar su propio perfil
+                if ("profesor".equals(rol)) {
+                    if (idProfesorSesion == null || !idProfesorSesion.equals(id)) {
+                        response.sendRedirect("listarProfesores.jsp?error=permiso");
+                        return;
+                    }
+                }
 
                 Profesor profesor = new Profesor();
                 profesor.setId(id);
@@ -57,6 +69,13 @@ public class ProfesorServlet extends HttpServlet {
                 }
 
             } else { // Registro de nuevo profesor
+                
+                // 🔒 Restricción: solo administrador puede registrar
+                if ("profesor".equals(rol)) {
+                    response.sendRedirect("listarProfesores.jsp?error=permiso");
+                    return;
+                }
+
                 System.out.println("[PROFESOR-SERVLET] Registro de nuevo profesor");
 
                 String nombre = request.getParameter("nombre");
@@ -108,11 +127,19 @@ public class ProfesorServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         String accion = request.getParameter("accion");
+        
+        HttpSession sesion = request.getSession();
+        String rol = (String) sesion.getAttribute("rol");
 
         try {
             ProfesorDAO dao = new ProfesorDAO();
 
             if ("eliminar".equals(accion)) { // Eliminación definitiva
+                if ("profesor".equals(rol)) {
+                    response.sendRedirect("listarProfesores.jsp?error=permiso");
+                    return;
+                }
+
                 int id = Integer.parseInt(request.getParameter("id"));
                 boolean eliminado = dao.eliminarProfesor(id); //
 
@@ -125,6 +152,11 @@ public class ProfesorServlet extends HttpServlet {
                 }
 
             } else if ("inactivar".equals(accion)) { // Cambio de estado a inactivo
+                if ("profesor".equals(rol)) {
+                    response.sendRedirect("listarProfesores.jsp?error=permiso");
+                    return;
+                }
+
                 int id = Integer.parseInt(request.getParameter("id"));
                 boolean inactivado = dao.cambiarEstadoProfesor(id, "inactivo");
 
@@ -136,6 +168,11 @@ public class ProfesorServlet extends HttpServlet {
                 }
 
             } else if ("activar".equals(accion)) { // Cambio de estado a activo
+                if ("profesor".equals(rol)) {
+                    response.sendRedirect("listarProfesores.jsp?error=permiso");
+                    return;
+                }
+
                 int id = Integer.parseInt(request.getParameter("id"));
                 boolean activado = dao.cambiarEstadoProfesor(id, "activo");
 
@@ -145,6 +182,8 @@ public class ProfesorServlet extends HttpServlet {
                 } else {
                     response.sendRedirect("listarProfesores.jsp?error=activacion");
                 }
+
+
 
             } else {
                 response.sendRedirect("listarProfesores.jsp");

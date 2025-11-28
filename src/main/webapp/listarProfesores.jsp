@@ -49,7 +49,7 @@
         <section class="content-header">
             <div class="content-header">
                 <div class="container-fluid">
-                    <% if ("administrador".equals(rol)) { %>
+                    <% if ("administrador".equals(rol) || "profesor".equals(rol)  ){ %>
                         <div class="d-flex justify-content-end mb-3">
                             <a href="registroProfesor.jsp" class="btn btn-success">
                                 <i class="fas fa-plus-circle"></i> Registrar nuevo profesor
@@ -95,8 +95,14 @@
                         <strong>⚠ Ocurrió un error al eliminar el profesor. Revise dependencias o integridad referencial.</strong>
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                     </div>
+                <% } else if ("permiso".equals(error)) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>⚠ No tiene permisos para realizar esta acción.</strong>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
                 <% } %>
-            </div>
+                </div>
+
 
         </section>
 
@@ -160,6 +166,20 @@
                                         <td><%= p.getEstado() %></td>
                                         <td><%= p.getUsuario_registro() %></td>
                                         <td class="text-center">
+                                            <!-- Botón Cursos asignados -->
+                                            <a href="CursoLibreServlet?accion=listarPorProfesor&id=<%= p.getId() %>" 
+                                               class="btn btn-sm btn-info" 
+                                               title="Ver cursos asignados">
+                                                <i class="fas fa-book"></i>
+                                            </a>
+
+                                            <!-- Botón Estudiantes inscritos -->
+                                            <a href="EstudianteServlet?accion=listarPorProfesor&id=<%= p.getId() %>" 
+                                               class="btn btn-sm btn-primary" 
+                                               title="Ver estudiantes inscritos">
+                                                <i class="fas fa-users"></i>
+                                            </a>
+
                                             <!-- Botón Editar -->
                                             <a href="editarProfesor.jsp?id=<%= p.getId() %>" 
                                                class="btn btn-sm btn-warning" 

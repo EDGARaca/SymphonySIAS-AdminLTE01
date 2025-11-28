@@ -187,5 +187,31 @@ public class EstudianteDAO {
         }
     } 
     
+    
+   public List<Estudiante> listarEstudiantesPorProfesor(int idProfesor) {
+        List<Estudiante> lista = new ArrayList<>();
+        String sql = "SELECT e.* FROM estudiante e " +
+                     "JOIN inspcurlibre i ON e.id = i.id_estudiante " +
+                     "JOIN curso_libre c ON i.id_curso_libre = c.id " +
+                     "WHERE c.id_profesor=?";
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idProfesor);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Estudiante est = new Estudiante();
+                est.setId(rs.getInt("id"));
+                est.setNombre(rs.getString("nombre"));
+                est.setApellido(rs.getString("apellido"));
+                est.setDocumento(rs.getString("documento"));
+                est.setCorreo(rs.getString("correo"));
+                // agrega más campos según tu modelo
+                lista.add(est);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    } 
 
 }

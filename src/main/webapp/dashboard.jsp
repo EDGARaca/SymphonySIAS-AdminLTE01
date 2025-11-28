@@ -10,10 +10,11 @@
 <%
     // Validación de sesión
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String nombre = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
-    rol = (rol != null) ? rol.trim().toLowerCase() : "";
+    String nombre  = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
+    String rol     = (session != null) ? (String) session.getAttribute("rolActivo") : null;
 
+    // Normalizar el rol: quitar espacios y pasarlo a minúsculas
+    String rolNormalizado = (rol != null) ? rol.trim().toLowerCase() : "";
 
     if (usuario == null || nombre == null || rol == null) {
         response.sendRedirect("login.jsp");
@@ -21,8 +22,9 @@
     }
 
     // Trazabilidad en consola del servidor
-    System.out.println("Acceso autorizado al dashboard por usuario22: " + usuario);
+    System.out.println("Acceso autorizado al dashboard por usuario: " + usuario + " (" + rolNormalizado + ")");
 %>
+
 
 
 
@@ -69,10 +71,9 @@
                         </div>
                         <div class="card-body">
                             <div class="row text-center">
-
                                 <!-- ADMIN SIAS -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rol)) { %>
+                                    <% if ("administrador sias".equals(rolNormalizado)) { %>
                                         <a href="AdministradorSIAS.jsp" class="btn btn-outline-primary btn-block">
                                             <i class="fas fa-tools"></i> AdministradorSIAS <br><small>(Administrador)</small>
                                         </a>
@@ -80,15 +81,11 @@
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-tools"></i> AdministradorSIAS <br><small>(Administrador)</small>
                                         </a>
-                                    <% } %>
-                                    
-                                    
-                                    
+                                    <% } %>               
                                 </div>
-
                                 <!-- Gestión Estudiantes -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol) || "auxiliar administrativo".equals(rol)) { %>
+                                    <% if ("administrador sias".equals(rolNormalizado) || "director".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado) || "auxiliar administrativo".equals(rolNormalizado) || "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado) || "estudiante".equals(rolNormalizado)) { %>
                                         <a href="estudiantes.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-user-graduate"></i> Gestión Estudiantes <br><small>(Roles autorizados)</small>
                                         </a>
@@ -98,10 +95,9 @@
                                         </a>
                                     <% } %>
                                 </div>
-
                                 <!-- Gestión Profesores -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rol) || "director".equals(rol) || "coordinador académico".equals(rol)|| "profesor".equals(rol)) { %>
+                                    <% if ("administrador sias".equals(rolNormalizado) || "director".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado)|| "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado)) { %>
                                         <a href="profesores.jsp" class="btn btn-outline-warning btn-block">
                                             <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(Director, Coordinador)</small>
                                         </a>
@@ -109,13 +105,11 @@
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
-                                    
-                                </div>
-                                    
+                                    <% } %>                                    
+                                </div>                                    
                                 <!-- Gestión Cursos Libres -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rol) || "coordinador académico".equals(rol) || "estudiante".equals(rol) ) { %>
+                                    <% if ("administrador sias".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado) || "estudiante".equals(rolNormalizado) || "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado) ) { %>
                                         <a href="cursoLibre.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(Administrador, Coordinador)</small>
                                         </a>
@@ -124,11 +118,10 @@
                                             <i class="fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(No disponible)</small>
                                         </a>
                                     <% } %>
-                                </div>    
-
+                                </div> 
                                 <!-- Auxiliar Contable -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("auxiliar contable".equals(rol)) { %>
+                                    <% if ("auxiliar contable".equals(rolNormalizado)|| "administrador sias".equals(rolNormalizado)) { %>
                                         <a href="gestionContable.jsp" class="btn btn-outline-dark btn-block">
                                             <i class="fas fa-calculator"></i> Auxiliar Contable <br><small>(Aux. Contable)</small>
                                         </a>
@@ -138,10 +131,9 @@
                                         </a>
                                     <% } %>
                                 </div>
-
                                 <!-- Auxiliar Administrativo -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("auxiliar administrativo".equals(rol)) { %>
+                                    <% if ("auxiliar administrativo".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado)) { %>
                                         <a href="gestionAdministrativo.jsp" class="btn btn-outline-secondary btn-block">
                                             <i class="fas fa-user-clock"></i> Auxiliar Administrativo <br><small>(Aux. Administrativo)</small>
                                         </a>
@@ -151,10 +143,9 @@
                                         </a>
                                     <% } %>
                                 </div>
-
                                 <!-- Clases y Horarios -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("docente".equals(rol) || "coordinador académico".equals(rol) || "director".equals(rol) || "estudiante".equals(rol) ) { %>
+                                    <% if ("docente".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado)|| "coordinador académico".equals(rolNormalizado) || "director".equals(rolNormalizado) || "estudiante".equals(rolNormalizado) ) { %>
                                         <a href="gestionClases.jsp" class="btn btn-outline-info btn-block">
                                             <i class="fas fa-calendar-alt"></i> Clases y Horarios <br><small>(Docente, Coordinador, Director)</small>
                                         </a>
@@ -164,10 +155,9 @@
                                         </a>
                                     <% } %>
                                 </div>
-
                                 <!-- Horarios (Estudiante) -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("estudiante".equals(rol)) { %>
+                                    <% if ("estudiante".equals(rolNormalizado)|| "administrador sias".equals(rolNormalizado)|| "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado)) { %>
                                         <a href="horarios.jsp" class="btn btn-outline-info btn-block">
                                             <i class="fas fa-clock"></i> Horarios <br><small>(Estudiante)</small>
                                         </a>
@@ -177,10 +167,9 @@
                                         </a>
                                     <% } %>
                                 </div>
-
                                 <!-- Coordinador Académico -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("coordinador académico".equals(rol)) { %>
+                                    <% if ("coordinador académico".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado)) { %>
                                         <a href="gestionCoordinador.jsp" class="btn btn-outline-primary btn-block">
                                             <i class="fas fa-user-cog"></i> Coordinador Académico <br><small>(Coordinador)</small>
                                         </a>
@@ -190,10 +179,9 @@
                                         </a>
                                     <% } %>
                                 </div>
-
                                 <!-- Gestión Director -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("director".equals(rol)) { %>
+                                    <% if ("director".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado)) { %>
                                         <a href="gestionDirector.jsp" class="btn btn-outline-primary btn-block">
                                             <i class="fas fa-user-tie"></i> Gestión Director <br><small>(Director)</small>
                                         </a>
@@ -202,11 +190,10 @@
                                             <i class="fas fa-user-tie"></i> Gestión Director <br><small>(No disponible)</small>
                                         </a>
                                     <% } %>
-                                </div>
-                                
+                                </div>                                
                                 <!-- Contenidos -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("docente".equals(rol) || "estudiante".equals(rol)) { %>
+                                    <% if ("docente".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado) || "estudiante".equals(rolNormalizado)) { %>
                                         <a href="contenidos.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-book-reader"></i> Contenidos <br><small>(Docente, Estudiante)</small>
                                         </a>
@@ -216,10 +203,9 @@
                                         </a>
                                     <% } %>
                                 </div>
-
                                 <!-- Gestión de Notas -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("docente".equals(rol) || "estudiante".equals(rol) || "coordinador académico".equals(rol) || "director".equals(rol)) { %>
+                                    <% if ("docente".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado) || "estudiante".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado) || "director".equals(rolNormalizado)) { %>
                                         <a href="gestionNotas.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-clipboard-list"></i> Gestión de Notas <br><small>(Docente, Estudiante, Coordinador, Director)</small>
                                         </a>
@@ -229,30 +215,25 @@
                                         </a>
                                     <% } %>
                                 </div>
-
                                 <!-- Notificaciones (todos los roles) -->
                                 <div class="col-md-3 mb-3">
                                     <a href="notificaciones.jsp" class="btn btn-outline-danger btn-block">
                                         <i class="fas fa-bell"></i> Notificaciones <br><small>(Todos los roles)</small>
                                     </a>
-                                </div>
-                                
+                                </div>                                
                                 <!-- Productos Músicales -->
                                 <div class="col-md-3 mb-3">
                                     <a href="catalogoProductos.jsp" class="btn btn-outline-info btn-block">
                                         <i class="fas fa-shopping-cart fa-lg"></i> Productos Musicales <br><small>Compra instrumentos</small>
                                     </a>
                                 </div>
-
-
-
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
             <%-- Scripts --%>
-            <% if (!"administrador sias".equals(rol)) { %>
+            <% if (!"administrador sias".equals(rolNormalizado)) { %>
                 <jsp:include page="componentes/chatbot.jspf" />
             <% } %>
 
