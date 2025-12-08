@@ -12,7 +12,7 @@
 
 <%
    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
 
     if (usuario == null || rol == null || 
         !(rol.equalsIgnoreCase("ADMINISTRADOR SIAS") || rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") || rol.equalsIgnoreCase("DIRECTOR"))) {
@@ -147,7 +147,11 @@
                                     <th>Genero</th>
                                     <th>Estado</th>
                                     <th>Usuario_registro</th>
-                                    <th>Acciones</th>
+                                    <% if ("administrador sias".equalsIgnoreCase(rol) 
+                                        || "director".equalsIgnoreCase(rol) 
+                                        || "coordinador académico".equalsIgnoreCase(rol)) { %>
+                                        <th>Acciones</th>
+                                    <% } %>
                                 </tr>
                             </thead>
                             <tbody>
@@ -165,62 +169,16 @@
                                         <td><%= p.getGenero() %></td>
                                         <td><%= p.getEstado() %></td>
                                         <td><%= p.getUsuario_registro() %></td>
+                                        
                                         <td class="text-center">
-                                            <!-- Botón Cursos asignados -->
-                                            <a href="CursoLibreServlet?accion=listarPorProfesor&id=<%= p.getId() %>" 
-                                               class="btn btn-sm btn-info" 
-                                               title="Ver cursos asignados">
-                                                <i class="fas fa-book"></i>
-                                            </a>
-
-                                            <!-- Botón Estudiantes inscritos -->
-                                            <a href="EstudianteServlet?accion=listarPorProfesor&id=<%= p.getId() %>" 
-                                               class="btn btn-sm btn-primary" 
-                                               title="Ver estudiantes inscritos">
-                                                <i class="fas fa-users"></i>
-                                            </a>
-
-                                            <!-- Botón Editar -->
-                                            <a href="editarProfesor.jsp?id=<%= p.getId() %>" 
-                                               class="btn btn-sm btn-warning" 
-                                               title="Editar profesor">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-
                                             <%
-                                                // Normalizar el estado para evitar errores por espacios o mayúsculas
-                                                String estado = p.getEstado() != null ? p.getEstado().trim().toLowerCase() : "";
+                                                //Se pasa profesor actual al componete
+                                                request.setAttribute("profesor", p);
                                             %>
-
-                                            <% if ("inactivo".equals(estado)) { %>
-                                                <!-- Botón Activar -->
-                                                <a href="ProfesorServlet?accion=activar&id=<%= p.getId() %>" 
-                                                   class="btn btn-sm btn-success" 
-                                                   title="Activar profesor"
-                                                   onclick="return confirm('¿Activar este profesor?');">
-                                                    <i class="fas fa-check-circle"></i>
-                                                </a>
-
-                                                <!-- Botón Eliminar definitivo (solo si está inactivo) -->
-                                                <a href="ProfesorServlet?accion=eliminar&id=<%= p.getId() %>" 
-                                                   class="btn btn-sm btn-danger" 
-                                                   title="Eliminar definitivamente"
-                                                   onclick="return confirm('⚠ ¿Está seguro de eliminar definitivamente este profesor?');">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
-                                            <% } else { %>
-                                                <!-- Botón Inactivar -->
-                                                <a href="ProfesorServlet?accion=inactivar&id=<%= p.getId() %>" 
-                                                   class="btn btn-sm btn-secondary" 
-                                                   title="Inactivar profesor"
-                                                   onclick="return confirm('¿Marcar este profesor como inactivo?');">
-                                                    <i class="fas fa-ban"></i>
-                                                </a>
-                                            <% } %>
-                                        </td>
-
-                                    </tr>
-                                <% } %>
+                                            <jsp:include page="componentes/accionesProfesores.jsp" />
+                                            </td>
+                                        </tr>
+                                <% } %>                                
                             </tbody>
                         </table>
                     </div>

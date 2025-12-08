@@ -19,6 +19,6 @@ public class Caso002_LoginInvalidoTest {
     public void testLoginConCredencialesInvalidas() {
         String usuario = "otro";
         String contraseña = "0000";
-        assertFalse(usuario.equals("admin") && contraseña.equals("1234"));
+        assertFalse(usuario.equals("admin") && contraseña.equals("12345*"));
     }
 }

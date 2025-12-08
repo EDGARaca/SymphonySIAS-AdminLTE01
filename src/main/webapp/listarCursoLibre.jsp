@@ -13,7 +13,7 @@
 <%
     // Validación de sesión
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
 
     if (usuario == null || rol == null) {
         response.sendRedirect("login.jsp?logout=true");

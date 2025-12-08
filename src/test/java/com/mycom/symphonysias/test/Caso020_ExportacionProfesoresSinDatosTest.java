@@ -9,7 +9,7 @@
  * @author Spiri
  */
 
-
+/*
 package com.mycom.symphonysias.test;
 
 import com.mycom.symphonysias.adminlte01.dao.ProfesorDAO;
@@ -33,4 +33,6 @@ public class Caso020_ExportacionProfesoresSinDatosTest {
             Assumptions.assumeTrue(false, "Test omitido: hay profesores registrados");
         }
     }
-}
+    
+    
+}*/

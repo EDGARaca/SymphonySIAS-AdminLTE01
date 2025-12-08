@@ -18,7 +18,7 @@ public class Caso001_LoginValidoTest {
     @Test
     public void testLoginConCredencialesValidas() {
         String usuario = "admin";
-        String contraseña = "1234";
-        assertTrue(usuario.equals("admin") && contraseña.equals("1234"));
+        String contraseña = "12345*";
+        assertTrue(usuario.equals("admin") && contraseña.equals("12345*"));
     }
 }

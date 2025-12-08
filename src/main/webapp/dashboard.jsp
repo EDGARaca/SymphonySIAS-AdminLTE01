@@ -11,7 +11,7 @@
     // Validación de sesión
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
     String nombre  = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
-    String rol     = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    String rol     = (session != null) ? (String) session.getAttribute("rol") : null;
 
     // Normalizar el rol: quitar espacios y pasarlo a minúsculas
     String rolNormalizado = (rol != null) ? rol.trim().toLowerCase() : "";
@@ -20,13 +20,7 @@
         response.sendRedirect("login.jsp");
         return;
     }
-
-    // Trazabilidad en consola del servidor
-    System.out.println("Acceso autorizado al dashboard por usuario: " + usuario + " (" + rolNormalizado + ")");
 %>
-
-
-
 
 
 <!DOCTYPE html>

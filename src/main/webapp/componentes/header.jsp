@@ -10,7 +10,7 @@
 
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
     String nombre = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
 
     if (usuario == null || nombre == null || rol == null){
         response.sendRedirect(base + "/login.jsp");

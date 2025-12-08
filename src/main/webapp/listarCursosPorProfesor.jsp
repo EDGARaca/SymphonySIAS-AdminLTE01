@@ -42,10 +42,11 @@
                            <td><%= c.getEstado() %></td>
                            <td>
                                <!-- Botón para ver estudiantes inscritos en este curso -->
-                               <a href="EstudianteServlet?accion=listarPorCurso&idCurso=<%= c.getId() %>" 
-                                  class="btn btn-sm btn-info">
-                                   <i class="fas fa-users"></i> Ver Estudiantes
-                               </a>
+                                <a href="CursoLibreServlet?accion=listarEstudiantes&id=<%= c.getId() %>"
+                                    class="btn btn-sm btn-info">
+                                    <i class="fas fa-users"></i> Ver estudiantes inscritos
+                                </a>
+
                            </td>                     
                        </tr>
             <%     }

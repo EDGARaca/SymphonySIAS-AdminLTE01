@@ -14,7 +14,7 @@
 
 <%
    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
 
     if (usuario == null || rol == null || 
         !(rol.equalsIgnoreCase("ADMINISTRADOR SIAS") || rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") || rol.equalsIgnoreCase("DIRECTOR"))) {

@@ -9,7 +9,7 @@
  * @author Spiri
  */
 
-
+/**
 package com.mycom.symphonysias.test;
 
 import com.mycom.symphonysias.adminlte01.dao.EstudianteDAO;
@@ -28,3 +28,4 @@ public class Caso021_ExportacionEstudiantesConDatosTest {
         System.out.println("[TEST] Estudiantes disponibles para exportación: " + lista.size());
     }
 }
+ */

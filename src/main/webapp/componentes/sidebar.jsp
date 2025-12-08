@@ -1,24 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 
 <%
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
     String rolNormalizado = (rol != null) ? rol.trim().toLowerCase() : "";
 %>
-
-<% if ("administrador sias".equals(rolNormalizado) 
-    || "director".equals(rolNormalizado) 
-    || "coordinador académico".equals(rolNormalizado) 
-    || "profesor".equals(rolNormalizado) 
-    || "docente".equals(rolNormalizado)) { %>
-    <li class="nav-item">
-        <a href="profesores.jsp" class="nav-link">
-            <i class="fas fa-chalkboard-teacher"></i>
-            <p>Gestión Profesores</p>
-        </a>
-    </li>
-<% } %>
-
-<%-- out.println("[SIDEBAR] Rol activo: " + rol); --%>
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
@@ -63,7 +48,12 @@
                 <% } %>
 
                 <%-- 2. Gestión Estudiantes --%>
-                <% if ("administrador sias".equals(rolNormalizado) || "director".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado) || "auxiliar administrativo".equals(rolNormalizado)|| "estudiante".equals(rolNormalizado) || "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado)) { %>
+                <% if ("administrador sias".equals(rolNormalizado) 
+                        || "director".equals(rolNormalizado) 
+                        || "coordinador académico".equals(rolNormalizado) 
+                        || "auxiliar administrativo".equals(rolNormalizado)
+                        || "estudiante".equals(rolNormalizado) 
+                        || "profesor".equals(rolNormalizado)) { %>
                     <li class="nav-item">
                         <a href="estudiantes.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-graduate"></i>
@@ -73,7 +63,10 @@
                 <% } %>
 
                 <%-- 3. Gestión Profesores --%>
-                <% if ("administrador sias".equals(rolNormalizado) || "director".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado) || "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado)) { %>
+                <% if ("administrador sias".equals(rolNormalizado) 
+                        || "director".equals(rolNormalizado) 
+                        || "coordinador académico".equals(rolNormalizado) 
+                        || "profesor".equals(rolNormalizado)) { %>
                     <li class="nav-item">
                         <a href="profesores.jsp" class="nav-link">
                             <i class="nav-icon fas fa-chalkboard-teacher"></i>

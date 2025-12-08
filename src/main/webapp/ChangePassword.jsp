@@ -3,17 +3,8 @@
     Created on : 14/10/2025, 11:14:20 a. m.
     Author     : Spiri
 --%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8" language="java"%>
-<%@page import="javax.servlet.http.HttpSession" %>
-
-<%
-    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    if (usuario == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -27,32 +18,36 @@
 <body class="hold-transition layout-top-nav">
     <div class="container mt-5">
         <h3><i class="fas fa-key"></i> Cambiar clave</h3>
-        <% if (request.getAttribute("mensaje") != null) { %>
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> <%= request.getAttribute("mensaje") %>
-            </div>
-        <% } %>
 
-        <% if (request.getAttribute("error") != null) { %>
+        <!-- Mensajes dinámicos -->
+        <c:if test="${not empty mensaje}">
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> ${mensaje}
+            </div>
+        </c:if>
+
+        <c:if test="${not empty error}">
             <div class="alert alert-danger">
-                <i class="fas fa-exclamation-triangle"></i> <%= request.getAttribute("error") %>
+                <i class="fas fa-exclamation-triangle"></i> ${error}
             </div>
-        <% } %>
-        <form action="CambiarClaveServlet" method="post">
+        </c:if>
+
+        <!-- Formulario -->
+        <form action="CambiarClaveServlet" method="post" autocomplete="off">
             <div class="form-group">
-                <label>Clave actual</label>
-                <input type="password" name="claveActual" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label>Nueva clave</label>
-                <input type="password" name="claveNueva" class="form-control" required>
+                <label for="claveActual">Clave actual</label>
+                <input type="password" id="claveActual" name="claveActual" class="form-control" required>
             </div>
             <div class="form-group">
-                <label>Confirmar nueva clave</label>
-                <input type="password" name="claveConfirmacion" class="form-control" required>
+                <label for="claveNueva">Nueva clave</label>
+                <input type="password" id="claveNueva" name="claveNueva" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-success">Actualizar clave</button>
-            <a href="dashboard.jsp" class="btn btn-secondary ml-2">
+            <div class="form-group">
+                <label for="claveConfirmacion">Confirmar nueva clave</label>
+                <input type="password" id="claveConfirmacion" name="claveConfirmacion" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success" aria-label="Actualizar clave">Actualizar clave</button>
+            <a href="dashboard.jsp" class="btn btn-secondary ml-2" aria-label="Regresar al panel">
                 <i class="fas fa-arrow-left"></i> Regresar al panel
             </a>
         </form>

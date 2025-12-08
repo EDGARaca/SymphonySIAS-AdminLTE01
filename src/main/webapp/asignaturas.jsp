@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html; charset=UTF-8" language="java"%>
 <%
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
     if (rol == null || (!"administrador".equals(rol) && !"coordinador académico".equals(rol))) {
         response.sendRedirect("login.jsp");
         return;

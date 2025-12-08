@@ -16,13 +16,11 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
-
-
 /**
  * DAO para validación de usuarios en SymphonySIAS-AdminLTE01
+ * Cumple trazabilidad y consistencia con ISO/IEC 25010
  * @author Spiri
  */
-
 public class UsuarioDAO {
     private static final Logger LOGGER = Logger.getLogger(UsuarioDAO.class.getName());
     private Connection conn;
@@ -36,70 +34,76 @@ public class UsuarioDAO {
         }
     }
 
+    /**
+     * Valida credenciales: usuario en texto plano + hash SHA-256
+     * IMPORTANTE: la columna en BD es 'clave' (no 'contraseña')
+     */
+    public Usuario validar(String usuarioPlano, String hashSha256) throws SQLException {
+        final String sql =
+            "SELECT id, usuario, nombre, rol, activo " +
+            "FROM usuarios " +
+            "WHERE usuario = ? AND clave = ? " +
+            "LIMIT 1";
 
-    public Usuario validar(String usuario, String clave) {
-        String sql = "SELECT * FROM usuarios WHERE usuario = ? AND clave = ? AND activo = 1";
-        try (Connection conn = Conexion.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            // 🔧 INICIO trazabilidad DAO
-            System.out.println("[DAO] Usuario recibido: '" + usuario + "'");
-            System.out.println("[DAO] Clave hash recibida: '" + clave + "'");
-            System.out.println("[DAO] Longitud usuario: " + usuario.length());
-            System.out.println("[DAO] Longitud hash: " + clave.length());
-            // 🔧 FIN trazabilidad DAO
+        try (Connection cx = Conexion.getConexion();
+             PreparedStatement ps = cx.prepareStatement(sql)) {
 
-            stmt.setString(1, usuario);
-            stmt.setString(2, clave);
-            ResultSet rs = stmt.executeQuery();
+            ps.setString(1, usuarioPlano.trim());
+            ps.setString(2, hashSha256.trim());
 
-            if (rs.next()) {
-                Usuario u = new Usuario();
-                u.setId(rs.getInt("id"));
-                u.setNombre(rs.getString("nombre"));
-                u.setUsuario(rs.getString("usuario"));
-                u.setClave(rs.getString("clave"));
-                u.setCorreo(rs.getString("correo"));
-                u.setRol(rs.getString("rol"));
-                u.setActivo(rs.getInt("activo") == 1);
-                return u;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Usuario u = new Usuario();
+                    u.setId(rs.getInt("id"));
+                    u.setUsuario(rs.getString("usuario"));
+                    u.setNombre(rs.getString("nombre"));
+                    u.setRol(rs.getString("rol"));
+                    u.setActivo(rs.getBoolean("activo"));
+                    LOGGER.log(Level.INFO, "[DAO] Validación exitosa para usuario: {0}", usuarioPlano);
+                    return u;
+                } else {
+                    LOGGER.log(Level.WARNING, "[DAO] Sin coincidencias: usuario/clave no válidos para usuario: {0}", usuarioPlano);
+                }
             }
-
-        } catch (Exception e) {
-            System.err.println("[ERROR DAO] Validación fallida: " + e.getMessage());
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "[DAO] Error en validar credenciales", e);
+            throw e;
         }
         return null;
     }
-    
-    public boolean existeUsuario(String usuario) {
-        String sql = "SELECT COUNT(*) FROM usuarios WHERE usuario = ?";
 
-        try (Connection conn = Conexion.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public boolean existeUsuario(String usuario) {
+        final String sql = "SELECT COUNT(*) FROM usuarios WHERE usuario = ?";
+
+        try (Connection cx = Conexion.getConexion();
+             PreparedStatement stmt = cx.prepareStatement(sql)) {
 
             stmt.setString(1, usuario);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
             }
-
         } catch (Exception e) {
-            System.err.println("[ERROR DAO] Validación de duplicado fallida: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "[ERROR DAO] Validación de duplicado fallida", e);
         }
 
         return false;
     }
 
-
     public List<Usuario> listarUsuarios() {
         List<Usuario> lista = new ArrayList<>();
 
-        try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT id, nombre, usuario, clave, correo, rol, activo FROM usuarios");
+        if (conn == null) {
+            LOGGER.log(Level.SEVERE, "[DAO] Conexión no disponible en listarUsuarios");
+            return lista;
+        }
 
-             ResultSet rs = ps.executeQuery()
-        ) {
+        final String sql = "SELECT id, nombre, usuario, clave, correo, rol, activo FROM usuarios";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 Usuario u = new Usuario();
                 u.setId(rs.getInt("id"));
@@ -115,102 +119,114 @@ public class UsuarioDAO {
             LOGGER.log(Level.SEVERE, "Error al listar usuarios", e);
         }
 
-        LOGGER.log(Level.INFO, "{DAO} Usuarios recuperados: {0}", lista.size());
-
+        LOGGER.log(Level.INFO, "[DAO] Usuarios recuperados: {0}", lista.size());
         return lista;
     }
-    
+
     public boolean actualizar(Usuario u) {
-    boolean resultado = false;
-    PreparedStatement ps = null;
+        boolean resultado = false;
+        PreparedStatement ps = null;
 
-    String sql = "UPDATE usuarios SET nombre = ?, usuario = ?, rol = ?, activo = ? WHERE id = ?";
-
-    try {
-        ps = conn.prepareStatement(sql);
-        ps.setString(1, u.getNombre());
-        ps.setString(2, u.getUsuario());
-        ps.setString(3, u.getRol());
-        ps.setBoolean(4, u.isActivo());
-        ps.setInt(5, u.getId());
-
-        int filas = ps.executeUpdate();
-        resultado = filas > 0;
-
-        LOGGER.log(Level.INFO, "[DAO] Usuario actualizado. Filas afectadas: {0}", filas);
-
-    } catch (SQLException e) {
-        LOGGER.log(Level.SEVERE, "Error al actualizar usuario", e);
-    } finally {
-        try {
-            if (ps != null) ps.close();
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al cerrar PreparedStatement", e);
+        if (conn == null) {
+            LOGGER.log(Level.SEVERE, "[DAO] Conexión no disponible en actualizar");
+            return false;
         }
-    }
+
+        final String sql = "UPDATE usuarios SET nombre = ?, usuario = ?, rol = ?, activo = ? WHERE id = ?";
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, u.getNombre());
+            ps.setString(2, u.getUsuario());
+            ps.setString(3, u.getRol());
+            ps.setBoolean(4, u.isActivo());
+            ps.setInt(5, u.getId());
+
+            int filas = ps.executeUpdate();
+            resultado = filas > 0;
+
+            LOGGER.log(Level.INFO, "[DAO] Usuario actualizado. Filas afectadas: {0}", filas);
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al actualizar usuario", e);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar PreparedStatement", e);
+            }
+        }
 
         return resultado;
     }
-    
+
     public boolean crear(Usuario u) {
-    boolean resultado = false;
-    PreparedStatement ps = null;
+        boolean resultado = false;
+        PreparedStatement ps = null;
 
-    String sql = "INSERT INTO usuarios (nombre, usuario, clave, correo, rol, activo) VALUES (?, ?, ?, ?, ?, ?)";
-
-    try {
-        ps = conn.prepareStatement(sql);
-        ps.setString(1, u.getNombre());
-        ps.setString(2, u.getUsuario());
-        ps.setString(3, u.getClave());
-        ps.setString(4, u.getCorreo());
-        ps.setString(5, u.getRol());
-        ps.setBoolean(6, u.isActivo());
-
-        int filas = ps.executeUpdate();
-        resultado = filas > 0;
-
-        LOGGER.log(Level.INFO, "[DAO] Usuario creado. Filas afectadas: {0}", filas);
-
-    } catch (SQLException e) {
-        LOGGER.log(Level.SEVERE, "Error al crear usuario", e);
-        e.printStackTrace(); 
-    }
-       
-        
-    finally {
-        try {
-            if (ps != null) ps.close();
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al cerrar PreparedStatement", e);
+        if (conn == null) {
+            LOGGER.log(Level.SEVERE, "[DAO] Conexión no disponible en crear");
+            return false;
         }
+
+        final String sql = "INSERT INTO usuarios (nombre, usuario, clave, correo, rol, activo) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, u.getNombre());
+            ps.setString(2, u.getUsuario());
+            ps.setString(3, u.getClave()); // debe venir ya hasheada (SHA-256) desde capa de servicio/servlet
+            ps.setString(4, u.getCorreo());
+            ps.setString(5, u.getRol());
+            ps.setBoolean(6, u.isActivo());
+
+            int filas = ps.executeUpdate();
+            resultado = filas > 0;
+
+            LOGGER.log(Level.INFO, "[DAO] Usuario creado. Filas afectadas: {0}", filas);
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al crear usuario", e);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar PreparedStatement", e);
+            }
+        }
+
+        return resultado;
     }
 
-    return resultado;
-    }
-    
     public boolean eliminarUsuario(String id) {
         boolean eliminado = false;
 
-        String sql = "DELETE FROM usuarios WHERE id = ?";
+        final String sql = "DELETE FROM usuarios WHERE id = ?";
 
-        try (Connection conn = Conexion.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection cx = Conexion.getConexion();
+             PreparedStatement stmt = cx.prepareStatement(sql)) {
 
             stmt.setString(1, id);
             int filas = stmt.executeUpdate();
             eliminado = filas > 0;
 
+            LOGGER.log(Level.INFO, "[DAO] Usuario eliminado. Filas afectadas: {0}", filas);
         } catch (SQLException ex) {
             LOGGER.log(Level.SEVERE, "[ERROR] Fallo al eliminar usuario", ex);
         }
 
         return eliminado;
     }
-    
+
     public boolean actualizarEstado(int id, boolean estado) {
         boolean actualizado = false;
-        String sql = "UPDATE usuarios SET activo = ? WHERE id = ?";
+
+        if (conn == null) {
+            LOGGER.log(Level.SEVERE, "[DAO] Conexión no disponible en actualizarEstado");
+            return false;
+        }
+
+        final String sql = "UPDATE usuarios SET activo = ? WHERE id = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setBoolean(1, estado);
@@ -227,4 +243,53 @@ public class UsuarioDAO {
         return actualizado;
     }
 
+    // Actualiza la clave (hash) por ID de usuario
+    public boolean actualizarClave(int id, String nuevoHash) {
+        final String sql = "UPDATE usuarios SET clave = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+
+        if (nuevoHash == null || nuevoHash.trim().isEmpty()) {
+            LOGGER.warning("[UsuarioDAO] Hash vacío o nulo");
+            return false;
+        }
+
+        try (Connection cx = Conexion.getConexion();
+             PreparedStatement ps = cx.prepareStatement(sql)) {
+
+            ps.setString(1, nuevoHash);
+            ps.setInt(2, id);
+
+            int filas = ps.executeUpdate();
+            LOGGER.info("[UsuarioDAO] actualizarClave -> filas afectadas: " + filas);
+            return filas > 0;
+
+        } catch (SQLException e) {
+            LOGGER.severe("[UsuarioDAO] Error al actualizar clave: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // (Opcional) Actualiza la clave por nombre de usuario
+    public boolean actualizarClavePorUsuario(String usuario, String nuevoHash) {
+        final String sql = "UPDATE usuarios SET clave = ?, updated_at = CURRENT_TIMESTAMP WHERE usuario = ?";
+
+        if (usuario == null || usuario.trim().isEmpty() || nuevoHash == null || nuevoHash.trim().isEmpty()) {
+            LOGGER.warning("[UsuarioDAO] usuario/hash inválidos");
+            return false;
+        }
+
+        try (Connection cx = Conexion.getConexion();
+             PreparedStatement ps = cx.prepareStatement(sql)) {
+
+            ps.setString(1, nuevoHash);
+            ps.setString(2, usuario);
+
+            int filas = ps.executeUpdate();
+            LOGGER.info("[UsuarioDAO] actualizarClavePorUsuario -> filas afectadas: " + filas);
+            return filas > 0;
+
+        } catch (SQLException e) {
+            LOGGER.severe("[UsuarioDAO] Error al actualizar clave por usuario: " + e.getMessage());
+            return false;
+        }
+    }
 }

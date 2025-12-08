@@ -33,6 +33,7 @@
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.mycom.symphonysias.adminlte01.LoginServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -149,7 +150,15 @@
         <servlet-name>ProfesorServlet</servlet-name>
         <url-pattern>/ProfesorServlet</url-pattern>
     </servlet-mapping>
-
+    
+    <servlet>
+        <servlet-name>CursoLibreServlet</servlet-name>
+        <servlet-class>com.mycom.symphonysias.adminlte01.servlet.CursoLibreServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CursoLibreServlet</servlet-name>
+        <url-pattern>/CursoLibreServlet</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>ExportarUsuariosServlet</servlet-name>
@@ -261,9 +270,7 @@
     <servlet-mapping>
         <servlet-name>MisPedidosServlet</servlet-name>
         <url-pattern>/misPedidosServlet</url-pattern>
-    </servlet-mapping>
-
-    
+    </servlet-mapping>    
 
 </web-app>
 

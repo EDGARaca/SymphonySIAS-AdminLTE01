@@ -43,21 +43,16 @@ public class LoginServlet extends HttpServlet {
 
         // Trazabilidad
         LOGGER.log(Level.INFO, "[LOGIN] Intento de login para usuario: {0}", user);
-        System.out.println("[LOGIN] Usuario recibido: " + user);
-        System.out.println("[LOGIN] Clave original recibida (longitud): " + pass.length());
 
         // Convertir la clave ingresada a SHA-256
         String hashedPass = HashUtil.sha256(pass);
-        System.out.println("[LOGIN] Hash SHA-256 generado: " + hashedPass);
 
         try {
             UsuarioDAO dao = new UsuarioDAO();
-            Usuario usuario = dao.validar(user, hashedPass);
+            Usuario usuario = dao.validar(user, hashedPass); // compara usuario + hash
 
             if (usuario != null) {
-                System.out.println("[LOGIN] Usuario encontrado: " + usuario.getUsuario());
-                System.out.println("[LOGIN] Estado activo: " + usuario.isActivo());
-                System.out.println("[LOGIN] Rol desde BD: " + usuario.getRol());
+                LOGGER.log(Level.INFO, "[LOGIN] Usuario encontrado: {0}", usuario.getUsuario());
 
                 if (usuario.isActivo()) {
                     HttpSession session = request.getSession();
@@ -67,8 +62,6 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("nombreActivo", usuario.getNombre());
                     session.setAttribute("usuario", usuarioNormalizado);
 
-                    System.out.println("[LOGIN] Usuario guardado en sesión como 'usuario': " + usuarioNormalizado);
-
                     // Normalización de rol en minúsculas
                     String rolOriginal = usuario.getRol().trim().toLowerCase();
                     String rolNormalizado;
@@ -77,47 +70,44 @@ public class LoginServlet extends HttpServlet {
                         case "admin":
                         case "administrador":
                         case "administrador sias":
-                            rolNormalizado = "administrador sias";
-                            break;
-                        case "doc":
-                        case "docente":
-                        case "profesor":
-                            rolNormalizado = "docente";
-                            break;
+                            rolNormalizado = "administrador sias"; break;
+
+                        case "dir":
+                        case "director":
+                            rolNormalizado = "director"; break;
+
                         case "coord":
                         case "coordinador":
                         case "coordinador académico":
                         case "coordinador academico":
-                            rolNormalizado = "coordinador académico";
-                            break;
-                        case "dir":
-                        case "director":
-                            rolNormalizado = "director";
-                            break;
+                            rolNormalizado = "coordinador académico"; break;
+
+                        case "doc":
+                        case "docente":
+                        case "profesor":
+                            rolNormalizado = "profesor"; break;
+
                         case "auxadmin":
                         case "auxiliar administrativo":
-                            rolNormalizado = "auxiliar administrativo";
-                            break;
+                            rolNormalizado = "auxiliar administrativo"; break;
+
                         case "auxcont":
                         case "auxiliar contable":
-                            rolNormalizado = "auxiliar contable";
-                            break;
+                            rolNormalizado = "auxiliar contable"; break;
+
                         case "est":
                         case "estudiante":
-                            rolNormalizado = "estudiante";
-                            break;
+                            rolNormalizado = "estudiante"; break;
+
                         default:
-                            rolNormalizado = rolOriginal;
-                            break;
+                            rolNormalizado = rolOriginal; break;
                     }
 
-                    session.setAttribute("rolActivo", rolNormalizado);
+                    session.setAttribute("rol", rolNormalizado);
                     session.setMaxInactiveInterval(1800); // 30 minutos
 
                     LOGGER.log(Level.INFO, "[LOGIN] Login exitoso - Usuario: {0} | Rol: {1}",
                             new Object[]{user, rolNormalizado});
-                    System.out.println("[LOGIN] Sesión creada exitosamente");
-                    System.out.println("[LOGIN] Rol normalizado guardado: " + rolNormalizado);
 
                     // Redirección al dashboard
                     response.sendRedirect("dashboard.jsp");
@@ -129,14 +119,11 @@ public class LoginServlet extends HttpServlet {
                 }
             } else {
                 LOGGER.log(Level.WARNING, "[LOGIN] Credenciales inválidas para usuario: {0}", user);
-                System.out.println("[LOGIN] Usuario no encontrado o contraseña incorrecta");
                 request.setAttribute("error", "Credenciales inválidas. Verifique usuario y contraseña.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "[LOGIN] Error en el proceso de autenticación", e);
-            System.err.println("[LOGIN ERROR] " + e.getMessage());
-            e.printStackTrace();
             request.setAttribute("error", "Error del sistema. Intente nuevamente.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }

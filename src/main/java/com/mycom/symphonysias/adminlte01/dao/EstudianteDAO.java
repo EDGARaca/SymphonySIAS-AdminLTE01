@@ -20,6 +20,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Statement;
+import java.sql.*;
+
 
 
 public class EstudianteDAO {
@@ -212,6 +214,42 @@ public class EstudianteDAO {
             e.printStackTrace();
         }
         return lista;
-    } 
+    }
+   
+    private Connection con;
+    private PreparedStatement ps;
+    private ResultSet rs;
+
+    // Método para listar estudiantes por curso
+    public List<Estudiante> listarPorCurso(int idCurso) {
+        List<Estudiante> lista = new ArrayList<>();
+        String sql = "SELECT * FROM estudiante WHERE idCurso = ?";
+
+        try {
+            con = Conexion.getConexion(); // tu clase de conexión
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idCurso);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Estudiante e = new Estudiante();
+                e.setId(rs.getInt("id"));
+                e.setNombre(rs.getString("nombre"));
+                e.setApellido(rs.getString("apellido"));
+                e.setCorreo(rs.getString("correo"));
+                // agrega más campos según tu tabla
+                lista.add(e);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return lista;
+    }
+
+   
+   
+   
+   
 
 }

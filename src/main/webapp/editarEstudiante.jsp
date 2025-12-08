@@ -10,7 +10,7 @@
 <%
     // Validación de sesión
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
+    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
 
     if (usuario == null || rol == null ||
         !(rol.equals("administrador") || rol.equals("coordinador académico") || rol.equals("director"))) {

@@ -145,7 +145,7 @@
                 <select name="rol" id="rol" class="form-control" required>
                     <option value="">Seleccione un rol</option>
                     <option value="est">Estudiante</option>
-                    <option value="doc">Docente</option>
+                    <option value="doc">Profesor</option>
                     <option value="coord">Coordinador</option>
                     <option value="dir">Director</option>
                     <option value="admin">Administrador</option>

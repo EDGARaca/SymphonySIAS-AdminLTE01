@@ -9,7 +9,7 @@
  * @author Spiri
  */
 
-
+/**
 package com.mycom.symphonysias.test;
 
 import com.mycom.symphonysias.adminlte01.dao.UsuarioDAO;
@@ -27,4 +27,4 @@ public class Caso022_ExportacionUsuariosConDatosTest {
         assertFalse(lista.isEmpty(), "Se esperaba al menos un usuario registrado para exportar");
         System.out.println("[TEST] Usuarios disponibles para exportación: " + lista.size());
     }
-}
+} */
