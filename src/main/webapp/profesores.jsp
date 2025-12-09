@@ -5,19 +5,19 @@
 --%>
 
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="componentes/roles.jspf" %>
 
 <%
-    // Validación de sesión
+    // Validación de sesión con trazabilidad
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String nombre = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
+    String nombre  = (session != null) ? (String) session.getAttribute("nombreActivo")  : null;
 
     if (usuario == null || nombre == null || rol == null){
         response.sendRedirect("login.jsp");
         return;
     }
 
-    // Trazabilidad en consola
     System.out.println("[PROFESORES] Sesión activa: " + usuario + " (" + rol + ")");
 %>
 
@@ -51,82 +51,69 @@
             <div class="container-fluid">
                 <div class="row">
 
-                <%-- Acceso a listado: disponible para todos los roles --%>
-                <div class="col-md-4 mb-3">
-                    <a href="listarProfesores.jsp" class="btn btn-outline-primary btn-block">
-                        <i class="fas fa-list"></i> Listar Profesores
-                    </a>
-                </div>
+                    <!-- Listar: todos los roles -->
+                    <c:if test="${canList}">
+                        <div class="col-md-4 mb-3">
+                            <a href="listarProfesores.jsp" class="btn btn-outline-primary btn-block">
+                                <i class="fas fa-list"></i> Listar Profesores
+                            </a>
+                        </div>
+                    </c:if>
 
-                <%-- Acceso a búsqueda con filtro: solo roles administrativos --%>
-                <% if ("administrador sias".equals(rol) 
-                    || "director".equals(rol) 
-                    || "coordinador académico".equals(rol)) { %>
-                    <div class="col-md-4 mb-3">
-                        <a href="buscarProfesores.jsp" class="btn btn-outline-info btn-block">
-                            <i class="fas fa-filter"></i> Buscar con Filtro
-                        </a>
-                    </div>
-                    <% } %>
+                    <!-- Buscar con filtro: admin/director/coordinador -->
+                    <c:if test="${canFilter}">
+                        <div class="col-md-4 mb-3">
+                            <a href="buscarProfesores.jsp" class="btn btn-outline-info btn-block">
+                                <i class="fas fa-filter"></i> Buscar con Filtro
+                            </a>
+                        </div>
+                    </c:if>
 
-                    <%-- Acceso a registro: solo roles administrativos --%>
-                    <% if ("administrador sias".equals(rol) 
-                        || "director".equals(rol) 
-                        || "coordinador académico".equals(rol)) { %>
+                    <!-- Registrar: admin/director/coordinador -->
+                    <c:if test="${canRegister}">
                         <div class="col-md-4 mb-3">
                             <a href="registroProfesor.jsp" class="btn btn-outline-success btn-block">
                                 <i class="fas fa-user-plus"></i> Registrar Profesor
                             </a>
                         </div>
-                    <% } %>
-                    
-                    <%-- Acceso a exportación PDF: disponible para todos los roles --%>
-                    <div class="col-md-4 mb-3">
-                        <a href="ExportarProfesoresServlet" class="btn btn-outline-danger btn-block">
-                            <i class="fas fa-file-pdf"></i> Exportar PDF
-                        </a>
-                    </div>
+                    </c:if>
 
-                    <%-- Acceso a cursos libres: solo rol profesor --%>
-                    <% if ("profesor".equalsIgnoreCase(rol)) { %>
-                        <!-- Solo ve sus cursos -->
+                    <!-- Exportar PDF: admin/director/coordinador -->
+                    <c:if test="${canExport}">
                         <div class="col-md-4 mb-3">
-                            <a href="CursoLibreServlet?accion=listarPorProfesor&id=<%= session.getAttribute("id_profesor") %>" 
+                            <a href="ExportarProfesoresServlet" class="btn btn-outline-danger btn-block">
+                                <i class="fas fa-file-pdf"></i> Exportar PDF
+                            </a>
+                        </div>
+                    </c:if>
+
+                    <!-- Accesos exclusivos de profesor -->
+                    <c:if test="${isProfesor}">
+                        <div class="col-md-4 mb-3">
+                            <a href="CursoLibreServlet?accion=listarPorProfesor&id=${sessionScope.id_profesor}"
                                class="btn btn-outline-warning btn-block">
                                 <i class="fas fa-book"></i> Mis Cursos Libres
                             </a>
                         </div>
-                    <% } %>
-                    
-                    <% if ("profesor".equalsIgnoreCase(rol)) { %>
-                        <div class="col-md-4 mb-3">
-                            <a href="EstudianteServlet?accion=listarPorProfesor&id=<%= session.getAttribute("id_profesor") %>" 
-                               class="btn btn-outline-info btn-block">
-                                <i class="fas fa-users"></i> Estudiantes Inscritos
-                            </a>
-                        </div>       
-                    <% } %>
 
-                    <%-- Acceso a estudiantes inscritos: solo rol profesor --%>
-                    <% if ("profesor".equalsIgnoreCase(rol)) { %>
                         <div class="col-md-4 mb-3">
-                            <a href="EstudianteServlet?accion=listarPorProfesor&id=<%= session.getAttribute("id_profesor") %>" 
+                            <a href="EstudianteServlet?accion=listarPorProfesor&id=${sessionScope.id_profesor}"
                                class="btn btn-outline-info btn-block">
                                 <i class="fas fa-users"></i> Estudiantes Inscritos
                             </a>
                         </div>
-                    <% } %>
+                    </c:if>
 
                 </div>
             </div>
         </section>
+
         <jsp:include page="componentes/footer.jsp" />
-            
     </div>
-  
+
 </div>
 
-<!-- Scripts -->
+<!-- Scripts confiables -->
 <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
 <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="assets/adminlte/js/adminlte.min.js"></script>

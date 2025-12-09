@@ -6,22 +6,21 @@
 
 <%@page contentType="text/html; charset=UTF-8" language="java"%>
 <%@page import="javax.servlet.http.HttpSession" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="componentes/roles.jspf" %>
 
 <%
-    // Validación de sesión
+    // Validación de sesión con trazabilidad (rol se define en roles.jspf, no redeclarar aquí)
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String nombre  = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
-    String rol     = (session != null) ? (String) session.getAttribute("rol") : null;
+    String nombre  = (session != null) ? (String) session.getAttribute("nombreActivo")  : null;
 
-    // Normalizar el rol: quitar espacios y pasarlo a minúsculas
-    String rolNormalizado = (rol != null) ? rol.trim().toLowerCase() : "";
-
-    if (usuario == null || nombre == null || rol == null) {
+    if (usuario == null || nombre == null || session.getAttribute("rol") == null) {
         response.sendRedirect("login.jsp");
         return;
     }
-%>
 
+    System.out.println("[DASHBOARD] Sesión activa: " + usuario + " (" + session.getAttribute("rol") + ")");
+%>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -65,177 +64,205 @@
                         </div>
                         <div class="card-body">
                             <div class="row text-center">
-                                <!-- ADMIN SIAS -->
+
+                                <!-- Administrador SIAS -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rolNormalizado)) { %>
+                                    <c:if test="${isAdmin}">
                                         <a href="AdministradorSIAS.jsp" class="btn btn-outline-primary btn-block">
                                             <i class="fas fa-tools"></i> AdministradorSIAS <br><small>(Administrador)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!isAdmin}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-tools"></i> AdministradorSIAS <br><small>(Administrador)</small>
+                                            <i class="fas fa-tools"></i> AdministradorSIAS <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>               
+                                    </c:if>
                                 </div>
+
                                 <!-- Gestión Estudiantes -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rolNormalizado) || "director".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado) || "auxiliar administrativo".equals(rolNormalizado) || "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado) || "estudiante".equals(rolNormalizado)) { %>
+                                    <c:if test="${isAdmin or isDirector or isCoordinador or isAuxAdmin or isProfesor or isEstudiante}">
                                         <a href="estudiantes.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-user-graduate"></i> Gestión Estudiantes <br><small>(Roles autorizados)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isAdmin or isDirector or isCoordinador or isAuxAdmin or isProfesor or isEstudiante)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-user-graduate"></i> Gestión Estudiantes <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
+                                    </c:if>
                                 </div>
+
                                 <!-- Gestión Profesores -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rolNormalizado) || "director".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado)|| "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado)) { %>
-                                        <a href="profesores.jsp" class="btn btn-outline-warning btn-block">
-                                            <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(Director, Coordinador)</small>
+                                    <c:if test="${isAdmin or isDirector or isCoordinador or isProfesor}">
+                                        <a href="ProfesorServlet?accion=vista" class="btn btn-outline-warning btn-block">
+                                            <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(Admin, Director, Coordinador, Profesor)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isAdmin or isDirector or isCoordinador or isProfesor)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>                                    
-                                </div>                                    
+                                    </c:if>
+                                </div>
+
                                 <!-- Gestión Cursos Libres -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("administrador sias".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado) || "estudiante".equals(rolNormalizado) || "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado) ) { %>
+                                    <c:if test="${isAdmin or isCoordinador or isProfesor or isEstudiante}">
                                         <a href="cursoLibre.jsp" class="btn btn-outline-success btn-block">
                                             <i class="fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(Administrador, Coordinador)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isAdmin or isCoordinador or isProfesor or isEstudiante)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
-                                </div> 
+                                    </c:if>
+                                </div>
+
                                 <!-- Auxiliar Contable -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("auxiliar contable".equals(rolNormalizado)|| "administrador sias".equals(rolNormalizado)) { %>
+                                    <c:if test="${isAuxCont or isAdmin}">
                                         <a href="gestionContable.jsp" class="btn btn-outline-dark btn-block">
                                             <i class="fas fa-calculator"></i> Auxiliar Contable <br><small>(Aux. Contable)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isAuxCont or isAdmin)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-calculator"></i> Auxiliar Contable <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
+                                    </c:if>
                                 </div>
+
                                 <!-- Auxiliar Administrativo -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("auxiliar administrativo".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado)) { %>
+                                    <c:if test="${isAuxAdmin or isAdmin}">
                                         <a href="gestionAdministrativo.jsp" class="btn btn-outline-secondary btn-block">
                                             <i class="fas fa-user-clock"></i> Auxiliar Administrativo <br><small>(Aux. Administrativo)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isAuxAdmin or isAdmin)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-user-clock"></i> Auxiliar Administrativo <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
+                                    </c:if>
                                 </div>
+
                                 <!-- Clases y Horarios -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("docente".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado)|| "coordinador académico".equals(rolNormalizado) || "director".equals(rolNormalizado) || "estudiante".equals(rolNormalizado) ) { %>
+                                    <c:if test="${isProfesor or isAdmin or isCoordinador or isDirector or isEstudiante}">
                                         <a href="gestionClases.jsp" class="btn btn-outline-info btn-block">
-                                            <i class="fas fa-calendar-alt"></i> Clases y Horarios <br><small>(Docente, Coordinador, Director)</small>
+                                            <i class="fas fa-calendar-alt"></i> Clases y Horarios <br><small>(Profesor, Coordinador, Director)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isProfesor or isAdmin or isCoordinador or isDirector or isEstudiante)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-calendar-alt"></i> Clases y Horarios <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
+                                    </c:if>
                                 </div>
-                                <!-- Horarios (Estudiante) -->
+
+                                <!-- Horarios -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("estudiante".equals(rolNormalizado)|| "administrador sias".equals(rolNormalizado)|| "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado)) { %>
+                                    <c:if test="${isEstudiante or isAdmin or isProfesor}">
                                         <a href="horarios.jsp" class="btn btn-outline-info btn-block">
                                             <i class="fas fa-clock"></i> Horarios <br><small>(Estudiante)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isEstudiante or isAdmin or isProfesor)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-clock"></i> Horarios <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
+                                    </c:if>
                                 </div>
+
                                 <!-- Coordinador Académico -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("coordinador académico".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado)) { %>
+                                    <c:if test="${isCoordinador or isAdmin}">
                                         <a href="gestionCoordinador.jsp" class="btn btn-outline-primary btn-block">
                                             <i class="fas fa-user-cog"></i> Coordinador Académico <br><small>(Coordinador)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isCoordinador or isAdmin)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-user-cog"></i> Coordinador Académico <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
+                                    </c:if>
                                 </div>
+
                                 <!-- Gestión Director -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("director".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado)) { %>
+                                    <c:if test="${isDirector or isAdmin}">
                                         <a href="gestionDirector.jsp" class="btn btn-outline-primary btn-block">
                                             <i class="fas fa-user-tie"></i> Gestión Director <br><small>(Director)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isDirector or isAdmin)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-user-tie"></i> Gestión Director <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
-                                </div>                                
+                                    </c:if>
+                                </div>
+
                                 <!-- Contenidos -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("docente".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado) || "estudiante".equals(rolNormalizado)) { %>
+                                    <c:if test="${isProfesor or isAdmin or isEstudiante}">
                                         <a href="contenidos.jsp" class="btn btn-outline-success btn-block">
-                                            <i class="fas fa-book-reader"></i> Contenidos <br><small>(Docente, Estudiante)</small>
+                                            <i class="fas fa-book-reader"></i> Contenidos <br><small>(Profesor, Estudiante)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isProfesor or isAdmin or isEstudiante)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-book-reader"></i> Contenidos <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
+                                    </c:if>
                                 </div>
+
                                 <!-- Gestión de Notas -->
                                 <div class="col-md-3 mb-3">
-                                    <% if ("docente".equals(rolNormalizado) || "administrador sias".equals(rolNormalizado) || "estudiante".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado) || "director".equals(rolNormalizado)) { %>
+                                    <c:if test="${isProfesor or isAdmin or isEstudiante or isCoordinador or isDirector}">
                                         <a href="gestionNotas.jsp" class="btn btn-outline-success btn-block">
-                                            <i class="fas fa-clipboard-list"></i> Gestión de Notas <br><small>(Docente, Estudiante, Coordinador, Director)</small>
+                                            <i class="fas fa-clipboard-list"></i> Gestión de Notas <br><small>(Profesor, Estudiante, Coordinador, Director)</small>
                                         </a>
-                                    <% } else { %>
+                                    </c:if>
+                                    <c:if test="${!(isProfesor or isAdmin or isEstudiante or isCoordinador or isDirector)}">
                                         <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
                                             <i class="fas fa-clipboard-list"></i> Gestión de Notas <br><small>(No disponible)</small>
                                         </a>
-                                    <% } %>
+                                    </c:if>
                                 </div>
+
                                 <!-- Notificaciones (todos los roles) -->
                                 <div class="col-md-3 mb-3">
                                     <a href="notificaciones.jsp" class="btn btn-outline-danger btn-block">
                                         <i class="fas fa-bell"></i> Notificaciones <br><small>(Todos los roles)</small>
                                     </a>
-                                </div>                                
-                                <!-- Productos Músicales -->
+                                </div>
+
+                                <!-- Productos Musicales -->
                                 <div class="col-md-3 mb-3">
                                     <a href="catalogoProductos.jsp" class="btn btn-outline-info btn-block">
                                         <i class="fas fa-shopping-cart fa-lg"></i> Productos Musicales <br><small>Compra instrumentos</small>
                                     </a>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <%-- Scripts --%>
-            <% if (!"administrador sias".equals(rolNormalizado)) { %>
+
+            <%-- Scripts y componentes opcionales --%>
+            <c:if test="${!isAdmin}">
                 <jsp:include page="componentes/chatbot.jspf" />
-            <% } %>
+            </c:if>
 
+            <jsp:include page="componentes/footer.jsp" />
+        </div>
+    </div>
 
-            <jsp:include page="componentes/footer.jsp" />                                   
-        </div>   
-    </div>    
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    </body>
+</body>
 </html>

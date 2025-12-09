@@ -68,7 +68,7 @@
                         || "coordinador académico".equals(rolNormalizado) 
                         || "profesor".equals(rolNormalizado)) { %>
                     <li class="nav-item">
-                        <a href="profesores.jsp" class="nav-link">
+                        <a href="ProfesorServlet?accion=vista" class="nav-link">
                             <i class="nav-icon fas fa-chalkboard-teacher"></i>
                             <p>Gestión Profesores</p>
                         </a>

@@ -4,17 +4,14 @@
     Author     : Spiri
 --%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%
-    // Recuperar rol desde sesión y normalizar
-    String rol = (String) session.getAttribute("rol");
-    String rolN = (rol != null) ? rol.trim().toLowerCase() : "";
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="componentes/roles.jspf" %> <!-- Inclusión del fragmento de roles -->
 
 <!-- Menú del módulo Profesores -->
 <div class="row">
 
-    <%-- Bloque Administrador SIAS --%>
-    <% if ("administrador sias".equals(rolN)) { %>
+    <!-- Opciones exclusivas para Administrador -->
+    <c:if test="${isAdmin}">
         <div class="col-md-4 mb-3">
             <a href="listarProfesores.jsp" class="btn btn-outline-primary btn-block" title="Ver listado global de profesores">
                 <i class="fas fa-list"></i> Listar Profesores
@@ -40,10 +37,10 @@
                 <i class="fas fa-book"></i> Cursos Libres por Profesor
             </a>
         </div>
-    <% } %>
+    </c:if>
 
-    <%-- Bloque Director / Coordinador académico --%>
-    <% if ("director".equals(rolN) || "coordinador académico".equals(rolN)) { %>
+    <!-- Opciones para Director y Coordinador -->
+    <c:if test="${isDirector || isCoord}">
         <div class="col-md-4 mb-3">
             <a href="CursoLibreServlet?accion=listarPorProfesor" class="btn btn-outline-warning btn-block" title="Ver cursos libres por profesor">
                 <i class="fas fa-book"></i> Cursos por Profesor
@@ -54,10 +51,10 @@
                 <i class="fas fa-users"></i> Estudiantes por Profesor
             </a>
         </div>
-    <% } %>
+    </c:if>
 
-    <%-- Bloque Profesor (solo acciones propias) --%>
-    <% if ("profesor".equals(rolN)) { %>
+    <!-- Opciones para Profesor (solo sus datos) -->
+    <c:if test="${isProfesor}">
         <div class="col-md-4 mb-3">
             <a href="CursoLibreServlet?accion=listarMisCursos" class="btn btn-outline-warning btn-block" title="Ver mis cursos libres">
                 <i class="fas fa-book"></i> Mis Cursos Libres
@@ -68,5 +65,5 @@
                 <i class="fas fa-users"></i> Estudiantes Inscritos
             </a>
         </div>
-    <% } %>
+    </c:if>
 </div>

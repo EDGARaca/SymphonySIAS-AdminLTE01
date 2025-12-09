@@ -2,6 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+/**
+ * Servlet de autenticación para SymphonySIAS-AdminLTE01
+ * Cumple con ISO/IEC 25010: mantenibilidad, confiabilidad y seguridad
+ * @author Spiri
+ */
 
 package com.mycom.symphonysias.adminlte01;
 
@@ -17,10 +22,6 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import com.mycom.symphonysias.adminlte01.util.HashUtil;
 
-/**
- * Servlet de autenticación para SymphonySIAS-AdminLTE01
- * @author Spiri
- */
 public class LoginServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(LoginServlet.class.getName());
 
@@ -62,46 +63,9 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("nombreActivo", usuario.getNombre());
                     session.setAttribute("usuario", usuarioNormalizado);
 
-                    // Normalización de rol en minúsculas
+                    // Normalización de rol a valores estándar
                     String rolOriginal = usuario.getRol().trim().toLowerCase();
-                    String rolNormalizado;
-
-                    switch (rolOriginal) {
-                        case "admin":
-                        case "administrador":
-                        case "administrador sias":
-                            rolNormalizado = "administrador sias"; break;
-
-                        case "dir":
-                        case "director":
-                            rolNormalizado = "director"; break;
-
-                        case "coord":
-                        case "coordinador":
-                        case "coordinador académico":
-                        case "coordinador academico":
-                            rolNormalizado = "coordinador académico"; break;
-
-                        case "doc":
-                        case "docente":
-                        case "profesor":
-                            rolNormalizado = "profesor"; break;
-
-                        case "auxadmin":
-                        case "auxiliar administrativo":
-                            rolNormalizado = "auxiliar administrativo"; break;
-
-                        case "auxcont":
-                        case "auxiliar contable":
-                            rolNormalizado = "auxiliar contable"; break;
-
-                        case "est":
-                        case "estudiante":
-                            rolNormalizado = "estudiante"; break;
-
-                        default:
-                            rolNormalizado = rolOriginal; break;
-                    }
+                    String rolNormalizado = normalizarRol(rolOriginal);
 
                     session.setAttribute("rol", rolNormalizado);
                     session.setMaxInactiveInterval(1800); // 30 minutos
@@ -133,5 +97,50 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.sendRedirect("login.jsp");
+    }
+
+    /**
+     * Normaliza el rol recibido desde BD a valores estándar
+     * para evitar problemas de coincidencia en los JSP.
+     */
+    private String normalizarRol(String rolOriginal) {
+        if (rolOriginal == null) return "";
+
+        switch (rolOriginal) {
+            case "admin":
+            case "administrador":
+            case "administrador sias":
+                return "admin";
+
+            case "dir":
+            case "director":
+                return "director";
+
+            case "coord":
+            case "coordinador":
+            case "coordinador académico":
+            case "coordinador academico":
+                return "coordinador";
+
+            case "doc":
+            case "docente":
+            case "profesor":
+                return "profesor";
+
+            case "auxadmin":
+            case "auxiliar administrativo":
+                return "auxadmin";
+
+            case "auxcont":
+            case "auxiliar contable":
+                return "auxcont";
+
+            case "est":
+            case "estudiante":
+                return "estudiante";
+
+            default:
+                return rolOriginal; // fallback
+        }
     }
 }

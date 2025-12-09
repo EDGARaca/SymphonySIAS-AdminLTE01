@@ -1,0 +1,16 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    // Recuperar rol desde sesión y normalizar a minúsculas
+    String rol = (String) session.getAttribute("rol");
+    String r = (rol != null) ? rol.trim().toLowerCase() : "";
+
+    // Definir banderas booleanas para cada rol institucional
+    // Se exponen como atributos en pageContext para uso directo en JSTL
+    pageContext.setAttribute("isAdmin",      "admin".equals(r) || "administrador".equals(r) || "administrador sias".equals(r));
+    pageContext.setAttribute("isDirector",   "director".equals(r));
+    pageContext.setAttribute("isCoord",      "coordinador".equals(r) || "coordinador académico".equals(r));
+    pageContext.setAttribute("isProfesor",   "profesor".equals(r));
+    pageContext.setAttribute("isEstudiante", "estudiante".equals(r));
+    pageContext.setAttribute("isAuxCont",    "auxcont".equals(r) || "auxiliar contable".equals(r));
+    pageContext.setAttribute("isAuxAdmin",   "auxadmin".equals(r) || "auxiliar administrativo".equals(r));
+%>
