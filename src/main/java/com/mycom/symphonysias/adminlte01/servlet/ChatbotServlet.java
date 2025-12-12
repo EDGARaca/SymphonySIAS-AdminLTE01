@@ -4,7 +4,7 @@
  */
 
 
-/**
+/*
  *
  * @author Spiri
  */
@@ -18,6 +18,7 @@ import javax.servlet.http.*;
 
 @WebServlet("/ChatbotServlet")
 public class ChatbotServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

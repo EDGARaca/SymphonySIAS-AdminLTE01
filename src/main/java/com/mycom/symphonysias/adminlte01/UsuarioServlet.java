@@ -17,15 +17,14 @@ import java.util.logging.Level;
 import javax.servlet.http.HttpSession;
 
 
-
-
-
-/**
+/*
  * Servlet de autenticación para SymphonySIAS-AdminLTE01
  * @author Spiri
  */
 
 public class UsuarioServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOGGER = Logger.getLogger(UsuarioServlet.class.getName());
 
 

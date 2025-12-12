@@ -2,27 +2,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-/**
- * Servlet de autenticación para SymphonySIAS-AdminLTE01
- * Cumple con ISO/IEC 25010: mantenibilidad, confiabilidad y seguridad
- * @author Spiri
+/*
+ * Servlet de autenticación de SymphonySIAS-AdminLTE.
+ * Cumple ISO/IEC 25010:
+ * - Confiabilidad: validación robusta, normalización de rol, manejo de errores y redirecciones con contextPath.
+ * - Mantenibilidad: comentarios claros, trazabilidad con java.util.logging, codificación UTF-8 consistente.
+ * - Trazabilidad: logs en cada decisión de flujo (login ok, inactivo, credenciales inválidas, errores).
+ *
+ * Integración:
+ * - NetBeans 27 + JDK 21 + Tomcat 9.
+ * - BD: jdbc:mysql://localhost:3306/login_symphony (DAO valida usuario + SHA-256).
+ * - La sesión almacena "usuario" y "rol" (usados por JSP/JSTL y fragmento de roles.jspf).
  */
 
 package com.mycom.symphonysias.adminlte01;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import com.mycom.symphonysias.adminlte01.modelo.Usuario;
 import com.mycom.symphonysias.adminlte01.dao.UsuarioDAO;
+import com.mycom.symphonysias.adminlte01.util.HashUtil;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import com.mycom.symphonysias.adminlte01.util.HashUtil;
 
 public class LoginServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(LoginServlet.class.getName());
 
     @Override
@@ -30,6 +35,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+        final String contextPath = request.getContextPath();
 
         String user = request.getParameter("usuario");
         String pass = request.getParameter("clave");
@@ -42,10 +48,9 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        // Trazabilidad
         LOGGER.log(Level.INFO, "[LOGIN] Intento de login para usuario: {0}", user);
 
-        // Convertir la clave ingresada a SHA-256
+        // Hash de la clave ingresada
         String hashedPass = HashUtil.sha256(pass);
 
         try {
@@ -56,35 +61,40 @@ public class LoginServlet extends HttpServlet {
                 LOGGER.log(Level.INFO, "[LOGIN] Usuario encontrado: {0}", usuario.getUsuario());
 
                 if (usuario.isActivo()) {
-                    HttpSession session = request.getSession();
+                    HttpSession session = request.getSession(true);
                     String usuarioNormalizado = usuario.getUsuario().trim().toLowerCase();
 
+                    // Atributos de sesión usados por JSP/JSTL y filtros
                     session.setAttribute("usuarioActivo", usuarioNormalizado);
                     session.setAttribute("nombreActivo", usuario.getNombre());
                     session.setAttribute("usuario", usuarioNormalizado);
 
-                    // Normalización de rol a valores estándar
-                    String rolOriginal = usuario.getRol().trim().toLowerCase();
+                    // Normalización de rol a valores estándar para JSP/roles.jspf
+                    String rolOriginal = usuario.getRol() != null ? usuario.getRol().trim().toLowerCase() : "";
                     String rolNormalizado = normalizarRol(rolOriginal);
-
                     session.setAttribute("rol", rolNormalizado);
-                    session.setMaxInactiveInterval(1800); // 30 minutos
+
+                    // Tiempo de sesión (30 minutos)
+                    session.setMaxInactiveInterval(1800);
 
                     LOGGER.log(Level.INFO, "[LOGIN] Login exitoso - Usuario: {0} | Rol: {1}",
-                            new Object[]{user, rolNormalizado});
+                            new Object[]{usuarioNormalizado, rolNormalizado});
 
-                    // Redirección al dashboard
-                    response.sendRedirect("dashboard.jsp");
+                    // Redirección segura usando contextPath
+                    response.sendRedirect(contextPath + "/dashboard.jsp");
+                    return;
 
                 } else {
                     LOGGER.log(Level.WARNING, "[LOGIN] Usuario inactivo: {0}", user);
                     request.setAttribute("error", "Usuario inactivo. Contacte al administrador.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
                 }
             } else {
                 LOGGER.log(Level.WARNING, "[LOGIN] Credenciales inválidas para usuario: {0}", user);
                 request.setAttribute("error", "Credenciales inválidas. Verifique usuario y contraseña.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
             }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "[LOGIN] Error en el proceso de autenticación", e);
@@ -96,12 +106,29 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("login.jsp");
+
+        request.setCharacterEncoding("UTF-8");
+        final String contextPath = request.getContextPath();
+
+        // Manejo de logout explícito por parámetro (?logout=true)
+        String logout = request.getParameter("logout");
+        if ("true".equalsIgnoreCase(logout)) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+                LOGGER.info("[LOGIN] Sesión invalidada por logout.");
+            }
+            response.sendRedirect(contextPath + "/login.jsp");
+            return;
+        }
+
+        // Por defecto, dirigir al login
+        response.sendRedirect(contextPath + "/login.jsp");
     }
 
     /**
-     * Normaliza el rol recibido desde BD a valores estándar
-     * para evitar problemas de coincidencia en los JSP.
+     * Normaliza el rol recibido desde BD a valores estándar para evitar problemas de coincidencia en los JSP.
+     * Retorna uno de: admin, director, coordinador, profesor, auxadmin, auxcont, estudiante.
      */
     private String normalizarRol(String rolOriginal) {
         if (rolOriginal == null) return "";

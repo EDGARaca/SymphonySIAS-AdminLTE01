@@ -3,55 +3,42 @@
     Created on : 30/10/2025, 10:12:12 p. m.
     Author     : Spiri
 --%>
-
-
-<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mycom.symphonysias.adminlte01.modelo.CursoLibre"%>
 <%@page import="com.mycom.symphonysias.adminlte01.dao.CursoLibreDAO"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="componentes/roles.jspf" %>
 
 <%
-    // Validación de sesión
+    // Validación de sesión (ISO/IEC 25010 - Confiabilidad)
     String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
+    String nombre = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
+   
 
-    if (usuario == null || rol == null) {
-        response.sendRedirect("login.jsp?logout=true");
+    if (usuario == null || nombre == null || rol == null){
+        response.sendRedirect("login.jsp");
         return;
     }
 
-    // Acceso permitido para roles institucionales y estudiante en modo visualización
-    boolean accesoPermitido = rol.equalsIgnoreCase("ADMINISTRADOR SIAS") ||
-                              rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") ||
-                              rol.equalsIgnoreCase("DIRECTOR") ||
-                              rol.equalsIgnoreCase("ESTUDIANTE");
+    // Trazabilidad en consola
+    System.out.println("[LISTAR CURSOS LIBRES] Sesión activa: " + usuario + " (" + rol + ")");
 
-    if (!accesoPermitido) {
-        response.sendRedirect("login.jsp?logout=true");
-        return;
-    }
-
+    // Recuperar lista de cursos desde DAO
     CursoLibreDAO dao = new CursoLibreDAO();
-    List<CursoLibre> lista = dao.listarActivos();
-    System.out.println("[JSP] Total cursos libres cargados: " + lista.size());
+    List<CursoLibre> cursos = dao.listar();
 %>
-
-
-<%
-    System.out.println("🧪 Usuario activo: " + usuario);
-    System.out.println("🧪 Rol activo: " + rol);
-%>
-
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Listado de Cursos Libres</title>
+    <title>Listado Cursos Libres</title>
     <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
@@ -59,174 +46,103 @@
     <jsp:include page="componentes/sidebar.jsp" />
 
     <div class="content-wrapper">
-
         <section class="content-header">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <% if ("administrador".equals(rol)) { %>
-                        <div class="d-flex justify-content-end mb-3">
-                            <a href="registroCursoLibre.jsp" class="btn btn-success">
-                                <i class="fas fa-plus-circle"></i> Registrar nuevo curso
-                            </a>
-                        </div>
-                    <% } %>
-                    <h4 class="mb-3 text-success">
-                        <i class="fas fa-book-open"></i> Cursos Libres Activos
-                    </h4>
-                </div>
-            </div>
-
             <div class="container-fluid">
-                <% String registrado = request.getParameter("registrado");
-                   String editado = request.getParameter("editado");
-                   String eliminado = request.getParameter("eliminado");
-                   String error = request.getParameter("error");
-                %>
-
-                <% if (registrado != null) { %>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>✔ Curso registrado correctamente.</strong>
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    </div>
-                <% } else if (editado != null) { %>
-                    <div class="alert alert-info alert-dismissible fade show" role="alert">
-                        <strong>✎ Curso editado correctamente.</strong>
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    </div>
-                <% } else if (eliminado != null) { %>
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong>? Curso eliminado correctamente.</strong>
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    </div>
-                <% } else if (error != null) { %>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>⚠ Ocurrió un error al procesar la solicitud.</strong>
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    </div>
-                <% } %>
-                
-                <% String eliminadoFisico = request.getParameter("eliminadoFisico"); %>
-
-                <% if (eliminadoFisico != null) { %>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>🗑 Curso eliminado permanentemente.</strong>
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    </div>
-                <% } %>
+                <h4 class="mb-3 text-success">
+                    <i class="fas fa-list-alt"></i> Listado de Cursos Libres
+                </h4>
+                <p class="text-muted">Consulta todos los cursos libres registrados en el sistema.</p>
             </div>
         </section>
 
         <section class="content">
             <div class="container-fluid">
-                <div class="card">
-                    <div class="card-header bg-success text-white">
+
+                <!-- Mensajes de estado -->
+                <c:if test="${param.ok eq 'registrado'}">
+                    <div class="alert alert-success text-center">
+                        <i class="fas fa-check-circle"></i> Curso registrado correctamente.
+                    </div>
+                </c:if>
+                <c:if test="${param.error eq 'permiso'}">
+                    <div class="alert alert-danger text-center">
+                        <i class="fas fa-exclamation-triangle"></i> No tienes permisos para acceder a esta funcionalidad.
+                    </div>
+                </c:if>
+                <c:if test="${param.error eq 'dao'}">
+                    <div class="alert alert-warning text-center">
+                        <i class="fas fa-exclamation-circle"></i> Error al acceder a la base de datos.
+                    </div>
+                </c:if>
+                <c:if test="${param.error eq 'excepcion'}">
+                    <div class="alert alert-danger text-center">
+                        <i class="fas fa-bug"></i> Ocurrió un error inesperado en el sistema.
+                    </div>
+                </c:if>
+
+                <!-- Tabla de cursos -->
+                <div class="card mt-3">
+                    <div class="card-header bg-info text-white">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-list-alt"></i> Cursos registrados
+                            <i class="fas fa-table"></i> Cursos registrados
                         </h5>
-                        <div class="card-tools">
-                            <a href="ExportarCursosLibresServlet" class="btn btn-sm btn-outline-light">
-                                <i class="fas fa-file-pdf"></i> Exportar PDF
-                            </a>
-                        </div>
                     </div>
                     <div class="card-body table-responsive">
-                        <% if (request.getParameter("sinDatos") != null) { %>
+                        <% if (cursos.isEmpty()) { %>
                             <div class="alert alert-warning text-center">
-                                <i class="fas fa-exclamation-triangle"></i> No hay registros disponibles para exportar.
+                                <i class="fas fa-exclamation-circle"></i> No hay cursos registrados actualmente.
                             </div>
-                        <% } %>
-
-                        <% if (request.getParameter("exportado") != null) { %>
-                            <div class="alert alert-success text-center">
-                                <i class="fas fa-file-export"></i> Exportación completada correctamente.
-                            </div>
-                        <% } %>
-
-                        <table class="table table-bordered table-hover table-striped text-center">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Horario</th>
-                                    <th>Profesor</th>
-                                    <th>Valor</th>
-                                    <th>Frecuencia</th>
-                                    <th>Estado</th>
-                                    <th>Usuario que registró</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% for (CursoLibre c : lista) { %>
+                        <% } else { %>
+                            <table class="table table-bordered table-hover table-striped text-center">
+                                <thead class="thead-light">
                                     <tr>
-                                        <td><%= c.getId() %></td>
-                                        <td><%= c.getNombre() %></td>
-                                        <td><%= c.getHorario() != null && !c.getHorario().trim().isEmpty() ? c.getHorario() : "No definido" %></td>
-                                        <td><%= (c.getNombreProfesor() != null && !c.getNombreProfesor().trim().isEmpty()) ? c.getNombreProfesor() : "Sin asignar" %></td>
-                                        <td>$<%= c.getValor() %></td>
-                                        <td><%= c.getFrecuencia() %></td>
-                                        <td><%= c.getEstado() %></td>
-                                        <td><%= c.getUsuario_registro() %></td>
-                                        <td>
-                                        <% if ("ESTUDIANTE".equalsIgnoreCase(rol) || "ADMINISTRADOR SIAS".equalsIgnoreCase(rol)) { %>
-                                            <form action="InscripcionCursoLibreServlet" method="post" style="display:inline;">
-                                                <input type="hidden" name="id_curso" value="<%= c.getId() %>">
-                                                <input type="hidden" name="id_estudiante" value="<%= session.getAttribute("idUsuarioActivo") %>">
-                                                <button type="submit" class="btn btn-success btn-sm">Inscribirme</button>
-                                            </form>
-                                        <% } %>  
-                                        
-                                        <%
-                                            System.out.println("[JSP] Curso: " + c.getNombre() + " | Profesor: " + c.getNombreProfesor());
-                                            System.out.println("[JSP] Rol activo: " + rol);
-                                        %>
-                                            <a href="editarCursoLibre.jsp?id=<%= c.getId() %>&usuario=<%= usuario %>" class="btn btn-sm btn-warning" title="Editar curso">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-
-                                            <% if ("activo".equals(c.getEstado())) { %>
-                                                <a href="RegistroCursoLibreServlet?accion=desactivar&id=<%= c.getId() %>&usuario=<%= usuario %>" class="btn btn-sm btn-danger" title="Desactivar curso" onclick="return confirm('¿Desactivar este curso?');">
-                                                    <i class="fas fa-ban"></i>
-                                                </a>
-                                            <% } else { %>
-                                                <a href="RegistroCursoLibreServlet?accion=activar&id=<%= c.getId() %>&usuario=<%= usuario %>" class="btn btn-sm btn-success" title="Activar curso" onclick="return confirm('¿Activar este curso?');">
-                                                    <i class="fas fa-check-circle"></i>
-                                                </a>
-                                            <% } %>
-                                            <a href="RegistroCursoLibreServlet?accion=eliminarFisico&id=<%= c.getId() %>&usuario=<%= usuario %>" 
-                                                class="btn btn-sm btn-outline-danger" 
-                                                title="Eliminar definitivamente" 
-                                                onclick="return confirm('⚠ Esta acción eliminará el curso de forma permanente. ¿Continuar?');">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </td>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Valor</th>
+                                        <th>Frecuencia</th>
+                                        <th>Estado</th>
+                                        <th>Profesor</th>
+                                        <th>Usuario Registro</th>
+                                        <c:if test="${isAdmin or isDirector or isCoord}">
+                                            <th>Acciones</th>
+                                        </c:if>
                                     </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <% for (CursoLibre c : cursos) { %>
+                                        <tr>
+                                            <td><%= c.getId() %></td>
+                                            <td><%= c.getNombre() %></td>
+                                            <td>$<%= c.getValor() %></td>
+                                            <td><%= c.getFrecuencia() %></td>
+                                            <td><%= c.getEstado() %></td>
+                                            <td><%= c.getIdProfesor() %></td>
+                                            <td><%= c.getUsuario_registro() %></td>
+                                            <c:if test="${isAdmin or isDirector or isCoord}">
+                                                <td>
+                                                    <a href="EditarCursoLibreServlet?id=<%= c.getId() %>" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </a>
+                                                    <a href="EliminarCursoLibreServlet?id=<%= c.getId() %>" class="btn btn-sm btn-outline-danger" 
+                                                       onclick="return confirm('¿Seguro que deseas eliminar este curso?');">
+                                                        <i class="fas fa-trash"></i> Eliminar
+                                                    </a>
+                                                </td>
+                                            </c:if>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        <% } %>
                     </div>
                 </div>
+
             </div>
         </section>
-        <jsp:include page="componentes/footer.jsp" />                    
-    </div>
 
-    
+        <jsp:include page="componentes/footer.jsp" />
+    </div>
 </div>
 
-<script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
-<script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/adminlte/js/adminlte.min.js"></script>
-
-<script>
-    // Ocultar alertas después de 8 segundos
-    setTimeout(function() {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(function(alert) {
-            alert.classList.remove('show');
-            alert.classList.add('fade');
-        });
-    }, 8000);
-</script>
 </body>
 </html>

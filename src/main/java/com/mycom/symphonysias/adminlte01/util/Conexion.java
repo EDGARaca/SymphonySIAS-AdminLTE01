@@ -5,23 +5,43 @@
 
 
 
-/**
+/*
  *
  * @author Spiri
  */
-
 
 package com.mycom.symphonysias.adminlte01.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.io.InputStream;
 
 public class Conexion {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/login_symphony?useUnicode=true&characterEncoding=UTF-8&serverTimezone=America/Bogota";
-    private static final String USER = "root";
-    private static final String PASS = "";
+    private static String URL;
+    private static String USER;
+    private static String PASS;
+
+    // Bloque estático: se ejecuta al cargar la clase
+    static {
+        try (InputStream input = Conexion.class.getClassLoader().getResourceAsStream("db.properties")) {
+            Properties props = new Properties();
+            if (input == null) {
+                throw new RuntimeException("[ERROR CONEXIÓN] No se encontró el archivo db.properties en resources.");
+            }
+            props.load(input);
+
+            URL = props.getProperty("db.url");
+            USER = props.getProperty("db.user");
+            PASS = props.getProperty("db.pass");
+
+            System.out.println("[CONEXIÓN] Parámetros cargados desde db.properties.");
+        } catch (Exception e) {
+            System.err.println("[ERROR CONEXIÓN] No se pudieron cargar las propiedades: " + e.getMessage());
+        }
+    }
 
     public static Connection getConexion() throws SQLException {
         try {
@@ -30,14 +50,10 @@ public class Conexion {
             System.out.println("[CONEXIÓN] Conexión establecida correctamente.");
             return conn;
         } catch (ClassNotFoundException e) {
-            System.err.println("[ERROR CONEXIÓN] Driver JDBC no encontrado.");
             throw new SQLException("Driver JDBC no encontrado", e);
-        } catch (SQLException e) {
-            System.err.println("[ERROR CONEXIÓN] Fallo al conectar con la base de datos: " + e.getMessage());
-            throw e;
         }
     }
-    
+
     public static void cerrarHilosMySQL() {
         try {
             com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkedShutdown();
@@ -46,7 +62,4 @@ public class Conexion {
             System.err.println("[ERROR CONEXIÓN] No se pudo cerrar el hilo de limpieza MySQL: " + e.getMessage());
         }
     }
-
-
-
 }

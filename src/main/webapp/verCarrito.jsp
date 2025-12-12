@@ -4,7 +4,7 @@
     Author     : Spiri
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.*, com.mycom.symphonysias.adminlte01.modelo.ItemCarrito, com.mycom.symphonysias.adminlte01.modelo.ProductoMusical" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="componentes/header.jsp" />
 <jsp:include page="componentes/sidebar.jsp" />
 
@@ -17,95 +17,96 @@
 
     <section class="content">
         <div class="container-fluid">
-            <%
-                String mensaje = (String) session.getAttribute("mensajeCompra");
-                if (mensaje != null) {
-            %>
-            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                <h4 class="alert-heading"><i class="fas fa-check-circle"></i> ¡Gracias por tu compra!</h4>
-                <p><%= mensaje %></p>
-                <hr>
-                <p class="mb-0">Puedes revisar tus pedidos o seguir explorando nuevos productos.</p>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-            </div>
-            <%
-                    session.removeAttribute("mensajeCompra");
-                }
-            %>
 
-            <%
-                List<ItemCarrito> carrito = (List<ItemCarrito>) session.getAttribute("carrito");
-                double total = 0;
-                if (carrito != null && !carrito.isEmpty()) {
-            %>
-            <table class="table table-bordered table-hover mt-3">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Producto</th>
-                        <th>Descripción</th>
-                        <th>Precio Unitario</th>
-                        <th>Precio con descuento</th>
-                        <th>Descuento</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%
-                        for (ItemCarrito item : carrito) {
-                            ProductoMusical prod = item.getProducto();
-                            double precioOriginal = prod.getPrecio();
-                            double precioConDescuento = precioOriginal;
-                            if (prod.isOfertaActiva()) {
-                                precioConDescuento -= (precioOriginal * prod.getDescuento() / 100);
-                            }
-                            double subtotal = precioConDescuento * item.getCantidad();
-                            total += subtotal;
-                    %>
-                    <tr>
-                        <td><%= prod.getNombre() %></td>
-                        <td><%= prod.getDescripcion() %></td>
-                        <td>$<%= String.format("%.2f", precioOriginal) %></td>
-                        <td>$<%= String.format("%.2f", precioConDescuento) %></td>
-                        <td><%= prod.getDescuento() %> %</td>
-                        <td><%= item.getCantidad() %></td>
-                        <td>$<%= String.format("%.2f", subtotal) %></td>
-                    </tr>
-                    <%
-                        }
-                    %>
-                </tbody>
-                <tfoot>
-                    <tr class="table-secondary">
-                        <td colspan="6" class="text-end fw-bold">Total:</td>
-                        <td class="fw-bold text-success">$<%= String.format("%.2f", total) %></td>
-                    </tr>
-                </tfoot>
-            </table>
+            <!-- Mensaje de compra -->
+            <c:if test="${not empty sessionScope.msgCarrito}">
+                <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                    <p>${sessionScope.msgCarrito}</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+                <c:remove var="msgCarrito" scope="session"/>
+            </c:if>
 
-            <div class="d-flex justify-content-center gap-3 mt-4">
-                <a href="catalogoProductos.jsp" class="btn btn-outline-primary">
-                    <i class="fas fa-shopping-bag"></i> Seguir comprando
-                </a>
-                <a href="misPedidosServlet" class="btn btn-outline-secondary">
-                    <i class="fas fa-box"></i> Ver mis pedidos
-                </a>
-                <form action="<%= request.getContextPath() %>/FinalizarCompraServlet" method="post">
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-credit-card"></i> Finalizar compra
-                    </button>
-                </form>
-            </div>
+            <c:choose>
+                <c:when test="${empty sessionScope.carrito}">
+                    <div class="alert alert-warning">
+                        Tu carrito está vacío. <a href="catalogoProductos.jsp">Ir al catálogo</a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <table class="table table-bordered table-hover mt-3">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Producto</th>
+                                <th>Descripción</th>
+                                <th>Precio Unitario</th>
+                                <th>Precio con descuento</th>
+                                <th>Descuento</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:set var="total" value="0"/>
+                            <c:forEach var="item" items="${sessionScope.carrito}">
+                                <tr>
+                                    <td>${item.producto.nombre}</td>
+                                    <td>${item.producto.descripcion}</td>
+                                    <td>$ ${item.producto.precio}</td>
+                                    <td>$ ${item.subtotalConDescuento}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${item.producto.ofertaActiva}">
+                                                ${item.producto.descuento} %
+                                            </c:when>
+                                            <c:otherwise>
+                                                Sin descuento
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <form method="post" action="${pageContext.request.contextPath}/ActualizarCantidadServlet">
+                                            <input type="hidden" name="id" value="${item.producto.idProducto}"/>
+                                            <input type="number" name="cantidad" value="${item.cantidad}" min="1" class="form-control" style="width:80px;display:inline-block"/>
+                                            <button type="submit" class="btn btn-primary btn-sm">Actualizar</button>
+                                        </form>
+                                    </td>
+                                    <td>$ ${item.subtotalConDescuento}</td>
+                                    <td>
+                                        <form method="post" action="${pageContext.request.contextPath}/ActualizarCantidadServlet">
+                                            <input type="hidden" name="id" value="${item.producto.idProducto}"/>
+                                            <input type="hidden" name="cantidad" value="0"/>
+                                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <c:set var="total" value="${total + item.subtotalConDescuento}"/>
+                            </c:forEach>
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-secondary">
+                                <td colspan="7" class="text-end fw-bold">Total:</td>
+                                <td class="fw-bold text-success">$ ${total}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
 
-            <%
-                } else {
-            %>
-            <div class="alert alert-warning">
-                Tu carrito está vacío. <a href="catalogoProductos.jsp">Ir al catálogo</a>
-            </div>
-            <%
-                }
-            %>
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <a href="catalogoProductos.jsp" class="btn btn-outline-primary">
+                            <i class="fas fa-shopping-bag"></i> Seguir comprando
+                        </a>
+                        <a href="misPedidosServlet" class="btn btn-outline-secondary">
+                            <i class="fas fa-box"></i> Ver mis pedidos
+                        </a>
+                        <form action="${pageContext.request.contextPath}/FinalizarCompraServlet" method="post">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-credit-card"></i> Finalizar compra
+                            </button>
+                        </form>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
     </section>
 </div>

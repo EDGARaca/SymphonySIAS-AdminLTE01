@@ -8,7 +8,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="com.mycom.symphonysias.adminlte01.modelo.Profesor" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="componentes/roles.jspf" %> <!-- Inclusión del fragmento de roles -->
+<%@ include file="/componentes/roles.jspf" %> <!-- Inclusión del fragmento de roles -->
 
 <%
     // Recuperar profesor actual desde request

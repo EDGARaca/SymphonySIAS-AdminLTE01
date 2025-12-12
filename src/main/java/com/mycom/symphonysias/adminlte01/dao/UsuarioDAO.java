@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
-/**
+/*
  * DAO para validación de usuarios en SymphonySIAS-AdminLTE01
  * Cumple trazabilidad y consistencia con ISO/IEC 25010
  * @author Spiri
@@ -34,7 +34,7 @@ public class UsuarioDAO {
         }
     }
 
-    /**
+    /*
      * Valida credenciales: usuario en texto plano + hash SHA-256
      * IMPORTANTE: la columna en BD es 'clave' (no 'contraseña')
      */

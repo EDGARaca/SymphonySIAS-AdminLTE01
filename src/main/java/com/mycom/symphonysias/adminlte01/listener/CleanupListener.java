@@ -4,7 +4,7 @@
  */
 
 
-/**
+/*
  *
  * @author Spiri
  */
@@ -16,6 +16,7 @@ import javax.servlet.ServletContextListener;
 import com.mycom.symphonysias.adminlte01.util.Conexion;
 
 public class CleanupListener implements ServletContextListener {
+    
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

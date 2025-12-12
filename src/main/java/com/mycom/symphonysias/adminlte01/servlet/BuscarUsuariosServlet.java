@@ -4,7 +4,7 @@
  */
 
 
-/**
+/*
  *
  * @author Spiri
  */
@@ -12,6 +12,4 @@
 
 package com.mycom.symphonysias.adminlte01.servlet;
 
-public class BuscarUsuariosServlet {
-    
-}
+

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
+/*
  *
  * @author Spiri
  */
@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 
 @WebServlet("/CrearUsuarioServlet")
 public class CrearUsuarioServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

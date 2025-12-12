@@ -4,7 +4,7 @@
  */
 
 
-/**
+/*
  *
  * @author Spiri
  */
@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ExportarUsuariosServlet extends HttpServlet {
+      private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

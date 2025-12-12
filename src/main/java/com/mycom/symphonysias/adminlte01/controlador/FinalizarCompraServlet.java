@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-/**
+/*
  *
  * @author Spiri
  */
@@ -24,6 +24,8 @@ import com.mycom.symphonysias.adminlte01.modelo.ItemCarrito;
 import com.mycom.symphonysias.adminlte01.util.Conexion;
 
 public class FinalizarCompraServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

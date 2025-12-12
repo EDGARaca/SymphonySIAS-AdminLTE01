@@ -3,15 +3,23 @@
     Created on : 30/10/2025, 5:31:21 p. m.
     Author     : Spiri
 --%>
-
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@page import="java.util.List"%>
-<%@page import="com.mycom.symphonysias.adminlte01.modelo.Profesor"%>
-<%@page import="com.mycom.symphonysias.adminlte01.dao.ProfesorDAO"%>
-
+<%@ page import="java.util.List" %>
+<%@ page import="com.mycom.symphonysias.adminlte01.modelo.Profesor" %>
+<%@ page import="com.mycom.symphonysias.adminlte01.dao.ProfesorDAO" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="componentes/roles.jspf" %>
 <%
+    // ISO/IEC 25010 - Trazabilidad y confiabilidad:
+    // Carga de datos necesaria para el formulario (lista de profesores).
+    // Se mantiene tu lógica original, pero exponemos la lista a JSTL para evitar scriptlets en la vista.
     ProfesorDAO profesorDAO = new ProfesorDAO();
     List<Profesor> profesores = profesorDAO.listar();
+    pageContext.setAttribute("profesores", profesores);
+
+    // Exponer el usuario activo (ya lo usas en el input) para trazabilidad.
+    Object usuarioActivo = session.getAttribute("usuarioActivo");
+    pageContext.setAttribute("usuarioActivo", usuarioActivo != null ? usuarioActivo : "");
 %>
 
 <!DOCTYPE html>
@@ -22,6 +30,7 @@
     <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
     <style>
+        /* ISO/IEC 25010 - Usabilidad y mantenibilidad: estilos claros y consistentes */
         body {
             background-color: #f4f6f9;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -29,12 +38,7 @@
             padding: 40px 0;
             overflow-x: hidden;
         }
-
-        .container-fluid {
-            padding-left: 40px;
-            padding-right: 40px;
-        }
-
+        .container-fluid { padding-left: 40px; padding-right: 40px; }
         .form-box {
             background: rgba(255, 255, 255, 0.95);
             padding: 30px 60px;
@@ -43,102 +47,102 @@
             max-width: 800px;
             margin: auto;
         }
-
-        h5 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #007bff;
-            margin-top: 20px;
-            margin-bottom: 25px;
-        }
-
-        .form-label {
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: #343a40;
-        }
-
-        .form-control {
-            font-size: 1rem;
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid #ced4da;
-        }
-
-        .mb-3 {
-            margin-bottom: 1rem !important;
-        }
-
-        .btn-block {
-            font-size: 1rem;
-            padding: 12px;
-            border-radius: 8px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-        }
-
-        .btn-block:hover {
-            background-color: #0056b3;
-        }
+        h5 { font-size: 1.4rem; font-weight: 600; color: #007bff; margin-top: 20px; margin-bottom: 25px; }
+        .form-label { font-weight: 500; margin-bottom: 6px; color: #343a40; }
+        .form-control { font-size: 1rem; padding: 10px 14px; border-radius: 8px; border: 1px solid #ced4da; }
+        .mb-3 { margin-bottom: 1rem !important; }
+        .btn-block { font-size: 1rem; padding: 12px; border-radius: 8px; background-color: #007bff; color: white; border: none; }
+        .btn-block:hover { background-color: #0056b3; }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
+<div class="container-fluid">
+
+    <!-- Control de acceso por rol (ISO/IEC 25010 - Confiabilidad):
+         Solo ADMIN/DIRECTOR/COORDINADOR pueden registrar cursos -->
+    <c:if test="${not (isAdmin or isDirector or isCoord)}">
         <div class="form-box">
             <div class="text-center">
                 <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" class="img-fluid" style="height:80px;">
-                <h5><i class="fas fa-music"></i> Registro de Curso Libre</h5>
+                <h5><i class="fas fa-exclamation-triangle text-warning"></i> Acceso restringido</h5>
+            </div>
+            <div class="alert alert-danger">
+                No tienes permisos para registrar cursos. Si necesitas acceso, contacta al Administrador SIAS.
+            </div>
+            <div class="text-center mt-3">
+                <a href="listarCursoLibre.jsp" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al listado
+                </a>
+            </div>
+        </div>
+        <!-- Evitar renderizar el formulario si no tiene permisos -->
+        <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
+        <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    </div>
+</body>
+</html>
+        <c:redirect url="listarCursoLibre.jsp"/>
+        <% return; %>
+    </c:if>
+
+    <!-- Formulario solo visible para roles con permiso -->
+    <div class="form-box">
+        <div class="text-center">
+            <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" class="img-fluid" style="height:80px;">
+            <h5><i class="fas fa-music"></i> Registro de Curso Libre</h5>
+        </div>
+
+        <!-- ISO/IEC 25010 - Confiabilidad: método POST, validaciones required -->
+        <form action="RegistroCursoLibreServlet" method="post" accept-charset="UTF-8">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="nombre">Nombre del curso</label>
+                    <input type="text" name="nombre" id="nombre" class="form-control" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="valor">Valor mensual</label>
+                    <input type="number" name="valor" id="valor" class="form-control" min="0" step="1" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="frecuencia">Frecuencia</label>
+                    <select name="frecuencia" id="frecuencia" class="form-control" required>
+                        <option value="semanal">Semanal</option>
+                        <option value="mensual">Mensual</option>
+                    </select>
+                </div>
+
+                <!-- ISO/IEC 25010 - Trazabilidad: se registra el usuario que crea el curso -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="usuario_registro">Usuario que registra</label>
+                    <input type="text" name="usuario_registro" id="usuario_registro"
+                           class="form-control" value="${usuarioActivo}" readonly>
+                </div>
+
+                <!-- Profesor asignado: usa JSTL para iterar la lista cargada -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="id_profesor">Profesor asignado</label>
+                    <select name="id_profesor" id="id_profesor" class="form-control" required>
+                        <option value="">Seleccione un profesor</option>
+                        <c:forEach var="p" items="${profesores}">
+                            <option value="${p.id}">${p.nombre}</option>
+                        </c:forEach>
+                    </select>
+                </div>
             </div>
 
-            <form action="RegistroCursoLibreServlet" method="post" accept-charset="UTF-8">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="nombre">Nombre del curso</label>
-                        <input type="text" name="nombre" id="nombre" class="form-control" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="valor">Valor mensual</label>
-                        <input type="number" name="valor" id="valor" class="form-control" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="frecuencia">Frecuencia</label>
-                        <select name="frecuencia" id="frecuencia" class="form-control" required>
-                            <option value="semanal">Semanal</option>
-                            <option value="mensual">Mensual</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="usuario_registro">Usuario que registra</label>
-                        <input type="text" name="usuario_registro" id="usuario_registro" class="form-control" value="<%= session.getAttribute("usuarioActivo") %>" readonly>
-                    </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label" for="id_profesor">Profesor asignado</label>
-                        <select name="id_profesor" id="id_profesor" class="form-control" required>
-                            <option value="">Seleccione un profesor</option>
-                            <%
-                                for (com.mycom.symphonysias.adminlte01.modelo.Profesor p : profesores) {
-                            %>
-                                <option value="<%= p.getId() %>"><%= p.getNombre() %></option>
-                            <%
-                                }
-                            %>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-block">Guardar curso</button>
-                    <a href="listarCursoLibre.jsp" class="btn btn-secondary mt-3">
-                        <i class="fas fa-arrow-left"></i> Cancelar y volver al listado
-                    </a>
-                </div>
-            </form>
-        </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-block">Guardar curso</button>
+                <a href="listarCursoLibre.jsp" class="btn btn-secondary mt-3">
+                    <i class="fas fa-arrow-left"></i> Cancelar y volver al listado
+                </a>
+            </div>
+        </form>
     </div>
+</div>
 
-    <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
-    <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
+<script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

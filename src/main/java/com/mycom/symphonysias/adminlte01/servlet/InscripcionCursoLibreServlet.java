@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-/**
+/*
  *
  * @author Spiri
  */
@@ -21,6 +21,7 @@ import com.mycom.symphonysias.adminlte01.dao.InscripcionCursoLibreDAO;
 import com.mycom.symphonysias.adminlte01.modelo.InscripcionCursoLibre;
 
 public class InscripcionCursoLibreServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(InscripcionCursoLibreServlet.class.getName());
 
     @Override

@@ -3,8 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
- *
+/*
  * @author Spiri
  */
 
@@ -19,6 +18,7 @@ import javax.servlet.http.*;
 
 
 public class EditarProfesorServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     
     public EditarProfesorServlet() {
         System.out.println("[SERVLET] EditarProfesorServlet cargado correctamente.");

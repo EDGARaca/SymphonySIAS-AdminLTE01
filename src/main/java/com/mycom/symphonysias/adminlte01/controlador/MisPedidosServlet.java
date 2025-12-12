@@ -4,7 +4,7 @@
  */
 
 
-/**
+/*
  *
  * @author Spiri
  */
@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class MisPedidosServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -1,16 +1,31 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%
-    // Recuperar rol desde sesión y normalizar a minúsculas
-    String rol = (String) session.getAttribute("rol");
-    String r = (rol != null) ? rol.trim().toLowerCase() : "";
+<!--
+  Fragmento roles.jspf
+  Cumple ISO/IEC 25010:
+  - Confiabilidad: control de sesión y roles consistente.
+  - Mantenibilidad: uso de JSTL/EL en lugar de scriptlets.
+  - Trazabilidad: comentarios claros y banderas de acceso definidas.
+-->
 
-    // Definir banderas booleanas para cada rol institucional
-    // Se exponen como atributos en pageContext para uso directo en JSTL
-    pageContext.setAttribute("isAdmin",      "admin".equals(r) || "administrador".equals(r) || "administrador sias".equals(r));
-    pageContext.setAttribute("isDirector",   "director".equals(r));
-    pageContext.setAttribute("isCoord",      "coordinador".equals(r) || "coordinador académico".equals(r));
-    pageContext.setAttribute("isProfesor",   "profesor".equals(r));
-    pageContext.setAttribute("isEstudiante", "estudiante".equals(r));
-    pageContext.setAttribute("isAuxCont",    "auxcont".equals(r) || "auxiliar contable".equals(r));
-    pageContext.setAttribute("isAuxAdmin",   "auxadmin".equals(r) || "auxiliar administrativo".equals(r));
-%>
+<!-- Validar sesión: si no hay usuario o rol, redirigir al login -->
+<c:if test="${empty sessionScope.usuario or empty sessionScope.rol}">
+    <c:redirect url="login.jsp?logout=true"/>
+</c:if>
+
+<!-- Normalizar rol: se asume que LoginServlet ya lo guardó en sesión -->
+<c:set var="rol" value="${sessionScope.rol}" />
+
+<!-- Definir banderas de acceso -->
+<c:set var="isAdmin"      value="${rol eq 'admin'}" />
+<c:set var="isDirector"   value="${rol eq 'director'}" />
+<c:set var="isCoord"      value="${rol eq 'coordinador'}" />
+<c:set var="isProfesor"   value="${rol eq 'profesor'}" />
+<c:set var="isEstudiante" value="${rol eq 'estudiante'}" />
+<c:set var="isAuxCont"    value="${rol eq 'auxcont'}" />
+<c:set var="isAuxAdmin"   value="${rol eq 'auxadmin'}" />
+
+<!-- Bandera general para roles académicos -->
+<c:set var="isAcademico"  value="${isProfesor or isCoord or isDirector}" />
+
+<!-- Bandera para roles con acceso a exportación y gestión institucional -->
+<c:set var="canExportar"  value="${isAdmin or isCoord or isDirector}" />

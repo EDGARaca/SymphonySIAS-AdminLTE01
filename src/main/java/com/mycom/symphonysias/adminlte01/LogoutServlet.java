@@ -9,13 +9,15 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;        
 
-/**
+/*
  *
  * @author Spiri
  */
 
 @WebServlet(name= "LogoutServlet", urlPatterns = {"/LogoutServlet"})
 public class LogoutServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

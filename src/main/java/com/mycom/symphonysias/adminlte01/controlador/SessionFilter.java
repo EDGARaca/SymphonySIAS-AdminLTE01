@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-/**
+/*
  *
  * @author Spiri
  */
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class SessionFilter implements Filter {
+    
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

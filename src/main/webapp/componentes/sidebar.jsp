@@ -1,9 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-
-<%
-    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
-    String rolNormalizado = (rol != null) ? rol.trim().toLowerCase() : "";
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="/componentes/roles.jspf" %> <!-- Inclusión de banderas de rol -->
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
@@ -26,125 +23,118 @@
 
                 <!-- Módulos Institucionales -->
                 <li class="nav-header">Módulos Institucionales</li>
-                
-                <% if ("administrador sias".equals(rolNormalizado)) { %>
+
+                <!-- Gestión de Usuarios (solo Admin) -->
+                <c:if test="${isAdmin}">
                     <li class="nav-item">
                         <a href="usuarios.jsp" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
                             <p>Gestión de Usuarios</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-
-                <%-- 1. AdministradorSIAS --%>
-                <% if ("administrador sias".equals(rolNormalizado)) { %>
+                <!-- Administrador SIAS -->
+                <c:if test="${isAdmin}">
                     <li class="nav-item">
                         <a href="AdministradorSIAS.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-shield"></i>
                             <p>AdministradorSIAS</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 2. Gestión Estudiantes --%>
-                <% if ("administrador sias".equals(rolNormalizado) 
-                        || "director".equals(rolNormalizado) 
-                        || "coordinador académico".equals(rolNormalizado) 
-                        || "auxiliar administrativo".equals(rolNormalizado)
-                        || "estudiante".equals(rolNormalizado) 
-                        || "profesor".equals(rolNormalizado)) { %>
+                <!-- Gestión Estudiantes -->
+                <c:if test="${isAdmin or isDirector or isCoord or isAuxAdmin or isEstudiante or isProfesor}">
                     <li class="nav-item">
                         <a href="estudiantes.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-graduate"></i>
                             <p>Gestión Estudiantes</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 3. Gestión Profesores --%>
-                <% if ("administrador sias".equals(rolNormalizado) 
-                        || "director".equals(rolNormalizado) 
-                        || "coordinador académico".equals(rolNormalizado) 
-                        || "profesor".equals(rolNormalizado)) { %>
+                <!-- Gestión Profesores -->
+                <c:if test="${isAdmin or isDirector or isCoord or isProfesor}">
                     <li class="nav-item">
                         <a href="ProfesorServlet?accion=vista" class="nav-link">
                             <i class="nav-icon fas fa-chalkboard-teacher"></i>
                             <p>Gestión Profesores</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 4. Gestión Auxiliar Contable --%>
-                <% if ("administrador sias".equals(rolNormalizado) || "auxiliar contable".equals(rolNormalizado)) { %>
+                <!-- Gestión Auxiliar Contable -->
+                <c:if test="${isAdmin or isAuxCont}">
                     <li class="nav-item">
                         <a href="reportesContables.jsp" class="nav-link">
                             <i class="nav-icon fas fa-file-invoice-dollar"></i>
                             <p>Gestión Auxiliar Contable</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 5. Gestión Auxiliar Administrativo --%>
-                <% if ("administrador sias".equals(rolNormalizado) || "auxiliar administrativo".equals(rolNormalizado)) { %>
+                <!-- Gestión Auxiliar Administrativo -->
+                <c:if test="${isAdmin or isAuxAdmin}">
                     <li class="nav-item">
                         <a href="ReporterServlet" class="nav-link">
                             <i class="nav-icon fas fa-file-export"></i>
                             <p>Gestión Auxiliar Administrativo</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 6. Gestión Director --%>
-                <% if ("administrador sias".equals(rolNormalizado) || "director".equals(rolNormalizado)) { %>
+                <!-- Gestión Director -->
+                <c:if test="${isAdmin or isDirector}">
                     <li class="nav-item">
                         <a href="director.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-tie"></i>
                             <p>Gestión Director</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 7. Gestión Coordinador Académico --%>
-                <% if ("administrador sias".equals(rolNormalizado) || "coordinador académico".equals(rolNormalizado)) { %>
+                <!-- Gestión Coordinador Académico -->
+                <c:if test="${isAdmin or isCoord}">
                     <li class="nav-item">
                         <a href="coordinador.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-cog"></i>
                             <p>Gestión Coordinador Académico</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 8. Gestión Cursos Libres --%>
-                <% if ("administrador sias".equals(rolNormalizado) || "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado)|| "coordinador académico".equals(rolNormalizado)|| "estudiante".equals(rolNormalizado)) { %>
+                <!-- Gestión Cursos Libres -->
+                <c:if test="${isAdmin or isProfesor or isCoord or isEstudiante}">
                     <li class="nav-item">
                         <a href="cursoLibre.jsp" class="nav-link">
                             <i class="nav-icon fas fa-book-reader"></i>
                             <p>Gestión Cursos Libres</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 9. Gestión de Horarios --%>
-                <% if ("administrador sias".equals(rolNormalizado) || "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado)|| "estudiante".equals(rolNormalizado)) { %>
+                <!-- Gestión de Horarios -->
+                <c:if test="${isAdmin or isProfesor or isEstudiante}">
                     <li class="nav-item">
                         <a href="horarios.jsp" class="nav-link">
                             <i class="nav-icon fas fa-calendar-alt"></i>
                             <p>Gestión de Horarios</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 10. Gestión de Notas --%>
-                <% if ("administrador sias".equals(rolNormalizado) || "profesor".equals(rolNormalizado) || "docente".equals(rolNormalizado) || "estudiante".equals(rolNormalizado)) { %>
+                <!-- Gestión de Notas -->
+                <c:if test="${isAdmin or isProfesor or isEstudiante}">
                     <li class="nav-item">
                         <a href="notas.jsp" class="nav-link">
                             <i class="nav-icon fas fa-clipboard-list"></i>
                             <p>Gestión de Notas</p>
                         </a>
                     </li>
-                <% } %>
-                
+                </c:if>
+
+                <!-- Productos Musicales (visible para todos) -->
                 <li class="nav-item">
                     <a href="catalogoProductos.jsp" class="nav-link">
                         <i class="nav-icon fas fa-shopping-cart"></i>
@@ -152,18 +142,17 @@
                     </a>
                 </li>
 
-
-                <%-- 11. Autenticación, Usuarios y Roles --%>
-                <% if ("administrador sias".equals(rolNormalizado)) { %>
+                <!-- Usuarios y Roles (solo Admin) -->
+                <c:if test="${isAdmin}">
                     <li class="nav-item">
                         <a href="UsuarioServlet" class="nav-link">
                             <i class="nav-icon fas fa-users-cog"></i>
                             <p>Usuarios y Roles</p>
                         </a>
                     </li>
-                <% } %>
+                </c:if>
 
-                <%-- 12. Notificaciones --%>
+                <!-- Notificaciones (visible para todos) -->
                 <li class="nav-item">
                     <a href="notificaciones.jsp" class="nav-link">
                         <i class="nav-icon fas fa-bell"></i>

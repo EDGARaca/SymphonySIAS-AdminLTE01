@@ -4,7 +4,7 @@
  */
 
 
-/**
+/*
  *
  * @author Spiri
  */
@@ -23,6 +23,7 @@ import javax.servlet.http.*;
  */
 @WebServlet("/EliminarInscripcionCursoLibreServlet")
 public class EliminarInscripcionCursoLibreServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

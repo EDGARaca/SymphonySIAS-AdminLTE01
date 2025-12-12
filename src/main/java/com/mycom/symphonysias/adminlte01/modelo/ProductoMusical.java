@@ -2,137 +2,94 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-/**
- *
- * @author Spiri
+/*
+ * Modelo de Producto Musical.
+ * ISO/IEC 25010:
+ * - Confiabilidad: getters/setters consistentes con la BD y JSP.
+ * - Mantenibilidad: comentarios claros y tipos adecuados.
+ * - Trazabilidad: incluye campos de auditoría y relaciones con usuario/profesor.
  */
 package com.mycom.symphonysias.adminlte01.modelo;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class ProductoMusical {
-    // --- Identificadores ---
-    private int idProducto;   // usado en PedidoDAO y AgregarCarritoServlet
-    private int id;           // usado en ProductoMusicalDAO y otros servlets
 
-    // --- Datos principales ---
+    // Identificadores
+    private Integer idProducto;          // PK
+    private Integer idProfesor;          // FK opcional
+    private Integer idUsuarioRegistro;   // FK obligatorio
+
+    // Datos de negocio
     private String nombre;
     private String descripcion;
+    private String imagenUrl;            // columna imagen_url
     private double precio;
-
-    // --- Imagen ---
-    private String imagen;       // mapea a imagen_url en BD
-    private String rutaImagen;   // opcional, para rutas locales
-    private String imagenUrl;    // compatibilidad con PedidoDAO
-
-    // --- Extras opcionales ---
-    private int cantidadDisponible;   // no existe en tabla productos, pero útil si lo agregas
-    private String usuarioRegistro;   // idem
-    private Timestamp fechaRegistro;  // idem
-
-    // --- Oferta ---
-    private double descuento;
+    private double descuento;            // porcentaje 0–100
     private boolean ofertaActiva;
+    private int stock;
+    private String estado;               // 'activo' | 'inactivo'
 
-    public ProductoMusical() {}
+    // Auditoría
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    // --- Getters y Setters ---
-    public int getIdProducto() {
-        return idProducto;
-    }
-    public void setIdProducto(int idProducto) {
-        this.idProducto = idProducto;
-    }
+    // =========================
+    // Getters y Setters
+    // =========================
 
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
+    public Integer getIdProducto() { return idProducto; }
+    public void setIdProducto(Integer idProducto) { this.idProducto = idProducto; }
 
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public Integer getIdProfesor() { return idProfesor; }
+    public void setIdProfesor(Integer idProfesor) { this.idProfesor = idProfesor; }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public Integer getIdUsuarioRegistro() { return idUsuarioRegistro; }
+    public void setIdUsuarioRegistro(Integer idUsuarioRegistro) { this.idUsuarioRegistro = idUsuarioRegistro; }
 
-    public double getPrecio() {
-        return precio;
-    }
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getImagen() {
-        return imagen;
-    }
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public String getRutaImagen() {
-        return rutaImagen;
-    }
-    public void setRutaImagen(String rutaImagen) {
-        this.rutaImagen = rutaImagen;
-    }
+    public String getImagenUrl() { return imagenUrl; }
+    public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
 
-    public String getImagenUrl() {
-        return imagenUrl;
-    }
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
-    }
+    public double getPrecio() { return precio; }
+    public void setPrecio(double precio) { this.precio = precio; }
 
-    public int getCantidadDisponible() {
-        return cantidadDisponible;
-    }
-    public void setCantidadDisponible(int cantidadDisponible) {
-        this.cantidadDisponible = cantidadDisponible;
-    }
+    public double getDescuento() { return descuento; }
+    public void setDescuento(double descuento) { this.descuento = descuento; }
 
-    public String getUsuarioRegistro() {
-        return usuarioRegistro;
-    }
-    public void setUsuarioRegistro(String usuarioRegistro) {
-        this.usuarioRegistro = usuarioRegistro;
-    }
+    public boolean isOfertaActiva() { return ofertaActiva; }
+    public void setOfertaActiva(boolean ofertaActiva) { this.ofertaActiva = ofertaActiva; }
 
-    public Timestamp getFechaRegistro() {
-        return fechaRegistro;
-    }
-    public void setFechaRegistro(Timestamp fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
+    public int getStock() { return stock; }
+    public void setStock(int stock) { this.stock = stock; }
 
-    public double getDescuento() {
-        return descuento;
-    }
-    public void setDescuento(double descuento) {
-        this.descuento = descuento;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public boolean isOfertaActiva() {
-        return ofertaActiva;
-    }
-    public void setOfertaActiva(boolean ofertaActiva) {
-        this.ofertaActiva = ofertaActiva;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    // --- Precio con descuento aplicado ---
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    // =========================
+    // Métodos auxiliares
+    // =========================
+
+    /** Precio con descuento aplicado */
     public double getPrecioConDescuento() {
         if (ofertaActiva && descuento > 0) {
-            return precio - (precio * descuento / 100.0);
+            return precio - (precio * (descuento / 100.0));
         }
         return precio;
     }
+
+    // Métodos auxiliares para compatibilidad con JSP antiguos
+    public Integer getId() { return getIdProducto(); }
+    public String getImagen() { return getImagenUrl(); }
 }

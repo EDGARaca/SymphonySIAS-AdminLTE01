@@ -13,6 +13,7 @@ import java.io.IOException;
 
 @WebServlet("/EditarUsuarioServlet") // Esto activa el servlet sin necesidad de web.xml si usas anotaciones
 public class EditarUsuarioServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

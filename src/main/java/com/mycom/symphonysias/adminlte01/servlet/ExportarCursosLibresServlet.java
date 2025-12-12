@@ -12,24 +12,36 @@
 
 package com.mycom.symphonysias.adminlte01.servlet;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
 import com.mycom.symphonysias.adminlte01.dao.CursoLibreDAO;
 import com.mycom.symphonysias.adminlte01.modelo.CursoLibre;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Servlet para exportar cursos libres activos a PDF.
+ * Cumple ISO/IEC 25010:
+ * - Mantenibilidad: código claro, comentarios explicativos.
+ * - Confiabilidad: validación de lista vacía, manejo de excepciones.
+ * - Trazabilidad: logs en consola y redirecciones con parámetros de estado.
+ */
 public class ExportarCursosLibresServlet extends HttpServlet {
+    
+    private static final long serialVersionUID = 1L; // Evita warning de serialización
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Obtener cursos activos desde DAO
         List<CursoLibre> lista = new CursoLibreDAO().listarActivos();
 
         if (lista == null || lista.isEmpty()) {
@@ -38,10 +50,12 @@ public class ExportarCursosLibresServlet extends HttpServlet {
             return;
         }
 
+        // Configuración de respuesta HTTP
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "inline; filename=CursosLibres_SymphonySIAS.pdf");
 
         try {
+            // Documento PDF en orientación horizontal
             Document pdf = new Document(PageSize.A4.rotate());
             PdfWriter.getInstance(pdf, response.getOutputStream());
             pdf.open();
@@ -55,19 +69,20 @@ public class ExportarCursosLibresServlet extends HttpServlet {
 
             // Fecha de generación
             String fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date());
-            Paragraph fechaGen = new Paragraph("Generado el: " + fecha, new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC));
+            Paragraph fechaGen = new Paragraph("Generado el: " + fecha,
+                    new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC));
             fechaGen.setAlignment(Element.ALIGN_RIGHT);
             fechaGen.setSpacingAfter(10);
             pdf.add(fechaGen);
 
-            // Tabla
+            // Tabla con 6 columnas
             PdfPTable tabla = new PdfPTable(6);
             tabla.setWidthPercentage(100);
             tabla.setWidths(new float[]{1.5f, 3, 2, 2, 2, 3});
 
+            // Cabecera
             Font cabeceraFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
             BaseColor verde = new BaseColor(0, 153, 76);
-
             String[] columnas = {"ID", "Nombre", "Valor", "Frecuencia", "Estado", "Usuario"};
             for (String col : columnas) {
                 PdfPCell celda = new PdfPCell(new Phrase(col, cabeceraFont));
@@ -77,6 +92,7 @@ public class ExportarCursosLibresServlet extends HttpServlet {
                 tabla.addCell(celda);
             }
 
+            // Filas
             Font filaFont = new Font(Font.FontFamily.HELVETICA, 10);
             for (CursoLibre c : lista) {
                 tabla.addCell(new Phrase(String.valueOf(c.getId()), filaFont));
@@ -84,13 +100,17 @@ public class ExportarCursosLibresServlet extends HttpServlet {
                 tabla.addCell(new Phrase("$" + c.getValor(), filaFont));
                 tabla.addCell(new Phrase(c.getFrecuencia(), filaFont));
                 tabla.addCell(new Phrase(c.getEstado(), filaFont));
-                tabla.addCell(new Phrase(c.getUsuario_registro(), filaFont));
+                // Conversión segura de Integer a String
+                tabla.addCell(new Phrase(
+                        c.getUsuario_registro() != null ? String.valueOf(c.getUsuario_registro()) : "",
+                        filaFont));
             }
 
             pdf.add(tabla);
 
             // Pie de página
-            Paragraph pie = new Paragraph("Documento generado automáticamente por SymphonySIAS", new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC));
+            Paragraph pie = new Paragraph("Documento generado automáticamente por SymphonySIAS",
+                    new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC));
             pie.setSpacingBefore(20);
             pie.setAlignment(Element.ALIGN_RIGHT);
             pdf.add(pie);

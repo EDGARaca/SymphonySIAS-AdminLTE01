@@ -2,6 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+/*
+ *
+ * @author Spiri
+ */
+
 package com.mycom.symphonysias.adminlte01.servlet;
 
 import com.mycom.symphonysias.adminlte01.modelo.Usuario;
@@ -13,13 +18,11 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-/**
- *
- * @author Spiri
- */
+
 
 @WebServlet("/RegistroServlet")
 public class RegistroServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     private String encriptarSHA256(String texto) {
         try {

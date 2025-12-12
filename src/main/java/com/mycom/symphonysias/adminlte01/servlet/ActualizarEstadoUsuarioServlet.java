@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
+/*
  *
  * @author Spiri
  */
@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 public class ActualizarEstadoUsuarioServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

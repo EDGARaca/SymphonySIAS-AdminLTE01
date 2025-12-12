@@ -5,7 +5,7 @@
 --%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="componentes/roles.jspf" %> <!-- Inclusión del fragmento de roles -->
+<%@ include file="/componentes/roles.jspf" %> <!-- Inclusión del fragmento de roles -->
 
 <!-- Menú del módulo Profesores -->
 <div class="row">

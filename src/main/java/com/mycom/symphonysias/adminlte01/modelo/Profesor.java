@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
+/*
  * Modelo para entidad Profesor en SymphonySIAS
  * @author Spiri
  */
