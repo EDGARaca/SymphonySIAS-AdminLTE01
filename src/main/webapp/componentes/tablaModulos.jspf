@@ -1,5 +1,7 @@
 <%-- Fragmento: tablaModulos.jspf --%>
-<table class="table table-bordered table-hover">
+<%@ page contentType="text/html; charset=UTF-8" %>
+<table class="table table-bordered table-hover table-striped table-sm">
+
     <thead class="table-light">
         <tr>
             <th>Módulo</th>
@@ -31,6 +33,6 @@
             <td><span class="badge bg-warning">En revisión</span></td>
             <td><button class="btn btn-sm btn-outline-success">Activar</button></td>
         </tr>
-        <!-- Puedes agregar más filas según tus módulos -->
+        <!-- Puedes agregar mÃ¡s filas segÃºn tus mÃ³dulos -->
     </tbody>
 </table>

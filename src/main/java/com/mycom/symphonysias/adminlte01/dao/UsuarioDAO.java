@@ -52,24 +52,26 @@ public class UsuarioDAO {
             ps.setString(2, hashSha256.trim());
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Usuario u = new Usuario();
-                    u.setId(rs.getInt("id"));
-                    u.setUsuario(rs.getString("usuario"));
-                    u.setNombre(rs.getString("nombre"));
-                    u.setRol(rs.getString("rol"));
-                    u.setActivo(rs.getBoolean("activo"));
-                    LOGGER.log(Level.INFO, "[DAO] Validación exitosa para usuario: {0}", usuarioPlano);
-                    return u;
-                } else {
-                    LOGGER.log(Level.WARNING, "[DAO] Sin coincidencias: usuario/clave no válidos para usuario: {0}", usuarioPlano);
+            if (rs.next()) {
+                Usuario u = new Usuario();
+                u.setId(rs.getInt("id"));
+                u.setUsuario(rs.getString("usuario"));
+                u.setNombre(rs.getString("nombre"));
+                u.setRol(rs.getString("rol"));
+                u.setActivo(rs.getBoolean("activo"));
+                LOGGER.log(Level.INFO, "[DAO] Validación exitosa para usuario: {0}", usuarioPlano);
+                return u;
+            } else {
+                    LOGGER.log(Level.WARNING, "[DAO] Credenciales incorrectas: usuario={0}, hash={1}", 
+                               new Object[]{usuarioPlano, hashSha256});
+                    return null; // credenciales inválidas
                 }
+
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "[DAO] Error en validar credenciales", e);
-            throw e;
-        }
-        return null;
+            LOGGER.log(Level.SEVERE, "[DAO] Error de conexión o SQL al validar credenciales", e);
+            throw new RuntimeException("Error de conexión con la base de datos", e);
+        }        
     }
 
     public boolean existeUsuario(String usuario) {

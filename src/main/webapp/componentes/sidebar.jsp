@@ -1,21 +1,31 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="/componentes/roles.jspf" %> <!-- Inclusión de banderas de rol -->
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-
-    <a href="AdministradorSIAS.jsp" class="brand-link">
+    <%-- Brand / logo --%>
+    <a href="<c:url value='/'/>" class="brand-link">
+        <img src="${base}/assets/img/logo.png" alt="Logo SymphonySIAS" class="brand-image img-circle elevation-3" style="opacity:.8">
         <span class="brand-text font-weight-light">SymphonySIAS</span>
     </a>
-
+        
+    <%-- Sidebar content --%>
     <div class="sidebar">
+        <%-- User panel opcional --%>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="info">
+            <a href="#" class="d-block">
+              <c:out value="${nombreActivo}" default="Usuario" /> (<c:out value="${rol}" default="Sin rol" />)
+            </a>
+          </div>
+        </div>       
+        
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" aria-label="Menú lateral SymphonySIAS">
 
                 <!-- Panel Principal -->
                 <li class="nav-header">Panel Principal</li>
                 <li class="nav-item">
-                    <a href="dashboard.jsp" class="nav-link">
+                    <a href="dashboard.jsp" class="nav-link <c:if test='${page eq "dashboard"}'>active</c:if>">
                         <i class="nav-icon fas fa-th-large"></i>
                         <p>Dashboard Institucional</p>
                     </a>
@@ -45,7 +55,7 @@
                 </c:if>
 
                 <!-- Gestión Estudiantes -->
-                <c:if test="${isAdmin or isDirector or isCoord or isAuxAdmin or isEstudiante or isProfesor}">
+                <c:if test="${isAdmin or isDirector or isCoordinador or isAuxAdmin or isEstudiante or isProfesor}">
                     <li class="nav-item">
                         <a href="estudiantes.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-graduate"></i>
@@ -55,7 +65,7 @@
                 </c:if>
 
                 <!-- Gestión Profesores -->
-                <c:if test="${isAdmin or isDirector or isCoord or isProfesor}">
+                <c:if test="${isAdmin or isDirector or isCoordinador or isProfesor}">
                     <li class="nav-item">
                         <a href="ProfesorServlet?accion=vista" class="nav-link">
                             <i class="nav-icon fas fa-chalkboard-teacher"></i>
@@ -95,7 +105,7 @@
                 </c:if>
 
                 <!-- Gestión Coordinador Académico -->
-                <c:if test="${isAdmin or isCoord}">
+                <c:if test="${isAdmin or isCoordinador}">
                     <li class="nav-item">
                         <a href="coordinador.jsp" class="nav-link">
                             <i class="nav-icon fas fa-user-cog"></i>
@@ -105,7 +115,7 @@
                 </c:if>
 
                 <!-- Gestión Cursos Libres -->
-                <c:if test="${isAdmin or isProfesor or isCoord or isEstudiante}">
+                <c:if test="${isAdmin or isProfesor or isCoordinador or isEstudiante}">
                     <li class="nav-item">
                         <a href="cursoLibre.jsp" class="nav-link">
                             <i class="nav-icon fas fa-book-reader"></i>

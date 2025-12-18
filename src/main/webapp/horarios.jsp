@@ -5,13 +5,9 @@
 --%>
 
 <%@page contentType="text/html; charset=UTF-8" language="java"%>
-<%
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
-    if (rol == null || (!"administrador".equals(rol) && !"estudiante".equals(rol))) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="/componentes/roles.jspf" %>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

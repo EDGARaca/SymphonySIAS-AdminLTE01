@@ -6,23 +6,13 @@
 
 
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="javax.servlet.http.HttpSession"%>
-<%@page session="true"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<jsp:forward page="layout.jsp">
+  <jsp:param name="contenido" value="/componentes/dashboard.jsp" />
+</jsp:forward>
 
-
-<%
-    
-    String usuario = (session != null) ? (String) session.getAttribute("usuario") : null;
-    
-    if (usuario == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-%>
-
-<p> Bienvenido: <%= session.getAttribute("nombreActivo") %></p> 
 
 <!DOCTYPE html>
 <html>
@@ -34,168 +24,9 @@
         <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
         <link rel="stylesheet" href="assets/adminlte/css/estilos.css">
         
-        <style>  
-        /* === CONTENEDOR DEL CHATBOT (oculto inicialmente) === */
-        .chat-container {
-          position: fixed;
-          bottom: 90px;
-          right: 20px;
-          width: 100%;
-          max-width: 380px;
-          height: 500px;
-          background: #fff;
-          border-radius: 12px;
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-          display: flex;
-          flex-direction: column;
-          opacity: 0;
-          pointer-events: none;
-          transform: translateY(20px);
-          transition: opacity 0.3s ease, transform 0.3s ease;
-          overflow: hidden;
-          z-index: 9999;
-        }
-
-        /* Cuando está activo se muestra con animación */
-        .chat-container.active {
-          opacity: 1;
-          pointer-events: auto;
-          transform: translateY(0);
-        }
-
-        /* === CABECERA DEL CHATBOT === */
-        .chat-header {
-          background: #007bff;
-          color: #fff;
-          padding: 12px;
-          text-align: center;
-          font-size: 16px;
-          font-weight: bold;
-          position: relative;
-        }
-
-        /* Botón para cerrar el chat */
-        .close-btn {
-          position: absolute;
-          right: 12px;
-          top: 12px;
-          background: transparent;
-          border: none;
-          color: #fff;
-          font-size: 18px;
-          cursor: pointer;
-        }
-
-        /* === ÁREA DE MENSAJES === */
-        .messages {
-          flex: 1;
-          padding: 12px;
-          overflow-y: auto;
-          background: #f4f4f4;
-        }
-
-        .message {
-          margin: 8px 0;
-          padding: 10px;
-          border-radius: 10px;
-          max-width: 75%;
-          font-size: 14px;
-          line-height: 1.4;
-        }
-
-        .user {
-          background-color: #d1e7ff;
-          align-self: flex-end;
-          margin-left: auto;
-        }
-
-        .bot {
-          background-color: #e9ecef;
-          align-self: flex-start;
-          margin-right: auto;
-        }
-
-        /* === ÁREA DE INPUT === */
-        .input-area {
-          display: flex;
-          border-top: 1px solid #ccc;
-          background: #fff;
-        }
-
-        .input-area input {
-          flex: 1;
-          padding: 12px;
-          border: none;
-          outline: none;
-          font-size: 14px;
-        }
-
-        .input-area button {
-          padding: 12px 16px;
-          background: #007bff;
-          color: white;
-          border: none;
-          cursor: pointer;
-          transition: background 0.3s;
-        }
-
-        .input-area button:hover {
-          background: #0056b3;
-        }
-
-        /* === ACCESIBILIDAD Y RESPONSIVIDAD === */
-        @media (max-width: 480px) {
-          .chat-container {
-            right: 10px;
-            left: 10px;
-            height: 70vh; /* altura dinámica para móviles */
-          }
-        }
-        </style>
         
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                min-height: 100vh;
-                background-image: url("public/imagen/pexels-jplenio-1103970.jpg");
-                background-size: cover; 
-                background-position: center;
-                background-repeat: no-repeat;
-                backdrop-filter: blur(<%= (usuario != null) ? "0px" : "6px" %>);
-                overflow-x: hidden;
-            }
-            .login-container {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                display: <%= (usuario != null) ? "none" : "flex" %>;
-                background-color: rgba(255, 255, 255, 0.95);
-                border-radius: 12px;
-                box-shadow: 0 0 20px rgba(0,0,0,0.3);
-                padding: 30px;
-                width: 500px;
-                max-width: 90%;
-                z-index: 10; <%--Garantiza el login este por encima del fondo y del dashboard--%>
-            }
-            .login-logo {
-                width: 100px;
-                margin-right: 20px;
-            }
-            .login-form {
-                flex: 1;
-            }
-            
-            .dashboard {
-                opacity: <%= (usuario != null) ? "1" : "0.4" %>; 
-                pointer-events: <%= (usuario != null) ? "auto" : "none" %>;
-                transition: opacity 0.5s ease;
-                padding: 20px;
-                position: relative;
-                z-index: 1; <%--Garantiza que el dashboard quede por debajo del formulario de login--%>
-            }
-        </style>
+        
+        
     </head>
     <body class="hold-transition sidebar-mini">
         <div class="wrapper">

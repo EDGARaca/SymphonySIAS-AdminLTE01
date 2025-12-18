@@ -9,22 +9,8 @@
 <%@page import="com.mycom.symphonysias.adminlte01.modelo.CursoLibre"%>
 <%@page import="com.mycom.symphonysias.adminlte01.dao.EstudianteDAO"%>
 <%@page import="com.mycom.symphonysias.adminlte01.dao.CursoLibreDAO"%>
-
-<%
-    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rolActivo") : null;
-
-    if (usuario == null || rol == null ||
-        !(rol.equalsIgnoreCase("ADMINISTRADOR SIAS") || rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") || rol.equalsIgnoreCase("DIRECTOR"))) {
-        response.sendRedirect("login.jsp?logout=true");
-        return;
-    }
-
-    EstudianteDAO estudianteDAO = new EstudianteDAO();
-    CursoLibreDAO cursoDAO = new CursoLibreDAO();
-    List<Estudiante> estudiantes = estudianteDAO.listarEstudiantes();
-    List<CursoLibre> cursos = cursoDAO.listarActivos();
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="/componentes/roles.jspf" %>
 
 <!DOCTYPE html>
 <html lang="es">

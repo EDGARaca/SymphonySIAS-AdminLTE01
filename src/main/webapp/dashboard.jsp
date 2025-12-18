@@ -3,266 +3,344 @@
     Created on : 1/10/2025, 8:04:14 p. m.
     Author     : Spiri
 --%>
-
-<%@page contentType="text/html; charset=UTF-8" language="java"%>
-<%@page import="javax.servlet.http.HttpSession" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="componentes/roles.jspf" %>
+<c:set var="base" value="/SymphonySIAS-AdminLTE01-1.0-SNAPSHOT" />
 
-<%
-    // Validación de sesión con trazabilidad (rol se define en roles.jspf, no redeclarar aquí)
-    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String nombre  = (session != null) ? (String) session.getAttribute("nombreActivo")  : null;
-
-    if (usuario == null || nombre == null || session.getAttribute("rol") == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
-    System.out.println("[DASHBOARD] Sesión activa: " + usuario + " (" + session.getAttribute("rol") + ")");
-%>
+<%@ include file="/componentes/roles.jspf" %>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard - SymphonySIAS</title>
-    <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
-    <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <title>Dashboard SymphonySIAS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <%-- Estilos de AdminLTE --%>
+  <link rel="stylesheet" href="${base}/assets/adminlte/css/bootstrap.min.css">
+  <link rel="stylesheet" href="${base}/assets/adminlte/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="${base}/assets/adminlte/css/adminlte.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
+<div class="wrapper">
 
-        <%-- Navbar --%>
-        <jsp:include page="componentes/header.jsp" />
+    <%-- Header y Sidebar --%>
+    <jsp:include page="/componentes/header.jsp" />
+    <jsp:include page="/componentes/sidebar.jsp" />
 
-        <%-- Sidebar --%>
-        <jsp:include page="componentes/sidebar.jsp" />
-
-        <%-- Content Wrapper --%>
-        <div class="content-wrapper">
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row align-items-center mb-3">
-                        <div class="col-12 col-md-6 text-center mb-2">
-                            <img src="assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" style="max-height:220px; border-radius:8px;">
-                        </div>
-                        <div class="col-12 col-md-6 text-center mb-2">
-                            <img src="assets/adminlte/img/banda5.jpg" alt="Fotografía institucional" style="max-height:300px; border-radius:8px;">
-                        </div>
+    <%-- Contenedor principal --%>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row align-items-center mb-3">
+                    <!-- Imagen del logo institucional -->
+                    <div class="col-12 col-md-6 text-center mb-2">
+                        <img src="${base}/assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" style="max-height:220px;">
+                    </div>
+                    <!-- Imagen representativa -->
+                    <div class="col-12 col-md-6 text-center mb-2">
+                        <img src="${base}/assets/adminlte/img/banda5.jpg" alt="Fotografía institucional" style="max-height:300px; border-radius:8px;">
                     </div>
                 </div>
-            </section>
 
-            <section class="content">
-                <div class="container-fluid px-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-school"></i> Accesos a módulos institucionales</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row text-center">
-
-                                <!-- Administrador SIAS -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isAdmin}">
-                                        <a href="AdministradorSIAS.jsp" class="btn btn-outline-primary btn-block">
-                                            <i class="fas fa-tools"></i> AdministradorSIAS <br><small>(Administrador)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!isAdmin}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-tools"></i> AdministradorSIAS <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Gestión Estudiantes -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isAdmin or isDirector or isCoordinador or isAuxAdmin or isProfesor or isEstudiante}">
-                                        <a href="estudiantes.jsp" class="btn btn-outline-success btn-block">
-                                            <i class="fas fa-user-graduate"></i> Gestión Estudiantes <br><small>(Roles autorizados)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isAdmin or isDirector or isCoordinador or isAuxAdmin or isProfesor or isEstudiante)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-user-graduate"></i> Gestión Estudiantes <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Gestión Profesores -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isAdmin or isDirector or isCoordinador or isProfesor}">
-                                        <a href="ProfesorServlet?accion=vista" class="btn btn-outline-warning btn-block">
-                                            <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(Admin, Director, Coordinador, Profesor)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isAdmin or isDirector or isCoordinador or isProfesor)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-chalkboard-teacher"></i> Gestión Profesores <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Gestión Cursos Libres -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isAdmin or isCoordinador or isProfesor or isEstudiante}">
-                                        <a href="cursoLibre.jsp" class="btn btn-outline-success btn-block">
-                                            <i class="fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(Administrador, Coordinador)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isAdmin or isCoordinador or isProfesor or isEstudiante)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Auxiliar Contable -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isAuxCont or isAdmin}">
-                                        <a href="gestionContable.jsp" class="btn btn-outline-dark btn-block">
-                                            <i class="fas fa-calculator"></i> Auxiliar Contable <br><small>(Aux. Contable)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isAuxCont or isAdmin)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-calculator"></i> Auxiliar Contable <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Auxiliar Administrativo -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isAuxAdmin or isAdmin}">
-                                        <a href="gestionAdministrativo.jsp" class="btn btn-outline-secondary btn-block">
-                                            <i class="fas fa-user-clock"></i> Auxiliar Administrativo <br><small>(Aux. Administrativo)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isAuxAdmin or isAdmin)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-user-clock"></i> Auxiliar Administrativo <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Clases y Horarios -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isProfesor or isAdmin or isCoordinador or isDirector or isEstudiante}">
-                                        <a href="gestionClases.jsp" class="btn btn-outline-info btn-block">
-                                            <i class="fas fa-calendar-alt"></i> Clases y Horarios <br><small>(Profesor, Coordinador, Director)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isProfesor or isAdmin or isCoordinador or isDirector or isEstudiante)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-calendar-alt"></i> Clases y Horarios <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Horarios -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isEstudiante or isAdmin or isProfesor}">
-                                        <a href="horarios.jsp" class="btn btn-outline-info btn-block">
-                                            <i class="fas fa-clock"></i> Horarios <br><small>(Estudiante)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isEstudiante or isAdmin or isProfesor)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-clock"></i> Horarios <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Coordinador Académico -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isCoordinador or isAdmin}">
-                                        <a href="gestionCoordinador.jsp" class="btn btn-outline-primary btn-block">
-                                            <i class="fas fa-user-cog"></i> Coordinador Académico <br><small>(Coordinador)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isCoordinador or isAdmin)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-user-cog"></i> Coordinador Académico <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Gestión Director -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isDirector or isAdmin}">
-                                        <a href="gestionDirector.jsp" class="btn btn-outline-primary btn-block">
-                                            <i class="fas fa-user-tie"></i> Gestión Director <br><small>(Director)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isDirector or isAdmin)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-user-tie"></i> Gestión Director <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Contenidos -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isProfesor or isAdmin or isEstudiante}">
-                                        <a href="contenidos.jsp" class="btn btn-outline-success btn-block">
-                                            <i class="fas fa-book-reader"></i> Contenidos <br><small>(Profesor, Estudiante)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isProfesor or isAdmin or isEstudiante)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-book-reader"></i> Contenidos <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Gestión de Notas -->
-                                <div class="col-md-3 mb-3">
-                                    <c:if test="${isProfesor or isAdmin or isEstudiante or isCoordinador or isDirector}">
-                                        <a href="gestionNotas.jsp" class="btn btn-outline-success btn-block">
-                                            <i class="fas fa-clipboard-list"></i> Gestión de Notas <br><small>(Profesor, Estudiante, Coordinador, Director)</small>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${!(isProfesor or isAdmin or isEstudiante or isCoordinador or isDirector)}">
-                                        <a href="#" class="btn btn-outline-secondary btn-block disabled" style="pointer-events: none;">
-                                            <i class="fas fa-clipboard-list"></i> Gestión de Notas <br><small>(No disponible)</small>
-                                        </a>
-                                    </c:if>
-                                </div>
-
-                                <!-- Notificaciones (todos los roles) -->
-                                <div class="col-md-3 mb-3">
-                                    <a href="notificaciones.jsp" class="btn btn-outline-danger btn-block">
-                                        <i class="fas fa-bell"></i> Notificaciones <br><small>(Todos los roles)</small>
-                                    </a>
-                                </div>
-
-                                <!-- Productos Musicales -->
-                                <div class="col-md-3 mb-3">
-                                    <a href="catalogoProductos.jsp" class="btn btn-outline-info btn-block">
-                                        <i class="fas fa-shopping-cart fa-lg"></i> Productos Musicales <br><small>Compra instrumentos</small>
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
+                <!-- Mensaje institucional -->
+                <div class="text-center mb-4 px-3">
+                    <h5 class="text-primary text-wrap">
+                        <i class="fas fa-music"></i> ¡Somos una Escuela de Música que te ayuda a impulsar tu desarrollo musical!
+                    </h5>
                 </div>
-            </section>
 
-            <%-- Scripts y componentes opcionales --%>
-            <c:if test="${!isAdmin}">
-                <jsp:include page="componentes/chatbot.jspf" />
-            </c:if>
+                <!-- Información de bienvenida -->
+                <h5 class="m-0">Bienvenido, <strong>${sessionScope.nombreActivo}</strong> (<strong>${sessionScope.rol}</strong>)</h5>
+                <p class="text-muted">Sistema de información estudiantil SymphonySIAS</p>
 
-            <jsp:include page="componentes/footer.jsp" />
-        </div>
-    </div>
+                <!-- Mensaje condicional para el rol de administrador -->
+                <c:if test="${'administrador'.equals(sessionScope.rol)}">
+                    <div class="alert alert-info mt-2">
+                        <i class="fas fa-user-shield"></i> Acceso completo como <strong>Administrador</strong>. Puedes gestionar usuarios, clases, contenidos y reportes.
+                    </div>
+                </c:if>
+            </div>
+        </section>
+        
+        <section class="content">
+            <div class="row mb-4">
+              <div class="col-md-6 text-center">
+                <img src="${base}/assets/img/logoSymphonySIAS.png" alt="Logo SymphonySIAS" style="max-width: 80%; height: auto;" />
+              </div>
+              <div class="col-md-6 text-center">
+                <img src="${base}/assets/img/groupMusic.jpg" alt="Grupo musical" class="rounded" style="max-width: 80%; height: auto;" />
+              </div>
+            </div>
+        </section>
+        
 
-    <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
-    <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <%-- Contenido principal: módulos en tarjetas dinámicas según roles --%>
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+            
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+
+              <%-- Tarjeta: Gestión Estudiantes --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-success">
+                  <div class="card-header">Gestión Estudiantes</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${canGestionEstudiantes}">
+                        <a href="estudiantes.jsp" class="btn btn-success btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+
+              <%-- Tarjeta: Gestión Profesores --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-info">
+                  <div class="card-header">Gestión Profesores</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${canGestionProfesores}">
+                        <a href="profesores.jsp" class="btn btn-info btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+
+              <%-- Tarjeta: Gestión Cursos Libres --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-warning">
+                  <div class="card-header">Gestión Cursos Libres</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${canCursosLibres}">
+                        <a href="cursoLibre.jsp" class="btn btn-warning btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+
+              <%-- Tarjeta: Gestión de Notas --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-danger">
+                  <div class="card-header">Gestión de Notas</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${canNotas}">
+                        <a href="notas.jsp" class="btn btn-danger btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Administrador SIAS --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">
+                  <div class="card-header">Administrador SIAS</div>
+                  <div class="card-body">
+                    <c:choose>
+                      <c:when test="${isAdmin}">
+                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+
+
+              <%-- Otros módulos y tarjetas dinámicas según roles... --%>
+
+            </div> <!-- /.row -->
+          </div> <!-- /.container -->
+        </section>
+    </div> <!-- /.content-wrapper -->
+
+    <%-- Footer --%>
+    <jsp:include page="/componentes/footer.jsp" />
+</div>
+
+<script src="${base}/assets/adminlte/plugins/jquery/jquery.min.js"></script>
+<script src="${base}/assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="${base}/assets/adminlte/js/adminlte.min.js"></script>
 </body>
 </html>

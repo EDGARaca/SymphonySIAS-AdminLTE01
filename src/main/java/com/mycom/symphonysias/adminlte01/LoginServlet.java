@@ -39,6 +39,12 @@ public class LoginServlet extends HttpServlet {
 
         String user = request.getParameter("usuario");
         String pass = request.getParameter("clave");
+        
+         // 🔎 Corrección integrada: normaliza usuario a minúsculas y elimina espacios
+        if (user != null) {
+            user = user.trim().toLowerCase();
+        }
+
 
         // Validación de parámetros
         if (user == null || pass == null || user.trim().isEmpty() || pass.trim().isEmpty()) {

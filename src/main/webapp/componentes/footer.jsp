@@ -21,11 +21,11 @@
             <div class="col-md-4 mb-3">
                 <h5 class="text-primary">Accesos rápidos</h5>
                 <ul class="list-unstyled">
-                    <li><a href="<%= base %>/vistas/dashboard.jsp" class="text-dark"><i class="fas fa-home"></i> Inicio</a></li>
-                    <li><a href="<%= base %>/vistas/contacto.jsp" class="text-dark"><i class="fas fa-envelope-open-text"></i> Contáctanos</a></li>
-                    <li><a href="<%= base %>/vistas/privacidad.jsp" class="text-dark"><i class="fas fa-user-shield"></i> Política de privacidad</a></li>
-                    <li><a href="<%= base %>/vistas/terminos.jsp" class="text-dark"><i class="fas fa-file-contract"></i> Términos y condiciones</a></li>
-                    <li><a href="<%= base %>/vistas/ayuda.jsp" class="text-dark"><i class="fas fa-question-circle"></i> Ayuda</a></li>
+                    <li><a href="<c:url value='/vistas/dashboard.jsp'/>" class="text-dark"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="<c:url value='/vistas/contacto.jsp'/>" class="text-dark"><i class="fas fa-envelope-open-text"></i> Contáctanos</a></li>
+                    <li><a href="<c:url value='/vistas/privacidad.jsp'/>" class="text-dark"><i class="fas fa-user-shield"></i> Política de privacidad</a></li>
+                    <li><a href="<c:url value='/vistas/terminos.jsp'/>" class="text-dark"><i class="fas fa-file-contract"></i> Términos y condiciones</a></li>
+                    <li><a href="<c:url value='/vistas/ayuda.jsp'/>" class="text-dark"><i class="fas fa-question-circle"></i> Ayuda</a></li>
                 </ul>
             </div>
 
@@ -68,6 +68,5 @@
     }, 8000);
 </script>
 
-</div> <!-- /.wrapper -->
 </body>
 </html>

@@ -7,14 +7,8 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@page import="java.util.List"%>
 <%@page import="com.mycom.symphonysias.adminlte01.modelo.Usuario" %>
-
-<%
-    HttpSession sesion = request.getSession(false);
-    if (sesion == null || sesion.getAttribute("usuarioActivo") == null) {
-        response.sendRedirect("login.jsp?logout=true");
-        return;
-    }
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="/componentes/roles.jspf" %>
 
 <!-- Alertas visuales -->
 <% if ("camposIncompletos".equals(request.getParameter("error"))) { %>

@@ -1,31 +1,63 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!--
-  Fragmento roles.jspf
-  Cumple ISO/IEC 25010:
-  - Confiabilidad: control de sesión y roles consistente.
-  - Mantenibilidad: uso de JSTL/EL en lugar de scriptlets.
-  - Trazabilidad: comentarios claros y banderas de acceso definidas.
--->
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!-- Validar sesión: si no hay usuario o rol, redirigir al login -->
-<c:if test="${empty sessionScope.usuario or empty sessionScope.rol}">
-    <c:redirect url="login.jsp?logout=true"/>
-</c:if>
+<!-- roles.jspf v1.1 â€” Centraliza sesiÃ³n y banderas de rol. Fecha: 2025-12-14. Autor: EdgarACA -->
 
-<!-- Normalizar rol: se asume que LoginServlet ya lo guardó en sesión -->
-<c:set var="rol" value="${sessionScope.rol}" />
+<!-- Bloqueo si no hay sesiÃ³n activa -->
+<c:choose>
+  <c:when test="${empty sessionScope.usuarioActivo || empty sessionScope.rol}">
+    <c:redirect url="/login.jsp"/>
+  </c:when>
+  <c:otherwise>
+    <!-- Variables de identidad disponibles en request -->
+    <c:set var="usuarioActivo" value="${sessionScope.usuarioActivo}" scope="request"/>
+    <c:set var="nombreActivo"  value="${sessionScope.nombreActivo}" scope="request"/>
+    <c:set var="rol"           value="${sessionScope.rol}" scope="request"/>
 
-<!-- Definir banderas de acceso -->
-<c:set var="isAdmin"      value="${rol eq 'admin'}" />
-<c:set var="isDirector"   value="${rol eq 'director'}" />
-<c:set var="isCoord"      value="${rol eq 'coordinador'}" />
-<c:set var="isProfesor"   value="${rol eq 'profesor'}" />
-<c:set var="isEstudiante" value="${rol eq 'estudiante'}" />
-<c:set var="isAuxCont"    value="${rol eq 'auxcont'}" />
-<c:set var="isAuxAdmin"   value="${rol eq 'auxadmin'}" />
+    <!-- Banderas bÃ¡sicas -->
+    <c:set var="isAdmin"       value="${rol == 'admin'}"       scope="request"/>
+    <c:set var="isProfesor"    value="${rol == 'profesor'}"    scope="request"/>
+    <c:set var="isEstudiante"  value="${rol == 'estudiante'}"  scope="request"/>
+    <c:set var="isCoordinador" value="${rol == 'coordinador'}" scope="request"/>
+    <c:set var="isDirector"    value="${rol == 'director'}"    scope="request"/>
+    <c:set var="isAuxAdmin"    value="${rol == 'auxadmin'}"   scope="request"/>
+    <c:set var="isAuxCont"     value="${rol == 'auxcont'}"    scope="request"/>
 
-<!-- Bandera general para roles académicos -->
-<c:set var="isAcademico"  value="${isProfesor or isCoord or isDirector}" />
+    <!-- Banderas compuestas para mÃ³dulos (mantenibilidad) -->
+    <c:set var="canGestionEstudiantes"
+           value="${isAdmin or isDirector or isCoordinador or isAuxAdmin or isProfesor or isEstudiante}"
+           scope="request"/>
 
-<!-- Bandera para roles con acceso a exportación y gestión institucional -->
-<c:set var="canExportar"  value="${isAdmin or isCoord or isDirector}" />
+    <c:set var="canGestionProfesores"
+           value="${isAdmin or isDirector or isCoordinador or isProfesor}"
+           scope="request"/>
+
+    <c:set var="canCursosLibres"
+           value="${isAdmin or isCoordinador}"
+           scope="request"/>
+
+    <c:set var="canClasesHorarios"
+           value="${isProfesor or isCoordinador or isDirector}"
+           scope="request"/>
+
+    <c:set var="canHorarios"
+           value="${isEstudiante or isProfesor or isAdmin}"
+           scope="request"/>
+
+    <c:set var="canCoordinador"
+           value="${isCoordinador or isAdmin}"
+           scope="request"/>
+
+    <c:set var="canDirector"
+           value="${isDirector or isAdmin}"
+           scope="request"/>
+
+    <c:set var="canContenidos"
+           value="${isProfesor or isEstudiante or isAdmin}"
+           scope="request"/>
+
+    <c:set var="canNotas"
+           value="${isProfesor or isEstudiante or isCoordinador or isDirector or isAdmin}"
+           scope="request"/>
+  </c:otherwise>
+</c:choose>

@@ -139,6 +139,8 @@
                     </div>
                 </div>
             </section>
+            <c:set var="base" value="${pageContext.request.contextPath}" />
+            <p>Base URL: <c:out value="${base}" /></p>
 
         </div>
     </div>

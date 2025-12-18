@@ -7,31 +7,10 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="com.mycom.symphonysias.adminlte01.modelo.CursoLibre"%>
 <%@page import="com.mycom.symphonysias.adminlte01.dao.CursoLibreDAO"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="/componentes/roles.jspf" %>
 
-<%
-    // Validación de sesión
-    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    if (usuario == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
 
-    // Captura de ID
-    String idStr = request.getParameter("id");
-    if (idStr == null) {
-        response.sendRedirect("listarCursoLibre.jsp?error=id");
-        return;
-    }
-
-    int id = Integer.parseInt(idStr);
-    CursoLibreDAO dao = new CursoLibreDAO();
-    CursoLibre curso = dao.buscarPorId(id);
-
-    if (curso == null) {
-        response.sendRedirect("listarCursoLibre.jsp?error=notfound");
-        return;
-    }
-%>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -46,7 +25,7 @@
 <div class="wrapper">
 
     <jsp:include page="header.jsp" />
-    <jsp:include page="sidebar.jsp" />
+    <jsp:include page="/sidebar.jsp" />
 
     <div class="content-wrapper">
         <section class="content-header">

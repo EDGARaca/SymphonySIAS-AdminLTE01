@@ -3,9 +3,13 @@
     Created on : 2/11/2025, 5:38:12 p. m.
     Author     : Spiri
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.*, com.mycom.symphonysias.adminlte01.modelo.InscripcionCursoLibre, com.mycom.symphonysias.adminlte01.modelo.Estudiante" %>
+<%@ page import="java.util.*, 
+         com.mycom.symphonysias.adminlte01.modelo.InscripcionCursoLibre,
+         com.mycom.symphonysias.adminlte01.modelo.Estudiante" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="/componentes/roles.jspf" %>
 
 <!DOCTYPE html>
 <html>
