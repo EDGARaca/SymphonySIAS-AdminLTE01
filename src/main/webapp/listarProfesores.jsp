@@ -9,23 +9,17 @@
 <%@page import="java.util.List"%>
 <%@page import="com.mycom.symphonysias.adminlte01.modelo.Profesor"%>
 <%@page import="com.mycom.symphonysias.adminlte01.dao.ProfesorDAO"%>
+<%@ include file="/componentes/roles.jspf" %>
+
 
 <%
-   String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
-
-    if (usuario == null || rol == null || 
-        !(rol.equalsIgnoreCase("ADMINISTRADOR SIAS") || rol.equalsIgnoreCase("COORDINADOR ACADÉMICO") || rol.equalsIgnoreCase("DIRECTOR"))) {
-        response.sendRedirect("login.jsp?logout=true");
-        return;
-    }
-
+    // Recuperación de lista de profesores con trazabilidad
     ProfesorDAO dao = new ProfesorDAO();
     List<Profesor> lista = dao.listar();
-%>
-
-<%
     System.out.println("[JSP] Profesores recuperados: " + lista.size());
+    
+    // ContextPath para rutas seguras en Tomcat
+    String contextPath = request.getContextPath();
 %>
 
 
@@ -34,34 +28,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Listado de Profesores</title>
-    <link rel="stylesheet" href="assets/adminlte/plugins/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="assets/adminlte/css/adminlte.min.css">
+    <link rel="stylesheet" href="${base}/assets/adminlte/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${base}/assets/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="${base}/assets/adminlte/css/adminlte.min.css">
+    <link rel="stylesheet" href="<%=contextPath%>/assets/custom.css"><!-- estilos institucionales -->
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
+    
+    <!-- Componentes comunes -->
     <jsp:include page="componentes/header.jsp" />
     <jsp:include page="componentes/sidebar.jsp" />
 
     <div class="content-wrapper">
-
+        <!-- Encabezado -->
         <section class="content-header">
             <div class="content-header">
                 <div class="container-fluid">
-                    <% if ("administrador".equals(rol) || "profesor".equals(rol)  ){ %>
+                    <!-- Permiso para registrar: Admin o Profesor -->
+                    <c:if test="${isAdmin or isProfesor}">
                         <div class="d-flex justify-content-end mb-3">
                             <a href="registroProfesor.jsp" class="btn btn-success">
                                 <i class="fas fa-plus-circle"></i> Registrar nuevo profesor
                             </a>
                         </div>
-                    <% } %>
+                    </c:if>
                     <h4 class="mb-3 text-primary">
                         <i class="fas fa-chalkboard-teacher"></i> Listado de Profesores
                     </h4>
                 </div>
             </div>
 
+            <!-- Mensajes de feedback -->
             <div class="container-fluid">
                 <% 
                    String registrado = request.getParameter("registrado");
@@ -102,10 +101,9 @@
                     </div>
                 <% } %>
                 </div>
-
-
         </section>
 
+        <!-- Contenido principal -->
         <section class="content">
             <div class="container-fluid">
                 <div class="card">
@@ -147,11 +145,10 @@
                                     <th>Genero</th>
                                     <th>Estado</th>
                                     <th>Usuario_registro</th>
-                                    <% if ("administrador sias".equalsIgnoreCase(rol) 
-                                        || "director".equalsIgnoreCase(rol) 
-                                        || "coordinador académico".equalsIgnoreCase(rol)) { %>
+                                    <!-- Acciones visibles solo para roles con permisos -->
+                                    <c:if test="${isAdmin or isDirector or isCoordinador}">
                                         <th>Acciones</th>
-                                    <% } %>
+                                    </c:if>
                                 </tr>
                             </thead>
                             <tbody>
@@ -170,13 +167,16 @@
                                         <td><%= p.getEstado() %></td>
                                         <td><%= p.getUsuario_registro() %></td>
                                         
-                                        <td class="text-center">
-                                            <%
-                                                //Se pasa profesor actual al componete
-                                                request.setAttribute("profesor", p);
-                                            %>
-                                            <jsp:include page="componentes/accionesProfesores.jsp" />
+                                        <c:if test="${isAdmin or isDirector or isCoordinador}">
+                                            <td class="text-center">
+                                                <%
+                                                    // Se pasa el profesor actual al componente de acciones
+                                                    request.setAttribute("profesor", p);
+                                                %>
+                                                <jsp:include page="componentes/accionesProfesores.jsp" />
                                             </td>
+                                        </c:if>
+
                                         </tr>
                                 <% } %>                                
                             </tbody>
@@ -185,15 +185,14 @@
                 </div> 
             </div>
         </section>
+        <!-- Footer institucional -->                    
         <jsp:include page="componentes/footer.jsp" />                    
-    </div>
-
-    
+    </div>    
 </div>
-
-<script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
-<script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/adminlte/js/adminlte.min.js"></script>
+<!-- Scripts de AdminLTE -->
+<script src="${base}/assets/adminlte/plugins/jquery/jquery.min.js"></script>
+<script src="${base}/assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="${base}/assets/adminlte/js/adminlte.min.js"></script>
 
 <script>
     // Ocultar alertas después de 8 segundos

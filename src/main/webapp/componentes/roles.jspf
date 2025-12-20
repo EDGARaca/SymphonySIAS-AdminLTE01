@@ -25,7 +25,11 @@
 
     <!-- Banderas compuestas para módulos (mantenibilidad) -->
     <c:set var="canGestionEstudiantes"
-           value="${isAdmin or isDirector or isCoordinador or isAuxAdmin or isProfesor or isEstudiante}"
+           value="${isAdmin or isDirector or isCoordinador or isAuxAdmin or isAuxCont or isProfesor or isEstudiante}"
+           scope="request"/>
+    
+    <c:set var="canProductosM"
+           value="${isAdmin or isDirector or isCoordinador or isAuxAdmin or isAuxCont or isProfesor or isEstudiante}"
            scope="request"/>
 
     <c:set var="canGestionProfesores"
@@ -51,6 +55,10 @@
     <c:set var="canDirector"
            value="${isDirector or isAdmin}"
            scope="request"/>
+    
+    <c:set var="canAuxCont"
+           value="${isAuxCont or isAdmin}"
+           scope="request"/>
 
     <c:set var="canContenidos"
            value="${isProfesor or isEstudiante or isAdmin}"
@@ -59,5 +67,7 @@
     <c:set var="canNotas"
            value="${isProfesor or isEstudiante or isCoordinador or isDirector or isAdmin}"
            scope="request"/>
+    
+    
   </c:otherwise>
 </c:choose>

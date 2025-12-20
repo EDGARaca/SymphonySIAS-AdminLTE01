@@ -4,7 +4,7 @@
 %>
 
 <!-- Footer institucional -->
-<footer class="bg-primary text-white text-center p-2 mt-2" style="background-color:#00BFFD;">
+<footer class="bg-primary text-light text-center p-2 mt-2" style="background-color:#00bffd;">
     <div class="container">
         <div class="row">
 
@@ -31,7 +31,7 @@
 
             <!-- Redes sociales -->
             <div class="col-md-4 mb-3">
-                <h5 class="text-primary">Síguenos</h5>
+                <h5 class="text-warning">Síguenos</h5>
                 <div class="d-flex gap-3">
                     <a href="#" class="mx-2 text-light"><i class="fab fa-facebook fa-lg"></i></a>
                     <a href="#" class="mx-2 text-light"><i class="fab fa-instagram fa-lg"></i></a>
@@ -43,7 +43,7 @@
         </div>
 
         <hr>
-        <div class="text-center small text-muted">
+        <div class="text-left small text-muted">
             Copyright © Domain. All Rights Reserved. | Desarrollado por Edgar Ceballos - Ficha 2977514 ADSO | Año: 2025
         </div>
     </div>

@@ -4,9 +4,16 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <%-- Brand / logo --%>
     <a href="<c:url value='/'/>" class="brand-link">
-        <img src="${base}/assets/img/logo.png" alt="Logo SymphonySIAS" class="brand-image img-circle elevation-3" style="opacity:.8">
-        <span class="brand-text font-weight-light">SymphonySIAS</span>
+       
+        <span class="brand-text font-weight-light">SymphonySIAS 3</span>
     </a>
+    
+    <%-- Botón para alternar el menú lateral (sidebar) --%>
+    <li class="nav-item">
+      <a class="nav-link" data-widget="pushmenu" href="#" aria-label="Alternar menú lateral">
+        <i class="fas fa-bars"></i>
+      </a>
+    </li>
         
     <%-- Sidebar content --%>
     <div class="sidebar">

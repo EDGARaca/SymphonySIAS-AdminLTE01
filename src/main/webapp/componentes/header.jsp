@@ -11,22 +11,15 @@
 
 
 <nav class="main-header navbar navbar-expand navbar-white navbar-light" aria-label="Barra de navegación">
-  <ul class="navbar-nav">
-    <%-- Botón para alternar el menú lateral (sidebar) --%>
-    <li class="nav-item">
-      <a class="nav-link" data-widget="pushmenu" href="#" aria-label="Alternar menú lateral">
-        <i class="fas fa-bars"></i>
-      </a>
-    </li>
+  <ul class="navbar-nav">   
 
     <%-- Logo e identidad institucional (lado izquierdo) --%>
     <li class="nav-item d-none d-sm-inline-block">
       <a class="navbar-brand d-flex align-items-center" href="<c:url value='/index.jsp'/>">
         <img src="<c:url value='/assets/adminlte/img/LogoSymphonySIAS.png'/>"
-             alt="Logo SymphonySIAS" class="mr-2" style="height:32px; width:auto;">
+             alt="Logo SymphonySIAS" class="mr-2" style="height:60px; width:auto;">
         <span class="brand-text font-weight-normal">SymphonySIAS</span>
-      </a>
-        <a href="<c:url value='/dashboard.jsp'/>" class="nav-link"><h5>Inicio</h5></a>
+      </a>        
     </li>
   </ul>
     

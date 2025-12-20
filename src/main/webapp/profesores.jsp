@@ -8,19 +8,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="componentes/roles.jspf" %>
 
-<%
-    // Validación de sesión con trazabilidad
-    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String nombre  = (session != null) ? (String) session.getAttribute("nombreActivo")  : null;
-
-    if (usuario == null || nombre == null || rol == null){
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
-    System.out.println("[PROFESORES] Sesión activa: " + usuario + " (" + rol + ")");
-%>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

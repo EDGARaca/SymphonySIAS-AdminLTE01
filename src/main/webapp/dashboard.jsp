@@ -36,7 +36,7 @@
                 <div class="row align-items-center mb-3">
                     <!-- Imagen del logo institucional -->
                     <div class="col-12 col-md-6 text-center mb-2">
-                        <img src="${base}/assets/adminlte/img/LogoSymphonySIAS.png" alt="Logo SymphonySIAS" style="max-height:220px;">
+                        <img src="${base}/assets/adminlte/img/varios.jpg" alt="Instrumentos" style="max-height:220px;">
                     </div>
                     <!-- Imagen representativa -->
                     <div class="col-12 col-md-6 text-center mb-2">
@@ -49,11 +49,7 @@
                     <h5 class="text-primary text-wrap">
                         <i class="fas fa-music"></i> ¡Somos una Escuela de Música que te ayuda a impulsar tu desarrollo musical!
                     </h5>
-                </div>
-
-                <!-- Información de bienvenida -->
-                <h5 class="m-0">Bienvenido, <strong>${sessionScope.nombreActivo}</strong> (<strong>${sessionScope.rol}</strong>)</h5>
-                <p class="text-muted">Sistema de información estudiantil SymphonySIAS</p>
+                </div>                
 
                 <!-- Mensaje condicional para el rol de administrador -->
                 <c:if test="${'administrador'.equals(sessionScope.rol)}">
@@ -66,12 +62,7 @@
         
         <section class="content">
             <div class="row mb-4">
-              <div class="col-md-6 text-center">
-                <img src="${base}/assets/img/logoSymphonySIAS.png" alt="Logo SymphonySIAS" style="max-width: 80%; height: auto;" />
-              </div>
-              <div class="col-md-6 text-center">
-                <img src="${base}/assets/img/groupMusic.jpg" alt="Grupo musical" class="rounded" style="max-width: 80%; height: auto;" />
-              </div>
+                <p class="text-muted">    Sistema de información estudiantil SymphonySIAS</p>              
             </div>
         </section>
         
@@ -79,30 +70,34 @@
         <%-- Contenido principal: módulos en tarjetas dinámicas según roles --%>
         <section class="content">
           <div class="container-fluid">
-            <div class="row">
-            
+            <div class="row">            
+                           
               <%-- Tarjeta: Administrador SIAS --%>
               <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
+                <div class="card card-outline card-primary">                  
                   <div class="card-body">
+                    <a href="AdministradorSIAS.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-user-shield mr-2"></i> Administrador SIAS <br><small> Admin </small>
+                    </a>                      
                     <c:choose>
                       <c:when test="${isAdmin}">
                         <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
-                      </c:when>
+                      </c:when>              
                       <c:otherwise>
                         <button class="btn btn-secondary btn-block" disabled>No disponible</button>
                       </c:otherwise>
                     </c:choose>
                   </div>
                 </div>
-              </div>
+              </div>                           
 
               <%-- Tarjeta: Gestión Estudiantes --%>
               <div class="col-lg-3 col-md-4 mb-3">
                 <div class="card card-outline card-success">
-                  <div class="card-header">Gestión Estudiantes</div>
                   <div class="card-body">
+                    <a href="estudiantes.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-user-graduate mr-2"></i> Gestión Estudiantes <br><small>(Estudiante - Profesor - Admin)</small>
+                    </a>   
                     <c:choose>
                       <c:when test="${canGestionEstudiantes}">
                         <a href="estudiantes.jsp" class="btn btn-success btn-block">Acceder</a>
@@ -117,12 +112,14 @@
 
               <%-- Tarjeta: Gestión Profesores --%>
               <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-info">
-                  <div class="card-header">Gestión Profesores</div>
+                <div class="card card-outline card-info">                 
                   <div class="card-body">
+                    <a href="ProfesorServlet?accion=vista" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-chalkboard-teacher mr-2" ></i> Gestión Profesores <br><small>(Profesor - Admin)</small>
+                    </a>  
                     <c:choose>
                       <c:when test="${canGestionProfesores}">
-                        <a href="profesores.jsp" class="btn btn-info btn-block">Acceder</a>
+                        <a href="ProfesorServlet?accion=vista" class="btn btn-info btn-block">Acceder</a>
                       </c:when>
                       <c:otherwise>
                         <button class="btn btn-secondary btn-block" disabled>No disponible</button>
@@ -134,9 +131,11 @@
 
               <%-- Tarjeta: Gestión Cursos Libres --%>
               <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-warning">
-                  <div class="card-header">Gestión Cursos Libres</div>
+                <div class="card card-outline card-warning">                  
                   <div class="card-body">
+                    <a href="cursoLibre.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-book-reader"></i> Gestión Cursos Libres <br><small>(Estudiante - Profesor - Admin)</small>
+                    </a>  
                     <c:choose>
                       <c:when test="${canCursosLibres}">
                         <a href="cursoLibre.jsp" class="btn btn-warning btn-block">Acceder</a>
@@ -149,14 +148,112 @@
                 </div>
               </div>
 
+              <%-- Tarjeta: Productos Músicales --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-danger">                  
+                  <div class="card-body">
+                    <a href="catalogoProductos.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-shopping-cart"></i> Productos Musicales <br><small>(Acceso General)</small>
+                    </a> 
+                    <c:choose>
+                      <c:when test="${canProductosM}">
+                        <a href="catalogoProductos.jsp" class="btn btn-danger btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Auxiliar Contable --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">                  
+                  <div class="card-body">
+                    <a href="gestionContable.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-file-invoice-dollar"></i> Auxiliar Contable <br><small>(Aux. Contable - Admin)</small>
+                    </a> 
+                      
+                    <c:choose>
+                      <c:when test="${canAuxCont}">
+                        <a href="gestionContable.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      </c:when>              
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Auxiliar Administrativo --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">                  
+                  <div class="card-body">
+                    <a href="gestionAdministrativo.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-file-export"></i> Auxiliar Administrativo <br><small>(Aux. Administrativo - Admin)</small>
+                    </a>                      
+                    <c:choose>
+                      <c:when test="${canAuxCont}">
+                        <a href="gestionAdministrativo.jsp" class="btn btn-success btn-block">Acceder</a>
+                      </c:when>              
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Gestión Director --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-primary">                  
+                  <div class="card-body">
+                    <a href="gestionDirector.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-user-tie"></i> Gestión Director <br><small>(Director - Admin)</small>
+                    </a>                      
+                    <c:choose>
+                      <c:when test="${canDirector}">
+                        <a href="gestionDirector.jsp" class="btn btn-secondary btn-block">Acceder</a>
+                      </c:when>              
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
+              <%-- Tarjeta: Gestión Clases y Horarios --%>
+              <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card card-outline card-warning">                  
+                  <div class="card-body">
+                    <a href="gestionClases.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-book-reader"></i> Gestión Clases y Horarios <br><small>(Estudiante - Profesor - Admin)</small>
+                    </a>  
+                    <c:choose>
+                      <c:when test="${canCursosLibres}">
+                        <a href="gestionClases.jsp" class="btn btn-warning btn-block">Acceder</a>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+              
               <%-- Tarjeta: Gestión de Notas --%>
               <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-danger">
-                  <div class="card-header">Gestión de Notas</div>
+                <div class="card card-outline card-info">                 
                   <div class="card-body">
+                    <a href="gestionNotas.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-clipboard-list" mr-2 " ></i> Gestión de Notas <br><small>(Profesor - Estudiante - Coordinador - Director - Admin)</small>
+                    </a>  
                     <c:choose>
-                      <c:when test="${canNotas}">
-                        <a href="notas.jsp" class="btn btn-danger btn-block">Acceder</a>
+                      <c:when test="${canGestionEstudiantes}">
+                        <a href="gestionNotas.jsp" class="btn btn-info btn-block">Acceder</a>
                       </c:when>
                       <c:otherwise>
                         <button class="btn btn-secondary btn-block" disabled>No disponible</button>
@@ -166,14 +263,16 @@
                 </div>
               </div>
               
-              <%-- Tarjeta: Administrador SIAS --%>
+              <%-- Tarjeta: Notificaciones --%>
               <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
+                <div class="card card-outline card-danger">                  
                   <div class="card-body">
+                    <a href="notificaciones.jsp" class="btn btn-outline-dark btn-block">
+                        <i class="nav-icon fas fa-bell"></i> Notificaciones <br><small>(Acceso General)</small>
+                    </a> 
                     <c:choose>
-                      <c:when test="${isAdmin}">
-                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
+                      <c:when test="${canGestionEstudiantes}">
+                        <a href="notificaciones.jsp" class="btn btn-danger btn-block">Acceder</a>
                       </c:when>
                       <c:otherwise>
                         <button class="btn btn-secondary btn-block" disabled>No disponible</button>
@@ -181,152 +280,7 @@
                     </c:choose>
                   </div>
                 </div>
-              </div>
-              
-              <%-- Tarjeta: Administrador SIAS --%>
-              <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
-                  <div class="card-body">
-                    <c:choose>
-                      <c:when test="${isAdmin}">
-                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
-                      </c:when>
-                      <c:otherwise>
-                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
-                      </c:otherwise>
-                    </c:choose>
-                  </div>
-                </div>
-              </div>
-              
-              <%-- Tarjeta: Administrador SIAS --%>
-              <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
-                  <div class="card-body">
-                    <c:choose>
-                      <c:when test="${isAdmin}">
-                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
-                      </c:when>
-                      <c:otherwise>
-                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
-                      </c:otherwise>
-                    </c:choose>
-                  </div>
-                </div>
-              </div>
-              
-              <%-- Tarjeta: Administrador SIAS --%>
-              <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
-                  <div class="card-body">
-                    <c:choose>
-                      <c:when test="${isAdmin}">
-                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
-                      </c:when>
-                      <c:otherwise>
-                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
-                      </c:otherwise>
-                    </c:choose>
-                  </div>
-                </div>
-              </div>
-              
-              <%-- Tarjeta: Administrador SIAS --%>
-              <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
-                  <div class="card-body">
-                    <c:choose>
-                      <c:when test="${isAdmin}">
-                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
-                      </c:when>
-                      <c:otherwise>
-                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
-                      </c:otherwise>
-                    </c:choose>
-                  </div>
-                </div>
-              </div>
-              
-              <%-- Tarjeta: Administrador SIAS --%>
-              <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
-                  <div class="card-body">
-                    <c:choose>
-                      <c:when test="${isAdmin}">
-                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
-                      </c:when>
-                      <c:otherwise>
-                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
-                      </c:otherwise>
-                    </c:choose>
-                  </div>
-                </div>
-              </div>
-              
-              <%-- Tarjeta: Administrador SIAS --%>
-              <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
-                  <div class="card-body">
-                    <c:choose>
-                      <c:when test="${isAdmin}">
-                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
-                      </c:when>
-                      <c:otherwise>
-                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
-                      </c:otherwise>
-                    </c:choose>
-                  </div>
-                </div>
-              </div>
-              
-              <%-- Tarjeta: Administrador SIAS --%>
-              <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
-                  <div class="card-body">
-                    <c:choose>
-                      <c:when test="${isAdmin}">
-                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
-                      </c:when>
-                      <c:otherwise>
-                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
-                      </c:otherwise>
-                    </c:choose>
-                  </div>
-                </div>
-              </div>
-              
-              <%-- Tarjeta: Administrador SIAS --%>
-              <div class="col-lg-3 col-md-4 mb-3">
-                <div class="card card-outline card-primary">
-                  <div class="card-header">Administrador SIAS</div>
-                  <div class="card-body">
-                    <c:choose>
-                      <c:when test="${isAdmin}">
-                        <a href="AdministradorSIAS.jsp" class="btn btn-primary btn-block">Acceder</a>
-                      </c:when>
-                      <c:otherwise>
-                        <button class="btn btn-secondary btn-block" disabled>No disponible</button>
-                      </c:otherwise>
-                    </c:choose>
-                  </div>
-                </div>
-              </div>
-
-
-
-
-
-
-
-
-
+              </div>   
 
               <%-- Otros módulos y tarjetas dinámicas según roles... --%>
 
