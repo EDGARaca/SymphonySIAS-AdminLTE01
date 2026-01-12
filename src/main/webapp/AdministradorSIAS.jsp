@@ -4,19 +4,12 @@
     Author     : Spiri
 --%>
 
-<%@page contentType="text/html; charset=UTF-8" language="java"%>
-<%
-    String usuario = (session != null) ? (String) session.getAttribute("usuarioActivo") : null;
-    String nombre = (session != null) ? (String) session.getAttribute("nombreActivo") : null;
-    String rol = (session != null) ? (String) session.getAttribute("rol") : null;
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:set var="base" value="/SymphonySIAS-AdminLTE01-1.0-SNAPSHOT" />
 
-    if (usuario == null || nombre == null || rol == null || !"administrador sias".equals(rol.trim().toLowerCase())) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
+<%@ include file="/componentes/roles.jspf" %>
 
-    System.out.println("[AdministradorSIAS] Acceso autorizado por: " + usuario + " (" + rol + ")");
-%>
 
 <!DOCTYPE html>
 <html lang="es">

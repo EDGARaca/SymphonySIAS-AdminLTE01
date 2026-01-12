@@ -9,6 +9,7 @@
 <%@page import="java.util.List"%>
 <%@page import="com.mycom.symphonysias.adminlte01.modelo.Profesor"%>
 <%@page import="com.mycom.symphonysias.adminlte01.dao.ProfesorDAO"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="/componentes/roles.jspf" %>
 
 
